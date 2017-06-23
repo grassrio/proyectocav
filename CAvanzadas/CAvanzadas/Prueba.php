@@ -2,5 +2,5 @@
 
 class Prueba
 {
-    echo pepito 3
+    echo 'pepito 3';
 }
