@@ -2,5 +2,5 @@
 
 class Prueba
 {
-    echo pepito 2
+    echo pepito 3
 }
