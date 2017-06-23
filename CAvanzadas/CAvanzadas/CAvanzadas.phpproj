@@ -22,6 +22,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="index.php" />
+    <Compile Include="Prueba.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
