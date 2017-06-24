@@ -21,14 +21,16 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="config.php" />
+    <Compile Include="includes\config.php" />
     <Compile Include="index.php" />
+    <Compile Include="includes\login_usuario.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
     <Folder Include="fonts\" />
     <Folder Include="img\" />
     <Folder Include="js\" />
+    <Folder Include="includes\" />
     <Folder Include="Properties\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
