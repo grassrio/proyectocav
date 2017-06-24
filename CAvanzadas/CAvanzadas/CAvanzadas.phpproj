@@ -21,6 +21,7 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="config.php" />
     <Compile Include="index.php" />
   </ItemGroup>
   <ItemGroup>
