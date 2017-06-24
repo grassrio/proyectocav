@@ -24,7 +24,7 @@ if(isset($_POST['submit'])){
         $_SESSION['tipoUsuario']=$line;
         $_SESSION['user']=$username;
 
-		echo'session establecida!!!';
+		echo'session establecida!';
 	}
   }
 ?>
