@@ -1,31 +1,7 @@
 <?php
-require('includes/config.php');
-$link = mysql_connect($mysqlserver, $mysqluser, $mysqlpass) or die('No se pudo conectar: ' . mysql_error());
-mysql_select_db($mysqldb) or die('No se pudo seleccionar la base de datos');
-
-// Realizar una consulta MySQL
-$query = 'SELECT * FROM Usuario';
-$result = mysql_query($query) or die('Consulta fallida: ' . mysql_error());
-
-// Imprimir los resultados en HTML
-echo "<table>\n";
-while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-    echo "\t<tr>\n";
-    foreach ($line as $col_value) {
-        echo "\t\t<td>$col_value</td>\n";
-    }
-    echo "\t</tr>\n";
-}
-echo "</table>\n";
-
-// Liberar resultados
-mysql_free_result($result);
-
-// Cerrar la conexión
-mysql_close($link);
-?>
-
-
+require('includes/loginheader.php');
+session_start();
+if (isset($_SESSION['usuario'])) { ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,31 +16,115 @@ mysql_close($link);
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
+    
+    <nav class="navbar navbar-toolbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+
+                <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#">Action</a>
+                    </li>
+                    <li>
+                        <a href="#">Another action</a>
+                    </li>
+                    <li>
+                        <a href="#">Something else here</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="#">Separated link</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="#">One more separated link</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="#">
+                            Link
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">Link</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            Dropdown
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#">Action</a>
+                            </li>
+                            <li>
+                                <a href="#">Another action</a>
+                            </li>
+                            <li>
+                                <a href="#">Something else here</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="#">Separated link</a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="#">One more separated link</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
 
 
-    <form method="POST" action="">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <h3 class="panel-title">Construcciones Avanzadas SRL</h3>
-            </div>
-            <div class="panel-body">
-                <div class="input-group">
-                    <input name="user" type="text" class="form-control" placeholder="Usuario" aria-describedby="basic-addon2" />
+                <!-- busqueda -->
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="" />
+                    </div>
+                    <button type="submit" class="btn btn-default">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+                </form>
+
+                <!-- desplegable derecha -->
+                <div class="btn-group pull-right">
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="glyphicon glyphicon-cog"></i>
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-header"><?php echo $_SESSION['usuario']; ?></li>
+                        <li>
+                            <a href="#">
+                                <i class="glyphicon glyphicon-user"></i>Usuarios
+                            </a>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="includes/logout.php">
+                                <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                <div class="input-group">
-                    <input name="pass" type="password" class="form-control" placeholder="Contraseña" aria-describedby="basic-addon2" />
-                </div>
-                <p>
-                    <input class="btn btn-primary btn-lg"  name="submit" type="submit" id="btn" value="ingresar" />
-                  <!--  <a class="btn btn-primary btn-lg" href="#" role="button" name="login" type="submit">Iniciar sesión</a>-->
-                </p>
-            </div>
-        </div>
-    </form>
-    <?php
-    if(isset($_POST['submit'])&&!empty($_POST['pass'])&&!empty($_POST['user'])){
-        require("includes/login_usuario.php");
-    }
-    ?>
+
+
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+
 </body>
 </html>
+<?php } ?>
+
