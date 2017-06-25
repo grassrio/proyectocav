@@ -28,7 +28,6 @@
     <Compile Include="includes\login_usuario.php" />
     <Compile Include="login.php" />
     <Compile Include="mysql.php" />
-    <Compile Include="PaginaPrincipal.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />

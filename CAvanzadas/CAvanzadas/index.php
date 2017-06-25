@@ -1,7 +1,7 @@
 <?php
 require('includes/loginheader.php');
 session_start();
-if (isset($_SESSION['usuario'])) { ?>
+if (isset($_SESSION['usuario'])) {?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
