@@ -55,7 +55,8 @@ mysql_close($link);
                     <input name="pass" type="password" class="form-control" placeholder="Contraseña" aria-describedby="basic-addon2" />
                 </div>
                 <p>
-                    <a class="btn btn-primary btn-lg" href="#" role="button" name="login" type="submit">Iniciar sesión</a>
+                    <input class="btn btn-primary btn-lg"  name="submit" type="submit" id="btn" value="ingresar" />
+                  <!--  <a class="btn btn-primary btn-lg" href="#" role="button" name="login" type="submit">Iniciar sesión</a>-->
                 </p>
             </div>
         </div>
