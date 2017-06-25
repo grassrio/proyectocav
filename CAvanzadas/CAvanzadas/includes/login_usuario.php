@@ -25,6 +25,7 @@ if(isset($_POST['submit'])){
             $_SESSION['user']=$username;
 
             echo'session establecida!';
+            header ("Location: http://localhost:14959/PaginaPrincipal.php");
         }
     }
 }
