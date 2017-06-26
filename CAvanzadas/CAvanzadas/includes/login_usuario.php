@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if(isset($_POST['submit'])){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -6,12 +6,12 @@ if(isset($_POST['submit'])){
     {
         mysqli_select_db($connect,$mysqldb);
         $username = $_POST['usuario'];
-        $password = $_POST['password'];
+        $password = md5($_POST['password']);
         $sql = mysqli_query($connect,"SELECT * FROM Usuario WHERE NombreUsuario='$username' AND Password='$password'")
              or die ("Error al consultar usuarios");
         $rowcount = mysqli_num_rows($sql);
         if ($rowcount<1){
-            echo 'Usuario o contraseña incorrecta';
+            echo ' Usuario o contraseña incorrecta';
             mysqli_close($connect);
         }else{
             session_start();

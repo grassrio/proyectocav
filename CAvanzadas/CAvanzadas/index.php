@@ -99,6 +99,7 @@ if (isset($_SESSION['usuario'])) {?>
                             <li class="dropdown-header">
                                 <?php echo $_SESSION['usuario']; ?>
                             </li>
+                            <li role="separator" class="divider"></li>
                             <li>
                                 <a href="#">
                                     <i class="glyphicon glyphicon-user"></i>Usuarios

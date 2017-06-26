@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 session_start();
 if (isset($_SESSION['usuario'])) {
     header("location:../index.php");
@@ -19,8 +19,10 @@ if (isset($_SESSION['usuario'])) {
 <body>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/md5.js"></script>
 
-    <form method="POST" action="">
+
+    <form method="POST" action="" onsubmit="pwd_encrypt(this);">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">Construcciones Avanzadas SRL</h3>
