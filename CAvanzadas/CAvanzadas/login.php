@@ -44,8 +44,12 @@ if (isset($_SESSION['usuario'])) {
 
 
     <?php
-    if(isset($_POST['submit'])&&!empty($_POST['usuario'])&&!empty($_POST['password'])){
-        require("includes/login_usuario.php");
+    if(isset($_POST['submit'])){
+        if (!empty($_POST['usuario'])&&!empty($_POST['password'])){
+             require("includes/login_usuario.php");
+        }else{
+            echo"Error: Debe ingresar el usuario y la contraseña para ingresar.";
+        }
     }
     ?>
 </body>
