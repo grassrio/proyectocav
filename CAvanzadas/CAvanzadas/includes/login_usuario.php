@@ -11,7 +11,7 @@ if(isset($_POST['submit'])){
              or die ("Error al consultar usuarios");
         $rowcount = mysqli_num_rows($sql);
         if ($rowcount<1){
-            echo ' Usuario o contraseña incorrecta';
+            echo 'Usuario o contraseña incorrecta';
             mysqli_close($connect);
         }else{
             session_start();
