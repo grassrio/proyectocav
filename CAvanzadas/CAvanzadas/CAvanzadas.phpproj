@@ -21,13 +21,17 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Clases\Cliente.php" />
     <Compile Include="includes\config.php" />
     <Compile Include="includes\loginheader.php" />
     <Compile Include="includes\logout.php" />
     <Compile Include="index.php" />
     <Compile Include="includes\login_usuario.php" />
+    <Compile Include="Clases\Licitacion.php" />
+    <Compile Include="PantallLicitacion.php" />
     <Compile Include="login.php" />
     <Compile Include="mysql.php" />
+    <Compile Include="Clases\Usuario.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
@@ -35,6 +39,7 @@
     <Folder Include="img\" />
     <Folder Include="js\" />
     <Folder Include="includes\" />
+    <Folder Include="Clases\" />
     <Folder Include="Properties\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>

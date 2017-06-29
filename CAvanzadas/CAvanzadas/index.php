@@ -31,7 +31,7 @@ if (isset($_SESSION['usuario'])) {?>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#">Action</a>
+                            <a href="licitacion.php">Licitacion</a>
                         </li>
                         <li>
                             <a href="#">Another action</a>
@@ -52,7 +52,7 @@ if (isset($_SESSION['usuario'])) {?>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
-                    <ul class="nav navbar-nav">
+                  <!--    <ul class="nav navbar-nav">
                         <li class="active">
                             <button type="button" class="btn btn-default" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
@@ -78,7 +78,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
                             </button>
                         </li>
-                    </ul>
+                    </ul>-->
                     <!-- busqueda -->
                     <form class="navbar-form navbar-left">
                         <div class="form-group">
