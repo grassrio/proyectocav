@@ -147,8 +147,8 @@ if ($rowcount>0) {?>
                 while($rs=mysqli_fetch_array($sql))
                 {
                     echo "<tr>"
-                    ."<td>".$rs[0]."</td>"
                     ."<td>".$rs[1]."</td>"
+                    ."<td>".$rs[2]."</td>"
                     ."</tr>";
                 }
             ?>
