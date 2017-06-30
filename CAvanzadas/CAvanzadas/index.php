@@ -31,10 +31,10 @@ if (isset($_SESSION['usuario'])) {?>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="licitacion.php">Licitacion</a>
+                             <a href="Pantallalicitacion.php">Licitaciones</a>
                         </li>
                         <li>
-                            <a href="#">Another action</a>
+                            <a href="PantallaCliente.php">Clientes</a>
                         </li>
                         <li>
                             <a href="#">Something else here</a>

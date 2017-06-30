@@ -2,12 +2,13 @@
 class Cliente
 {
     private $nombre;
-    private $zona = array();
+    private $zona;
 
 
     function construct( $nombre, $unaZona)
     {
         $this->nombre = $nombre;
+        $this->zona = $unaZona;
 
     }
 
@@ -22,6 +23,13 @@ class Cliente
     public function ExisteCliente($connect)
     {
         $sql = mysqli_query($connect,"SELECT * FROM Cliente WHERE Nombre='".$this->nombre."'")
+           or die ("Error al consultar cliente");
+        return $sql;
+    }
+
+    public function ListaCliente($connect)
+    {
+        $sql = mysqli_query($connect,"SELECT * FROM Cliente")
            or die ("Error al consultar cliente");
         return $sql;
     }
