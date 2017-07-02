@@ -117,7 +117,7 @@ if (isset($_SESSION['usuario'])) {?>
             $sql = insertarCliente($_POST['Nombre'],$_POST['Zona']);
             echo 'Se ingreso correctamente el cliente.';
         }else{
-            echo"Error: Debe ingresar el Nombre y las zonas para ingresar el cliente.";
+            echo"Error: Debe ingresar el Nombre y las zonas para ingresar el cliente."; 
         }
     }
     ?>
