@@ -126,15 +126,13 @@ if ($rowcount>0) {?>
         <div class="panel-heading">
             <h3  class="panel-title">Clientes</h3>
         </div>
-        <!--    <div class="panel-body">
-
-        </div>-->
-
         <!-- Table -->
         <table class="table">
             <tr>
                 <th>Nombre</th>
                 <th>Zonas</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
             </tr>
             <?php
                 while($rs=mysqli_fetch_array($sql))
@@ -142,12 +140,17 @@ if ($rowcount>0) {?>
                     echo "<tr>"
                     ."<td>".$rs[1]."</td>"
                     ."<td>".$rs[2]."</td>"
+                    ."<td>"."<input type="."reset"." name="."editar"." value="."editar"."/>"."</td>"
+                    ."<td>".'<a type="button" class="btn btn-default" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                          </a>'."</td>"
                     ."</tr>";
                 }
+
+
             ?>
         </table>
     </div>
-
 </body>
 </html>
 <?php } ?>
