@@ -141,9 +141,12 @@ if ($rowcount>0) {?>
                     ."<td>".$rs[1]."</td>"
                     ."<td>".$rs[2]."</td>"
                     ."<td>"."<input type="."reset"." name="."editar"." value="."editar"."/>"."</td>"
-                    ."<td>".'<a type="button" class="btn btn-default" aria-label="Left Align">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                          </a>'."</td>"
+                    ."<td>".'<form method="POST" action="">
+                                <a type="button" class="btn btn-default" aria-label="Left Align">
+                                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </a>
+                            </form>'
+                    ."</td>"
                     ."</tr>";
                 }
 

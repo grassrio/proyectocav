@@ -43,8 +43,13 @@ class Cliente
 
     public function ObtenerZonas($connect)
     {
-
         $sql = mysqli_query($connect,"SELECT zona FROM Cliente WHERE Nombre='".$this->nombre."'")
+         or die ("Error al obtener las zonas");
+        return $sql;
+    }
+    public function EliminarCliente($connect,$nombre)
+    {
+        $sql = mysqli_query($connect,"DELETE FROM Cliente WHERE Nombre='".$this->nombre."'")
          or die ("Error al obtener las zonas");
         return $sql;
     }

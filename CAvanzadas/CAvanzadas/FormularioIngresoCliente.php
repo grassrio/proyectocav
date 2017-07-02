@@ -81,7 +81,7 @@ if (isset($_SESSION['usuario'])) {?>
                         <li role="separator" class="divider"></li>
                         <li>
                             <a href="includes/logout.php">
-                                <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
+                                <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesiï¿½n
                             </a>
                         </li>
                     </ul>
@@ -105,7 +105,7 @@ if (isset($_SESSION['usuario'])) {?>
                     </div>
                     <p>
                         <input class="btn btn-primary" name="submit" type="submit" id="btn" value="Ingresar" />
-                        <!--  <a class="btn btn-primary btn-lg" href="#" role="button" name="login" type="submit">Iniciar sesión</a>-->
+                        <!--  <a class="btn btn-primary btn-lg" href="#" role="button" name="login" type="submit">Iniciar sesiï¿½n</a>-->
                     </p>
                 </div>
          </form>
@@ -115,7 +115,7 @@ if (isset($_SESSION['usuario'])) {?>
         if (!empty($_POST['Nombre'])&&!empty($_POST['Zona'])){
             require("includes/ConsultasCliente.php");
             $sql = insertarCliente($_POST['Nombre'],$_POST['Zona']);
-            echo 'Se ingreso correctamente el cliente.'
+            echo 'Se ingreso correctamente el cliente.';
         }else{
             echo"Error: Debe ingresar el Nombre y las zonas para ingresar el cliente.";
         }

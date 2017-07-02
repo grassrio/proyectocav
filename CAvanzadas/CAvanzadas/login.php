@@ -4,8 +4,6 @@ if (isset($_SESSION['usuario'])) {
     header("location:../index.php");
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,8 +39,6 @@ if (isset($_SESSION['usuario'])) {
             </div>
         </div>
     </form>
-
-
     <?php
     if(isset($_POST['submit'])){
         if (!empty($_POST['usuario'])&&!empty($_POST['password'])){
