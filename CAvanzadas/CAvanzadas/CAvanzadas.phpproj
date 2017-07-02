@@ -22,6 +22,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Clases\Cliente.php" />
+    <Compile Include="FormularioIngresoCliente.php" />
     <Compile Include="includes\ConsultasCliente.php" />
     <Compile Include="includes\config.php" />
     <Compile Include="includes\loginheader.php" />

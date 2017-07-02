@@ -1,10 +1,7 @@
 <?php
 require('includes/loginheader.php');
 session_start();
-require 'includes/ConsultasCliente.php';
-$sql = devolverClientes();
-$rowcount = mysqli_num_rows($sql);
-if ($rowcount>0) {?>
+if (isset($_SESSION['usuario'])) {?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,10 +31,10 @@ if ($rowcount>0) {?>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="Pantallalicitacion.php">Licitacion</a>
+                        <a href="Pantallalicitacion.php">Licitaciones</a>
                     </li>
                     <li>
-                        <a href="#">Another action</a>
+                        <a href="PantallaCliente.php">Clientes</a>
                     </li>
                     <li>
                         <a href="#">Something else here</a>
@@ -55,33 +52,6 @@ if ($rowcount>0) {?>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li class="active">
-                        <button type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-                        </button>
-                    </li>
-                    <li>
-                        <a type="button" class="btn btn-default" aria-label="Left Align" href="FormularioIngresoCliente.php">
-                            <span  onclick="" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                    <li>
-                        <button type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                        </button>
-                    </li>
-                    <li>
-                        <a type="button" class="btn btn-default" aria-label="Left Align">
-                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-                        </a>
-                    </li>
-                </ul>
                 <!-- busqueda -->
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
@@ -111,7 +81,7 @@ if ($rowcount>0) {?>
                         <li role="separator" class="divider"></li>
                         <li>
                             <a href="includes/logout.php">
-                                <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesi?n
+                                <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
                             </a>
                         </li>
                     </ul>
@@ -122,32 +92,35 @@ if ($rowcount>0) {?>
         </div><!-- /.container-fluid -->
     </nav>
     <div class="panel panel-default">
-        <!-- Default panel contents -->
         <div class="panel-heading">
-            <h3  class="panel-title">Clientes</h3>
+            <h3 class="panel-title">Ingrese un cliente nuevo</h3>
         </div>
-        <!--    <div class="panel-body">
-
-        </div>-->
-
-        <!-- Table -->
-        <table class="table">
-            <tr>
-                <th>Nombre</th>
-                <th>Zonas</th>
-            </tr>
-            <?php
-                while($rs=mysqli_fetch_array($sql))
-                {
-                    echo "<tr>"
-                    ."<td>".$rs[1]."</td>"
-                    ."<td>".$rs[2]."</td>"
-                    ."</tr>";
-                }
-            ?>
-        </table>
+        <form method="POST" action="">
+                 <div class="panel-body">
+                    <div class="input-group">
+                        <input name="Nombre" type="text" class="form-control" placeholder="Nombre" aria-describedby="basic-addon2" />
+                    </div>
+                    <div class="input-group">
+                        <input name="Zona" type="text" class="form-control" placeholder="Zona" aria-describedby="basic-addon2" />
+                    </div>
+                    <p>
+                        <input class="btn btn-primary" name="submit" type="submit" id="btn" value="Ingresar" />
+                        <!--  <a class="btn btn-primary btn-lg" href="#" role="button" name="login" type="submit">Iniciar sesión</a>-->
+                    </p>
+                </div>
+         </form>
     </div>
-
+    <?php
+    if(isset($_POST['submit'])){
+        if (!empty($_POST['Nombre'])&&!empty($_POST['Zona'])){
+            require("includes/ConsultasCliente.php");
+            $sql = insertarCliente($_POST['Nombre'],$_POST['Zona']);
+            echo 'Se ingreso correctamente el cliente.'
+        }else{
+            echo"Error: Debe ingresar el Nombre y las zonas para ingresar el cliente.";
+        }
+    }
+    ?>
 </body>
 </html>
 <?php } ?>

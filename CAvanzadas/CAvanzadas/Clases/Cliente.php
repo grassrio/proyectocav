@@ -34,9 +34,9 @@ class Cliente
         return $sql;
     }
 
-    public function InsertarCliente($connect)
+    public function InsertarCliente($connect,$nombre,$zona)
     {
-        $sql = mysqli_query($connect,"INSERT INTO CLIENTE (Nombre,Zona) VALUES ('".$this->nombre."','".$this->zona."')")
+        $sql = mysqli_query($connect,"INSERT INTO Cliente (Nombre,Zona) VALUES ('".$nombre."','".$zona."')")
             or die ("Error al insertar cliente");
         return $sql;
     }
