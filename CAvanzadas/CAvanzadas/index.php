@@ -15,6 +15,12 @@ if (isset($_SESSION['usuario'])) {?>
 <body>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        function carga(script) {
+            jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
+            ;
+        }
+    </script>
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title">Construcciones Avanzadas SRL</h3>
@@ -31,10 +37,10 @@ if (isset($_SESSION['usuario'])) {?>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                             <a href="Pantallalicitacion.php">Licitaciones</a>
+                            <a href="JavaScript:carga('Pantallalicitacion')">Licitaciones</a>
                         </li>
                         <li>
-                            <a href="PantallaCliente.php">Clientes</a>
+                            <a href="JavaScript:carga('PantallaCliente')">Clientes</a>
                         </li>
                         <li>
                             <a href="#">Something else here</a>
@@ -79,7 +85,7 @@ if (isset($_SESSION['usuario'])) {?>
                             </button>
                         </li>
                     </ul>-->
-                    <!-- busqueda -->
+                    <!-- busqueda 
                     <form class="navbar-form navbar-left">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="" />
@@ -88,6 +94,7 @@ if (isset($_SESSION['usuario'])) {?>
                             <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                         </button>
                     </form>
+                                            -->
 
                     <!-- desplegable derecha -->
                     <div class="btn-group pull-right">
@@ -120,6 +127,11 @@ if (isset($_SESSION['usuario'])) {?>
         </nav>
 
 
+   
+    <div id="main">
+        <div id="contenido"></div>
+    </div>
+    
 </body>
 </html>
 <?php } ?>
