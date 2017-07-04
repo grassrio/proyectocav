@@ -42,8 +42,9 @@ if (isset($_SESSION['usuario'])) {?>
                         <li>
                             <a href="JavaScript:carga('PantallaCliente')">Clientes</a>
                         </li>
+
                         <li>
-                            <a href="#">Something else here</a>
+                            <a href="JavaScript:carga('PantallaRubro')">Rubros</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
