@@ -21,6 +21,7 @@
     <IncludeDebugInformation>false</IncludeDebugInformation>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ajaxCliente.php" />
     <Compile Include="ajaxRubro.php" />
     <Compile Include="Clases\Cliente.php" />
     <Compile Include="Clases\Rubro.php" />

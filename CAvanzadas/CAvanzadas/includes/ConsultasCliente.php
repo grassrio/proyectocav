@@ -26,6 +26,20 @@ require 'Clases/Cliente.php';
         return $sql;
     }
 
+    function modificarCliente($id,$nombre,$zona)
+    {
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $cliente = new Cliente();
+            $sql = $cliente->ModificarCliente($connect,$id,$nombre,$zona);
+            return $sql;
+        }
+        return $sql;
+    }
+
     function eliminarCliente($nombre)
     {
         require('config.php');
