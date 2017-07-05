@@ -19,7 +19,7 @@ if ($rowcount>0) {?>
    $(document).ready(function(){
         $("#ventanaEliminarCliente").on("show.bs.modal", function(e) {
             nombreDinamico = $(e.relatedTarget).data('target-id');
-            $("#eliminarDinamico").html("Desea eliminar el cliente " + id + "?");
+            $("#eliminarDinamico").html("Desea eliminar el cliente " + nombreDinamico + "?");
         });
    });
    $(document).ready(function () {
