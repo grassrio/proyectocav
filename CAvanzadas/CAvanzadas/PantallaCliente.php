@@ -14,12 +14,19 @@ if ($rowcount>0) {?>
 </head>
 <body>
     <script>
-    $(document).ready(function(){
+        var nombreDinamico;
+        var id;
+   $(document).ready(function(){
         $("#ventanaEliminarCliente").on("show.bs.modal", function(e) {
-            var id = $(e.relatedTarget).data('target-id');
+            nombreDinamico = $(e.relatedTarget).data('target-id');
             $("#eliminarDinamico").html("Desea eliminar el cliente " + id + "?");
         });
-    });
+   });
+   $(document).ready(function () {
+       $("#ventanaModificarCliente").on("show.bs.modal", function (e) {
+           id = $(e.relatedTarget).data('target-id');
+       });
+   });
         $("#btnNuevoCliente").click(function () {
             $('#btnNuevoCliente').prop('disabled', true);
             var nombreCliente = $('#Nombre').val();
@@ -45,8 +52,8 @@ if ($rowcount>0) {?>
         });
         $("#btnModificarCliente").click(function () {
             $('#btnModificarCliente').prop('disabled', true);
-            var nombreCliente = $('#Nombre').val();
-            var zona = $('#zona').val();
+            var nombreCliente = $('#NombreM').val();
+            var zona = $('#zonaM').val();
             if (nombreCliente == '') {
                 alert("Debe ingresar el Nombre del cliente");
                 if (zona == '') {
@@ -54,7 +61,6 @@ if ($rowcount>0) {?>
                 }
             }
             else {
-                alert(id);
                 $.post("ajaxCliente.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "modificarCliente",
@@ -70,12 +76,11 @@ if ($rowcount>0) {?>
         });
         $("#btnEliminarCliente").click(function () {
             $('#btnEliminarCliente').prop('disabled', true);
-            var nombreCliente = $(e.relatedTarget).data('target-id');
-            alert('asdasd');
+            var nombreCliente = nombreDinamico
                 $.post("ajaxCliente.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "eliminarCliente",
-                          Nombre: nombreCliente
+                          Nombre: nombreCliente,
                       },
                 function (response, status) { // Required Callback Function
                     $('#ventanaEliminarCliente').modal('hide');
@@ -121,11 +126,15 @@ if ($rowcount>0) {?>
                     <h4 class="modal-title">Modificar Cliente</h4>
                 </div>
                 <form name="modificarCliente" method="POST" action="modificarCliente">
+                    <div class="modal-body" id="modificarDinamico">
+                        <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+                        <!-- esto se carga dinamico-->
+                    </div>
                     <div class="modal-body">
                         Nombre
-                        <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
+                        <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
                         Zona
-                        <input name="zona" id="zona" type="text" class="form-control" aria-describedby="basic-addon2" />
+                        <input name="zona" id="zonaM" type="text" class="form-control" aria-describedby="basic-addon2" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -147,7 +156,7 @@ if ($rowcount>0) {?>
                     <h4 class="modal-title">Eliminar Cliente</h4>
                 </div>
                 <div class="modal-body" id="eliminarDinamico">
-                    <input name="NombreEliminar" id="NombreEliminar" type="hidden" class="form-control" aria-describedby="basic-addon2" />
+                    <input name="NombreEliminar" id="NombreEliminar" class="form-control" aria-describedby="basic-addon2" />
                     <!-- esto se carga dinamico-->
                 </div>
                 <div class="modal-footer">

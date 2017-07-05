@@ -49,6 +49,7 @@ require 'Clases/Cliente.php';
             mysqli_select_db($connect,$mysqldb);
             $cliente = new Cliente();
             $sql = $cliente->EliminarCliente($connect,$nombre);
+
             return $sql;
         }
         return $sql;

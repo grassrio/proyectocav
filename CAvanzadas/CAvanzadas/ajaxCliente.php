@@ -10,7 +10,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             eliminarCliente($_POST['Nombre']);
             break;
         case 'modificarCliente' :
-            insertarCliente($_POST['idCliente'],$_POST['Nombre'],$_POST['Zona']);
+            modificarCliente($_POST['idCliente'],$_POST['Nombre'],$_POST['Zona']);
             break;
     }
 }
