@@ -49,8 +49,15 @@ class Rubro
 
     public function EliminarRubro($connect,$nombre)
     {
-        $sql = mysqli_query($connect,"DELETE FROM Rubro WHERE Nombre='".$this->nombre."'")
+        $sql = mysqli_query($connect,"DELETE FROM Rubro WHERE Nombre='".$nombre."'")
          or die ("Error al eliminar rubro");
+        return $sql;
+    }
+
+    public function ModificarRubro($connect,$id,$nombre,$unidad, $cantidadStock)
+    {
+        $sql = mysqli_query($connect,"UPDATE Rubro SET Nombre='".$nombre."',Unidad='".$unidad."',CantidadStock='".$cantidadStock."' WHERE idRubro='".$id."'")
+            or die ("Error al modificar rubro");
         return $sql;
     }
 }

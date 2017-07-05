@@ -11,10 +11,18 @@ if (isset($_SESSION['usuario'])) {?>
 </head>
 <body>
     <script>
+    var nombreDinamico;
+    var id;
     $(document).ready(function(){
         $("#ventanaEliminarRubro").on("show.bs.modal", function(e) {
-            var id = $(e.relatedTarget).data('target-id');
-            $("#eliminarDinamico").html("Desea eliminar el rubro " + id + "?");
+            nombreDinamico = $(e.relatedTarget).data('target-id');
+            $("#eliminarDinamico").html("Desea eliminar el rubro " + nombreDinamico + "?");
+        });
+    });
+
+    $(document).ready(function () {
+        $("#ventanaModificarRubro").on("show.bs.modal", function (e) {
+            id = $(e.relatedTarget).data('target-id');
         });
     });
 
@@ -41,10 +49,38 @@ if (isset($_SESSION['usuario'])) {?>
              });
             }
         });
-
+        $("#btnModificarRubro").click(function () {
+            $('#btnModificarRubro').prop('disabled', true);
+            var nombreRubro = $('#NombreM').val();
+            var unidadRubro = $('#UnidadM').val();
+            var cantidadStock = $('#cantidadStockM').val();
+            if (nombreRubro == '') {
+                alert("Debe ingresar el Nombre del Rubro");
+                if (unidadRubro == '') {
+                    alert("Debe ingresar la unidad del Rubro");
+                }
+                if (cantidadStock == '') {
+                    alert("Debe ingresar la Cantidad del Rubro");
+                }
+            }
+            else {
+                $.post("ajaxRubro.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "modificarRubro",
+                          Nombre: nombreRubro,
+                          Unidad: unidadRubro,
+                          cantidadStock: cantidadStock,
+                          idRubro: id,
+                      },
+                function (response, status) { // Required Callback Function
+                    $('#ventanaModificarRubro').modal('hide');
+                    carga('PantallaRubro');
+                });
+            }
+        });
         $("#btnEliminarRubro").click(function () {
             $('#btnEliminarRubro').prop('disabled', true);
-            alert(nombreRubro);
+            var nombreRubro = nombreDinamico
                 $.post("ajaxRubro.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "eliminarRubro",
@@ -60,7 +96,7 @@ if (isset($_SESSION['usuario'])) {?>
 
     </script>
 
-
+    <!--VENTANA PARA INGRESAR UN NUEVO RUBRO-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarRubro">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -88,7 +124,39 @@ if (isset($_SESSION['usuario'])) {?>
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+    <!--VENTANA PARA MODIFICAR UN RUBRO-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="ventanaModificarRubro">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Modificar Cliente</h4>
+                </div>
+                <form name="modificarRubro" method="POST" action="modificarRubro">
+                    <div class="modal-body" id="modificarDinamico">
+                        <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+                        <!-- esto se carga dinamico-->
+                    </div>
+                    <div class="modal-body">
+                        Nombre
+                        <input name="NombreM" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                        Unidad
+                        <input name="UnidadM" id="UnidadM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                        Cantidad de stock
+                        <input name="cantidadStockM" id="cantidadStockM" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button id="btnModificarRubro" type="button" class="btn btn-success success">Modificar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <!--VENTANA PARA ELIMINAR UN NUEVO RUBRO-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaEliminarRubro">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -158,6 +226,7 @@ if (isset($_SESSION['usuario'])) {?>
                 <th>Unidad</th>
                 <th>Stock</th>
                 <th></th>
+                <th></th>
             </tr>
             <?php
             require 'includes/ConsultasRubro.php';
@@ -174,6 +243,9 @@ if (isset($_SESSION['usuario'])) {?>
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 </button>
                             '
+                    ."</td>"
+                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarRubro" data-toggle="modal">
+<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
                     ."</td>"
                     ."</tr>";
                 }
