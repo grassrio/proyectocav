@@ -2,6 +2,7 @@
 require('includes/loginheader.php');
 session_start();
 require 'includes/ConsultasCliente.php';
+require 'includes/ConsultaZonas.php';
 $sql = devolverClientes();
 $rowcount = mysqli_num_rows($sql);
 if ($rowcount>0) {?>
@@ -92,15 +93,13 @@ if ($rowcount>0) {?>
                     carga('PantallaCliente');
                 });
         });
-        $("#btnNuevZona").click(function () {
-            $('#btnNuevZona').prop('disabled', true);
+        $("#btnNuevaZona").click(function () {
+            $('#btnNuevaZona').prop('disabled', true);
             var nombreZona = $('#NombreZ').val();
-            alert(nombreZona);
-            alert(id);
             $.post("ajaxZona.php", //Required URL of the page on server
                   { // Data Sending With Request To Server
                       action: "nuevoZona",
-                      Nombre: nombreCliente,
+                      Nombre: nombreZona,
                       idCliente: id,
                   },
             function (response, status) { // Required Callback Function
@@ -151,7 +150,7 @@ if ($rowcount>0) {?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevZona" type="button" class="btn btn-success success">Agregar</button>
+                        <button id="btnNuevaZona" type="button" class="btn btn-success success">Agregar</button>
                     </div>
                 </form>
             </div>

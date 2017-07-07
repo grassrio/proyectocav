@@ -42,7 +42,7 @@
     <Compile Include="mysql.php" />
     <Compile Include="Clases\Usuario.php" />
     <Compile Include="PantallaRubro.php" />
-    <Compile Include="Zona.php" />
+    <Compile Include="Clases\Zona.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
