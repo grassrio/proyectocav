@@ -27,6 +27,11 @@ if ($rowcount>0) {?>
            id = $(e.relatedTarget).data('target-id');
        });
    });
+   $(document).ready(function () {
+       $("#ventanaAgregarZona").on("show.bs.modal", function (e) {
+           id = $(e.relatedTarget).data('target-id');
+       });
+   });
         $("#btnNuevoCliente").click(function () {
             $('#btnNuevoCliente').prop('disabled', true);
             var nombreCliente = $('#Nombre').val();
@@ -87,6 +92,22 @@ if ($rowcount>0) {?>
                     carga('PantallaCliente');
                 });
         });
+        $("#btnNuevZona").click(function () {
+            $('#btnNuevZona').prop('disabled', true);
+            var nombreZona = $('#NombreZ').val();
+            alert(nombreZona);
+            alert(id);
+            $.post("ajaxZona.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "nuevoZona",
+                      Nombre: nombreCliente,
+                      idCliente: id,
+                  },
+            function (response, status) { // Required Callback Function
+                $('#ventanaAgregarZona').modal('hide');
+                carga('PantallaCliente');
+            });
+        });
     </script>   
 
     <!--VENTANA PARA INGRESAR UN NUEVO CIENTE-->
@@ -103,12 +124,34 @@ if ($rowcount>0) {?>
                     <div class="modal-body">
                         Nombre
                         <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
-                        Zona
-                        <input name="zona" id="zona" type="text" class="form-control" aria-describedby="basic-addon2" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         <button id="btnNuevoCliente" type="button" class="btn btn-success success">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--VENTANA PARA INGRESAR UN NUEVA ZONA-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarZona">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Agregar Zona</h4>
+                </div>
+                <form name="nuevoZona" method="POST" action="nuevoZona">
+                    <div class="modal-body">
+                        Nombre
+                        <input name="NombreZ" id="NombreZ" type="text" class="form-control" aria-describedby="basic-addon2" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <button id="btnNuevZona" type="button" class="btn btn-success success">Agregar</button>
                     </div>
                 </form>
             </div>
@@ -212,7 +255,9 @@ if ($rowcount>0) {?>
                 {
                     echo "<tr>"
                     ."<td>".$rs[1]."</td>"
-                    ."<td>".$rs[2]."</td>"
+                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaAgregarZona" data-toggle="modal">
+<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>'
+                    ."</td>"
                     ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarCliente" data-toggle="modal">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
                     ."</td>"

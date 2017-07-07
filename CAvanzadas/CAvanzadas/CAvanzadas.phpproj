@@ -23,12 +23,14 @@
   <ItemGroup>
     <Compile Include="ajaxCliente.php" />
     <Compile Include="ajaxRubro.php" />
+    <Compile Include="ajaxZona.php" />
     <Compile Include="Clases\Cliente.php" />
     <Compile Include="Clases\Rubro.php" />
     <Compile Include="FormularioIngresoCliente.php" />
     <Compile Include="includes\ConsultasCliente.php" />
     <Compile Include="includes\config.php" />
     <Compile Include="includes\ConsultasRubro.php" />
+    <Compile Include="includes\ConsultaZonas.php" />
     <Compile Include="includes\loginheader.php" />
     <Compile Include="includes\logout.php" />
     <Compile Include="index.php" />
@@ -40,6 +42,7 @@
     <Compile Include="mysql.php" />
     <Compile Include="Clases\Usuario.php" />
     <Compile Include="PantallaRubro.php" />
+    <Compile Include="Zona.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
