@@ -12,6 +12,13 @@ class Zona
     public function setNombre( $nombre ){	$this->nombreUsu = $nombre; }
     public function getNombre(){ return $this->nombreUsu; }
 
+    public function DevolverZona($connect,$idZona)
+    {
+        $sql = mysqli_query($connect,"SELECT * FROM Zona WHERE idZona='".$idZona."'")
+           or die ("Error al consultar cliente");
+        return $sql;
+    }
+
     public function ExisteZona($connect,$nombre)
     {
         $sql = mysqli_query($connect,"SELECT * FROM Zona WHERE Nombre='".$nombre."'")

@@ -8,17 +8,11 @@ class Cliente
     function construct( $nombre, $unaZona)
     {
         $this->nombre = $nombre;
-        $this->zona = $unaZona;
-
     }
 
     public function setNombre( $nombre ){	$this->nombreUsu = $nombre; }
     public function getNombre(){ return $this->nombreUsu; }
 
-    public function agregarZona($unaZona)
-    {
-        $this->zona[] = $unaZona;
-    }
 
     public function ExisteCliente($connect)
     {
@@ -34,16 +28,16 @@ class Cliente
         return $sql;
     }
 
-    public function InsertarCliente($connect,$nombre,$zona)
+    public function InsertarCliente($connect,$nombre)
     {
-        $sql = mysqli_query($connect,"INSERT INTO Cliente (Nombre,Zona) VALUES ('".$nombre."','".$zona."')")
+        $sql = mysqli_query($connect,"INSERT INTO Cliente (Nombre) VALUES ('".$nombre."')")
             or die ("Error al insertar cliente");
         return $sql;
     }
 
-    public function ObtenerZonas($connect)
+    public function ObtenerZonas($connect,$idCliente)
     {
-        $sql = mysqli_query($connect,"SELECT zona FROM Cliente WHERE Nombre='".$this->nombre."'")
+        $sql = mysqli_query($connect,"SELECT idZona FROM ClienteZona WHERE idCliente='".$idCliente."'")
          or die ("Error al obtener las zonas");
         return $sql;
     }
@@ -54,9 +48,9 @@ class Cliente
         return $sql;
     }
 
-    public function ModificarCliente($connect,$id,$nombre,$zona)
+    public function ModificarCliente($connect,$id,$nombre)
     {
-        $sql = mysqli_query($connect,"UPDATE Cliente SET Nombre='".$nombre."', Zona='".$zona."' WHERE idCliente='".$id."'")
+        $sql = mysqli_query($connect,"UPDATE Cliente SET Nombre='".$nombre."' WHERE idCliente='".$id."'")
             or die ("Error al insertar cliente");
         return $sql;
     }

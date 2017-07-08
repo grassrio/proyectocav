@@ -36,19 +36,14 @@ if ($rowcount>0) {?>
         $("#btnNuevoCliente").click(function () {
             $('#btnNuevoCliente').prop('disabled', true);
             var nombreCliente = $('#Nombre').val();
-            var zona = $('#zona').val();
             if (nombreCliente == '') {
                 alert("Debe ingresar el Nombre del cliente");
-                if(zona ==''){
-                    alert("Debe ingresar la zona del cliente");
-                }
             }
             else {
              $.post("ajaxCliente.php", //Required URL of the page on server
                    { // Data Sending With Request To Server
                        action: "nuevoCliente",
-                       Nombre: nombreCliente,
-                       Zona: zona,
+                       Nombre: nombreCliente
                    },
              function (response, status) { // Required Callback Function
                  $('#ventanaAgregarCliente').modal('hide');
@@ -59,20 +54,15 @@ if ($rowcount>0) {?>
         $("#btnModificarCliente").click(function () {
             $('#btnModificarCliente').prop('disabled', true);
             var nombreCliente = $('#NombreM').val();
-            var zona = $('#zonaM').val();
             if (nombreCliente == '') {
                 alert("Debe ingresar el Nombre del cliente");
-                if (zona == '') {
-                    alert("Debe ingresar la zona del cliente");
-                }
             }
             else {
                 $.post("ajaxCliente.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "modificarCliente",
                           Nombre: nombreCliente,
-                          Zona: zona,
-                          idCliente : id,
+                          idCliente : id
                       },
                 function (response, status) { // Required Callback Function
                     $('#ventanaModificarCliente').modal('hide');
@@ -93,6 +83,9 @@ if ($rowcount>0) {?>
                     carga('PantallaCliente');
                 });
         });
+        $("#btnEliminarZona").click(function () {
+            alert("aca eliminar zona");
+        });
         $("#btnNuevaZona").click(function () {
             $('#btnNuevaZona').prop('disabled', true);
             var nombreZona = $('#NombreZ').val();
@@ -104,10 +97,47 @@ if ($rowcount>0) {?>
                   },
             function (response, status) { // Required Callback Function
                 $('#ventanaAgregarZona').modal('hide');
-                carga('PantallaCliente');
+                $("#ventanaMostrarCliente").modal('hide');
+                //carga('PantallaCliente');
             });
         });
+
+        $("#ventanaMostrarCliente").on("show.bs.modal", function (e) {
+            var idCliente = $(e.relatedTarget).data('target-id');
+            var nombreCliente = $(e.relatedTarget).data('target-nombre');
+            $("#ventanaMostrarClienteTitle").html('<span class="label label-info">'+nombreCliente+'</span>');
+            $.post("ajaxCliente.php", //Required URL of the page on server
+              { // Data Sending With Request To Server
+                  action: "mostrarCliente",
+                  idCliente: idCliente
+              },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMostrarClienteBody").html(response);
+ 
+            });
+            
+        });
     </script>   
+
+    <!--VENTANA MUESTRA DETALLE CIENTE-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="ventanaMostrarCliente">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaMostrarClienteTitle">Cliente</h4>
+                </div>
+                <div class="modal-body" id="ventanaMostrarClienteBody">
+
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+            </div>
+        </div>
+    </div>
 
     <!--VENTANA PARA INGRESAR UN NUEVO CIENTE-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarCliente">
@@ -175,8 +205,6 @@ if ($rowcount>0) {?>
                     <div class="modal-body">
                         Nombre
                         <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
-                        Zona
-                        <input name="zona" id="zonaM" type="text" class="form-control" aria-describedby="basic-addon2" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
@@ -208,7 +236,6 @@ if ($rowcount>0) {?>
             </div>
         </div>
     </div>
-
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -245,23 +272,16 @@ if ($rowcount>0) {?>
         <table class="table">
             <tr>
                 <th>Nombre</th>
-                <th>Zonas</th>
-                <th>Eliminar</th>
-                <th>Editar</th>
+                <th></th>
             </tr>
             <?php
                 while($rs=mysqli_fetch_array($sql))
                 {
                     echo "<tr>"
-                    ."<td>".$rs[1]."</td>"
-                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaAgregarZona" data-toggle="modal">
-<span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>'
-                    ."</td>"
-                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarCliente" data-toggle="modal">
-<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
-                    ."</td>"
+                    ."<td>".'</button><a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCliente">'.$rs[1].'</a>'."</td>"
                     ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCliente" data-toggle="modal">
-<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
+<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button><button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarCliente" data-toggle="modal">
+<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
                     ."</td>"
                     ."</tr>";
                 }

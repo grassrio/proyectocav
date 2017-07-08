@@ -12,7 +12,19 @@ require 'Clases/Cliente.php';
         }
         return $sql;
     }
-    function insertarCliente($nombre,$zona)
+    function obtenerZonas($idCliente){
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $cliente = new Cliente();
+            $sql = $cliente->ObtenerZonas($connect,$idCliente);
+            return $sql;
+        }
+        return $sql;
+    }
+    function insertarCliente($nombre)
     {
         require('config.php');
         $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -20,13 +32,13 @@ require 'Clases/Cliente.php';
         {
             mysqli_select_db($connect,$mysqldb);
             $cliente = new Cliente();
-            $sql = $cliente->InsertarCliente($connect,$nombre,$zona);
+            $sql = $cliente->InsertarCliente($connect,$nombre);
             return $sql;
         }
         return $sql;
     }
 
-    function modificarCliente($id,$nombre,$zona)
+    function modificarCliente($id,$nombre)
     {
         require('config.php');
         $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -34,7 +46,7 @@ require 'Clases/Cliente.php';
         {
             mysqli_select_db($connect,$mysqldb);
             $cliente = new Cliente();
-            $sql = $cliente->ModificarCliente($connect,$id,$nombre,$zona);
+            $sql = $cliente->ModificarCliente($connect,$id,$nombre);
             return $sql;
         }
         return $sql;
