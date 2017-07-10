@@ -60,4 +60,10 @@ class Rubro
             or die ("Error al modificar rubro");
         return $sql;
     }
+    public function DevolverRubro($connect,$idRubro)
+    {
+        $sql = mysqli_query($connect,"SELECT * FROM Rubro WHERE idRubro='".$idRubro."'")
+           or die ("Error al consultar rubro");
+        return $sql;
+    }
 }

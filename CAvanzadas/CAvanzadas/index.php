@@ -46,7 +46,9 @@ if (isset($_SESSION['usuario'])) {?>
                         <li>
                             <a href="JavaScript:carga('PantallaRubro')">Rubros</a>
                         </li>
-                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="JavaScript:carga('PantallaCotizacion')">Cotización</a>
+                        </li>
                         <li>
                             <a href="#">Separated link</a>
                         </li>

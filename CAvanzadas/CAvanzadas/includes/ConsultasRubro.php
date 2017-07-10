@@ -66,4 +66,16 @@ function eliminarRubro($nombre)
     }
     return $sql;
 }
+function devolverRubro($idRubro){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $rubro = new Rubro();
+        $sql = $rubro->DevolverRubro($connect,$idRubro);
+        return $sql;
+    }
+    return $sql;
+}
 ?>

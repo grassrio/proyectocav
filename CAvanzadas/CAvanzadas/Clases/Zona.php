@@ -9,20 +9,20 @@ class Zona
 
     }
 
-    public function setNombre( $nombre ){	$this->nombreUsu = $nombre; }
-    public function getNombre(){ return $this->nombreUsu; }
+    public function setNombre( $nombre ){	$this->nombre= $nombre; }
+    public function getNombre(){ return $this->nombre; }
 
     public function DevolverZona($connect,$idZona)
     {
         $sql = mysqli_query($connect,"SELECT * FROM Zona WHERE idZona='".$idZona."'")
-           or die ("Error al consultar cliente");
+           or die ("Error al consultar zona");
         return $sql;
     }
 
     public function ExisteZona($connect,$nombre)
     {
         $sql = mysqli_query($connect,"SELECT * FROM Zona WHERE Nombre='".$nombre."'")
-           or die ("Error al consultar cliente");
+           or die ("Error al consultar zona");
         return $sql;
     }
 
