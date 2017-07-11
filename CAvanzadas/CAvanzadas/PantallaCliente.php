@@ -15,6 +15,14 @@ if ($rowcount>0) {?>
 </head>
 <body>
     <script>
+        $(document).ready(function () {
+            $(document).ajaxStart(function () {
+                $("#loading").show();
+            }).ajaxStop(function () {
+                $("#loading").hide();
+            });
+        });
+
         var nombreDinamico;
         var id;
    $(document).ready(function(){
@@ -97,12 +105,21 @@ if ($rowcount>0) {?>
                   },
             function (response, status) { // Required Callback Function
                 $('#ventanaAgregarZona').modal('hide');
-                $("#ventanaMostrarCliente").modal('hide');
-                //carga('PantallaCliente');
+                $("#ventanaMostrarClienteBody").html("");
+                $.post("ajaxCliente.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "mostrarCliente",
+                      idCliente: id
+                  },
+                function (response, status) { // Required Callback Function
+                    $("#ventanaMostrarClienteBody").html(response);
+
+                });
             });
         });
 
         $("#ventanaMostrarCliente").on("show.bs.modal", function (e) {
+            $("#ventanaMostrarClienteBody").html("");
             var idCliente = $(e.relatedTarget).data('target-id');
             var nombreCliente = $(e.relatedTarget).data('target-nombre');
             $("#ventanaMostrarClienteTitle").html('<span class="label label-info">'+nombreCliente+'</span>');
@@ -236,6 +253,10 @@ if ($rowcount>0) {?>
             </div>
         </div>
     </div>
+
+
+    
+
 
     <div class="panel panel-default">
         <!-- Default panel contents -->

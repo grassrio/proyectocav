@@ -16,11 +16,20 @@ if (isset($_SESSION['usuario'])) {?>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#loading").hide();
+        });
         function carga(script) {
             jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
             ;
         }
     </script>
+        
+
+    <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 1;">
+        <img src="img/Loading.gif" />
+    </div>
+
     <div class="panel panel-info">
         <div class="panel-heading">
             <h3 class="panel-title">Construcciones Avanzadas SRL</h3>
