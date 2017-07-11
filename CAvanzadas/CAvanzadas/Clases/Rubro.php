@@ -18,16 +18,16 @@ class Rubro
     public function getNombre(){ return $this->nombre; }
 
 
-    public function BuscarRubro($connect)
+    public function BuscarRubro($connect,$nombre)
     {
-        $sql = mysqli_query($connect,"SELECT * FROM Rubro WHERE Nombre like '"."%".$this->nombre."%"."'")
+        $sql = mysqli_query($connect,"SELECT * FROM Rubro WHERE Nombre like '"."%".$nombre."%"."'")
            or die ("Error al buscar rubro");
         return $sql;
     }
 
-    public function ExisteRubro($connect)
+    public function ExisteRubro($connect,$nombre)
     {
-        $sql = mysqli_query($connect,"SELECT * FROM Rubro WHERE Nombre='".$this->nombre."'")
+        $sql = mysqli_query($connect,"SELECT * FROM Rubro WHERE Nombre='".$nombre."'")
            or die ("Error al consultar rubro");
         return $sql;
     }
