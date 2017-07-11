@@ -85,6 +85,7 @@ if (isset($_SESSION['usuario'])) {?>
                 });
        });
        $("#ventanaMostrarCotizacion").on("show.bs.modal", function (e) {
+           $("#ventanaMostrarCotizacionBody").html("");
            var idCotizacion = $(e.relatedTarget).data('target-id');
            var nombreCoti = $(e.relatedTarget).data('target-nombre');
            $("#ventanaMostrarCotizacionTitle").html('<span class="label label-info">' + nombreCoti + '</span>');
@@ -99,6 +100,30 @@ if (isset($_SESSION['usuario'])) {?>
            });
 
        });
+
+       function EliminarRubroPrecio($idRubro, $idCotizacion) {
+           var idRubro = $idRubro;
+           var idCotizacion = $idCotizacion;
+           $.post("ajaxCotizacion.php", //Required URL of the page on server
+                 { // Data Sending With Request To Server
+                     action: "eliminarRubroPrecio",
+                     idRubro: idRubro,
+                     idCotizacion: idCotizacion
+                 },
+           function (response, status) { // Required Callback Function
+               $("#ventanaMostrarCotizacionBody").html("");
+               $.post("ajaxCotizacion.php", //Required URL of the page on server
+                 { // Data Sending With Request To Server
+                     action: "mostrarCotizacion",
+                     idCotizacion: idCotizacion
+                 },
+               function (response, status) { // Required Callback Function
+                   $("#ventanaMostrarCotizacionBody").html(response);
+
+               });
+           });
+       }
+
        $("#btnNuevaRubro").click(function () {
            $('#btnNuevaRubro').prop('disabled', true);
            var Precio  = $('#Precio').val();
@@ -112,8 +137,18 @@ if (isset($_SESSION['usuario'])) {?>
                  },
            function (response, status) { // Required Callback Function
                $('#ventanaAgregarRubro').modal('hide');
-               $("#ventanaMostrarCotizacion").modal('hide');
-               carga('PantallaCotizacion');
+               $('#btnNuevaRubro').prop('disabled', false);
+               $('#Precio').val("");
+               $("#ventanaMostrarCotizacionBody").html("");
+               $.post("ajaxCotizacion.php", //Required URL of the page on server
+                 { // Data Sending With Request To Server
+                     action: "mostrarCotizacion",
+                     idCotizacion: id
+                 },
+               function (response, status) { // Required Callback Function
+                   $("#ventanaMostrarCotizacionBody").html(response);
+
+               });
            });
        });
 
@@ -185,16 +220,18 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Agregar Rubro</h4>
                 </div>
                 <form name="nuevoRubro" method="POST" action="nuevoRubro">
-                    <select name='rubroCombo' id='rubroCombo'>
-                        <?php
-                    $sql = devolverRubros();
-                        while ($rs=mysqli_fetch_array($sql))
-                      {
-                        echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
-                      }
-                        ?>
-                    </select> 
+                     
                     <div class="modal-body">
+                        Rubro <select name='rubroCombo' id='rubroCombo'>
+                            <?php
+                                $sql = devolverRubros();
+                                while ($rs=mysqli_fetch_array($sql))
+                                {
+                                    echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
+                                }
+                            ?>
+                        </select>
+                        <br />
                         Precio
                         <input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
                     </div>

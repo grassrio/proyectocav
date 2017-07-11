@@ -53,6 +53,13 @@ class Cotizacion
         return $sql;
     }
 
+    public function EliminarRubroPrecio($connect,$idRubro,$idCotizacion)
+    {
+        $sql = mysqli_query($connect,"DELETE FROM RubroCotizacion WHERE idRubro='".$idRubro."' and idCotizacion='".$idCotizacion."'")
+         or die ("Error al obtener las cotización");
+        return $sql;
+    }
+
     public function ModificarCotización($connect,$id,$nombre)
     {
         $sql = mysqli_query($connect,"UPDATE Cotizacion SET Nombre='".$nombre."' WHERE idCotizacion='".$id."'")

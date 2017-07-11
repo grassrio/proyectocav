@@ -18,7 +18,13 @@ if (isset($_SESSION['usuario'])) {?>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#loading").hide();
+            $(document).ajaxStart(function () {
+                $("#loading").show();
+            }).ajaxStop(function () {
+                $("#loading").hide();
+            });
         });
+
         function carga(script) {
             jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
             ;
@@ -26,7 +32,8 @@ if (isset($_SESSION['usuario'])) {?>
     </script>
         
 
-    <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 1;">
+
+    <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
         <img src="img/Loading.gif" />
     </div>
 

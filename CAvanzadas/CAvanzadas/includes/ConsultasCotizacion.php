@@ -63,6 +63,21 @@ function eliminarCotizacion($nombre)
     return $sql;
 }
 
+function eliminarRubroPrecio($idRubro,$idCotizacion)
+{
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $cotizacion = new Cotizacion();
+        $sql = $cotizacion->EliminarRubroPrecio($connect,$idRubro,$idCotizacion);
+
+        return $sql;
+    }
+    return $sql;
+}
+
 function listaCotizacion()
 {
     require('config.php');

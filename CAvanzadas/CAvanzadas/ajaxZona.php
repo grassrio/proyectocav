@@ -7,7 +7,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             insertarZona($_POST['Nombre'],$_POST['idCliente']);
             break;
         case 'eliminarZona' :
-            eliminarZona($_POST['Nombre']);
+            eliminarZona($_POST['idZona']);
             break;
         case 'modificarZona' :
             modificarZona($_POST['idZona'],$_POST['Nombre']);

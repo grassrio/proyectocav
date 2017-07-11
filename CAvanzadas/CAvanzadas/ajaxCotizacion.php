@@ -14,6 +14,9 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'eliminarCotizacion' :
             eliminarCotizacion($_POST['Nombre']);
             break;
+        case 'eliminarRubroPrecio' :
+            eliminarRubroPrecio($_POST['idRubro'],$_POST['idCotizacion']);
+            break;
         case 'modificarCotizacion' :
             modificarCotizacion($_POST['idCotizacion'],$_POST['Nombre']);
             break;
@@ -30,7 +33,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     $rsrubro=mysqli_fetch_array($rubro);
                     echo '<tr><td>'.$rsrubro[Nombre].'</td>
                               <td>'.$rs[Precio].'</td>
-                              <td><button id="btnEliminarZona" type="button" class="btn btn-default">
+                              <td><button onclick="EliminarRubroPrecio('.$rsrubro[idRubro].','.$idCotizacion.')" id="btnEliminarRubroPrecio" type="button" class="btn btn-default">
                               <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
                         </tr>';
                 }

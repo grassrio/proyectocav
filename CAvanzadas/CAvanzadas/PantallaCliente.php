@@ -15,14 +15,6 @@ if ($rowcount>0) {?>
 </head>
 <body>
     <script>
-        $(document).ready(function () {
-            $(document).ajaxStart(function () {
-                $("#loading").show();
-            }).ajaxStop(function () {
-                $("#loading").hide();
-            });
-        });
-
         var nombreDinamico;
         var id;
    $(document).ready(function(){
@@ -91,9 +83,27 @@ if ($rowcount>0) {?>
                     carga('PantallaCliente');
                 });
         });
-        $("#btnEliminarZona").click(function () {
-            alert("aca eliminar zona");
-        });
+        function EliminarZona($idZona,$idCliente) {
+            var idZona = $idZona;
+            var idCliente = $idCliente;
+            $.post("ajaxZona.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "eliminarZona",
+                      idZona: idZona
+                  },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMostrarClienteBody").html("");
+                $.post("ajaxCliente.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "mostrarCliente",
+                      idCliente: idCliente
+                  },
+                function (response, status) { // Required Callback Function
+                    $("#ventanaMostrarClienteBody").html(response);
+
+                });
+            });
+        }
         $("#btnNuevaZona").click(function () {
             $('#btnNuevaZona').prop('disabled', true);
             var nombreZona = $('#NombreZ').val();

@@ -25,7 +25,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     $zona=devolverZona($idZona);
                     $rsZona=mysqli_fetch_array($zona);
                     echo '<tr><td>'.$rsZona[Nombre].'</td>
-<td><button id="btnEliminarZona" type="button" class="btn btn-default">
+<td><button onclick="EliminarZona('.$rsZona[idZona].','.$idCliente.')" id="btnEliminarZona" type="button" class="btn btn-default">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>
 </tr>';
                 }

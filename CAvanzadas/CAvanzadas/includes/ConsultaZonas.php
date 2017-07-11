@@ -61,7 +61,7 @@ function modificarZona($id,$nombre)
     return $sql;
 }
 
-function eliminarZona($nombre)
+function eliminarZona($idZona)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -69,7 +69,7 @@ function eliminarZona($nombre)
     {
         mysqli_select_db($connect,$mysqldb);
         $zona = new Zona();
-        $sql = $zona->EliminarZona($connect,$nombre);
+        $sql = $zona->EliminarZona($connect,$idZona);
 
         return $sql;
     }
