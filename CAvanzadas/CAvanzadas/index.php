@@ -10,6 +10,7 @@ if (isset($_SESSION['usuario'])) {?>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CAvanzadas</title>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
     <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
