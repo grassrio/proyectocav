@@ -165,7 +165,7 @@ if (isset($_SESSION['usuario'])) {?>
                                     {
                                         echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
                                     }
-                                    ?>
+                                                                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -190,7 +190,7 @@ if (isset($_SESSION['usuario'])) {?>
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-    <!--VENTANA PARA MODIFICAR UN LICITACION-->
+<!--VENTANA PARA MODIFICAR UN LICITACION-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaModificarLicitacion">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -200,23 +200,29 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Modificar Licitacion</h4>
                 </div>
-                <form name="modificarRubro" method="POST" action="modificarRubro">
-                    <div class="modal-body" id="modificarDinamico">
-                        <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
-                        <!-- esto se carga dinamico-->
-                    </div>
-                    <div class="modal-body">
-                        Selecione el Estado:
-                        <select name='estadoCombo1' id='estadoCombo1'>
-                             <option value='1' selected>Aprobada</option>
-                             <option value='2' selected>Rechazada</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnModificarLicitacion" type="button" class="btn btn-success success">Modificar</button>
-                    </div>
-                </form>
+				<div class="modal-body">
+					<form name="modificarRubro" method="POST" action="modificarRubro">
+						<div class="modal-body" id="modificarDinamico">
+							<input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+							<!-- esto se carga dinamico-->
+						</div>
+						<div class="form-group row">
+	                        <label for="Estado" class="col-sm-2 col-form-label">
+                                Selecione el Estado:
+                            </label>
+							<div class="col-sm-8">
+								<select name='estadoCombo1' id='estadoCombo1'>
+									 <option value='1' selected>Aprobada</option>
+									 <option value='2' selected>Rechazada</option>
+								</select>
+							</div>	
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+							<button id="btnModificarLicitacion" type="button" class="btn btn-success success">Modificar</button>
+						</div>
+					</form>
+				</div>
             </div>
         </div>
     </div>
