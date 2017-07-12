@@ -87,7 +87,6 @@
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery.min.js" />
-    <Content Include="js\jquery.popup-box.js" />
     <Content Include="js\md5.js" />
     <Content Include="js\npm.js" />
     <None Include="Properties\PublishProfiles\Heliohost.pubxml" />
