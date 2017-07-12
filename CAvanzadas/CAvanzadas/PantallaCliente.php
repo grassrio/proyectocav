@@ -156,12 +156,10 @@ if ($rowcount>0) {?>
                     </button>
                     <h4 class="modal-title" id="ventanaMostrarClienteTitle">Cliente</h4>
                 </div>
-                <div class="modal-body" id="ventanaMostrarClienteBody">
-
+                <div class="modal-body" id="ventanaMostrarClienteBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    </div>
             </div>
         </div>
     </div>
@@ -176,16 +174,22 @@ if ($rowcount>0) {?>
                     </button>
                     <h4 class="modal-title">Agregar Cliente</h4>
                 </div>
-                <form name="nuevoCliente" method="POST" action="nuevoCliente">
-                    <div class="modal-body">
-                        Nombre
-                        <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevoCliente" type="button" class="btn btn-success success">Agregar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="nuevoCliente" method="POST" action="nuevoCliente">
+                        <div class="form-group row">
+                            <label for="Nombre" class="col-sm-2 col-form-label">
+                                Nombre:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnNuevoCliente" type="button" class="btn btn-success success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -200,16 +204,22 @@ if ($rowcount>0) {?>
                     </button>
                     <h4 class="modal-title">Agregar Zona</h4>
                 </div>
-                <form name="nuevoZona" method="POST" action="nuevoZona">
-                    <div class="modal-body">
-                        Nombre
-                        <input name="NombreZ" id="NombreZ" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevaZona" type="button" class="btn btn-success success">Agregar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="nuevoZona" method="POST" action="nuevoZona">
+                        <div class="form-group row">
+                            <label for="Nombre" class="col-sm-2 col-form-label">
+                                Nombre:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="NombreZ" id="NombreZ" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnNuevaZona" type="button" class="btn btn-success success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -224,20 +234,26 @@ if ($rowcount>0) {?>
                     </button>
                     <h4 class="modal-title">Modificar Cliente</h4>
                 </div>
-                <form name="modificarCliente" method="POST" action="modificarCliente">
-                    <div class="modal-body" id="modificarDinamico">
-                        <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
-                        <!-- esto se carga dinamico-->
-                    </div>
-                    <div class="modal-body">
-                        Nombre
-                        <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnModificarCliente" type="button" class="btn btn-success success">Modificar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="modificarCliente" method="POST" action="modificarCliente">
+                        <div class="modal-body" id="modificarDinamico">
+                            <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+                            <!-- esto se carga dinamico-->
+                        </div>
+                        <div class="form-group row">
+                            <label for="Estado" class="col-sm-2 col-form-label">
+                                Nombre:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnModificarCliente" type="button" class="btn btn-success success">Modificar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
