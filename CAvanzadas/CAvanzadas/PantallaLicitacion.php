@@ -121,52 +121,72 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Agregar licitacion</h4>
                 </div>
-                <form name="NuevaLicitacion" method="POST" action="NuevaLicitacion">
-                    <div class="modal-body">
-                        Nro Compra directa:
-                        <input name="Codigo" id="Codigo" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-body">
-                        Presupuesto:
-                        <input name="Presupuesto" id="Presupuesto" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-body">
-                        Selecione el cliente:
-                        <select name='clienteCombo' id='clienteCombo'>
-                            <?php
+                <div class="modal-body">
+                    <form name="NuevaLicitacion" method="POST" action="NuevaLicitacion">
+                        <div class="form-group row">
+                            <label for="Compra" class="col-sm-2 col-form-label">
+                                Codigo compra:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Codigo" id="Codigo" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Presupuesto" class="col-sm-2 col-form-label">
+                                Presupuesto:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Presupuesto" id="Presupuesto" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="cliente" class="col-sm-2 col-form-label">
+                                Selecione el cliente:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name='clienteCombo' id='clienteCombo'><?php
                                 $sql = devolverClientes();
                                 while ($rs=mysqli_fetch_array($sql))
                                 {
                                     echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
                                 }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="modal-body">
-                        Selecione una cotizacion:
-                        <select name='cotizacionCombo' id='cotizacionCombo'>
-                            <?php
-                                $sql = listaCotizacion();
-                                while ($rs=mysqli_fetch_array($sql))
-                                {
-                                    echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
-                                }
-                            ?>
-                        </select>
-                    </div>
-                    <div class="modal-body">
-                        Selecione el Estado:
-                        <select name='estadoCombo' id='estadoCombo'>
-                             <option value='1' selected>Aprobada</option>
-                             <option value='2' selected>Rechazada</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevaLicitacion" type="button" class="btn btn-success success">Agregar</button>
-                    </div>
-                </form>
-            </div><!-- /.modal-content -->
+                                                                          ?>
+                                </select>
+                                </div>
+                            </div>
+                        <div class="form-group row">
+                            <label for="cotizacion" class="col-sm-2 col-form-label">
+                                Selecione una cotizacion:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name='cotizacionCombo' id='cotizacionCombo'><?php
+                                    $sql = listaCotizacion();
+                                    while ($rs=mysqli_fetch_array($sql))
+                                    {
+                                        echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Estado" class="col-sm-2 col-form-label">
+                                Selecione el Estado:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name='estadoCombo' id='estadoCombo'>
+                                    <option value='1' selected>Aprobada</option>
+                                    <option value='2' selected>Rechazada</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnNuevaLicitacion" type="button" class="btn btn-success success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
+                </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
