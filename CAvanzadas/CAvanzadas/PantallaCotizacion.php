@@ -172,6 +172,7 @@ if (isset($_SESSION['usuario'])) {?>
         </div>
     </div>
 
+
     <!--VENTANA PARA INGRESAR UNA NUEVA COTIZACI�N-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarCotizacion">
         <div class="modal-dialog" role="document">
@@ -182,29 +183,35 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Agregar Cotizacion</h4>
                 </div>
-                <form name="nuevaCotizacion" method="POST" action="nuevaCotizacion">
-                    <div class="modal-body">
-                        Nombre
-                        <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <!--<select name='rubro' id='rubro'>    
-                    //    <?php
-                      //      $sql = devolverRubros();
-                        //    while ($rs=mysqli_fetch_array($sql))
-                          //  {
-                            //    echo "<option value='".$rs[0]."' selected>'".$rs[1]."'</option>";
-                            //}
-                          ?> 
-                    </select> 
-                    <div class="modal-body">
-                        Precio
-                        <input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>-->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevoCotizacion" type="button" class="btn btn-success success">Agregar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="nuevaCotizacion" method="POST" action="nuevaCotizacion">
+                        <div class="form-group row">
+                            <label for="Nombre" class="col-sm-2 col-form-label">
+                                Nombre:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <!--<select name='rubro' id='rubro'>    
+						//    <?php
+    //      $sql = devolverRubros();
+    //    while ($rs=mysqli_fetch_array($sql))
+    //  {
+    //    echo "<option value='".$rs[0]."' selected>'".$rs[1]."'</option>";
+    //}
+                              ?> 
+						</select> 
+						<div class="modal-body">
+							Precio
+							<input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
+						</div>-->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnNuevoCotizacion" type="button" class="btn btn-success success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -219,27 +226,38 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Agregar Rubro</h4>
                 </div>
-                <form name="nuevoRubro" method="POST" action="nuevoRubro">
-                     
-                    <div class="modal-body">
-                        Rubro <select name='rubroCombo' id='rubroCombo'>
-                            <?php
-                                $sql = devolverRubros();
-                                while ($rs=mysqli_fetch_array($sql))
-                                {
-                                    echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
-                                }
-                            ?>
-                        </select>
-                        <br />
-                        Precio
-                        <input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevaRubro" type="button" class="btn btn-success success">Agregar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="nuevoRubro" method="POST" action="nuevoRubro">
+                        <div class="form-group row">
+                            <label for="Rubro" class="col-sm-2 col-form-label">
+                                Rubro:
+                            </label>
+                            <div class="col-sm-8">
+                                <select name='rubroCombo' id='rubroCombo'>
+                                    <?php
+    $sql = devolverRubros();
+    while ($rs=mysqli_fetch_array($sql))
+    {
+        echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
+    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Compra" class="col-sm-2 col-form-label">
+                                Precio:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnNuevaRubro" type="button" class="btn btn-success success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -254,24 +272,29 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Modificar Cotizaci�n</h4>
                 </div>
-                <form name="modificarCotizacion" method="POST" action="modificarCotizacion">
-                    <div class="modal-body" id="modificarDinamico">
-                        <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
-                        <!-- esto se carga dinamico-->
-                    </div>
-                    <div class="modal-body">
-                        Nombre
-                        <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnModificarCotizacion" type="button" class="btn btn-success success">Modificar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="modificarCotizacion" method="POST" action="modificarCotizacion">
+                        <div class="modal-body" id="modificarDinamico">
+                            <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+                            <!-- esto se carga dinamico-->
+                        </div>
+                        <div class="form-group row">
+                            <label for="Nombre" class="col-sm-2 col-form-label">
+                                Nombre:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnModificarCotizacion" type="button" class="btn btn-success success">Modificar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-
     <!--VENTANA PARA CONFIRMAR QUE SE VA A ELIMINAR LA COTIZACION-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaEliminarCotizacion">
         <div class="modal-dialog" role="document">
