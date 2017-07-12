@@ -202,15 +202,7 @@ if (isset($_SESSION['usuario'])) {?>
                         </li>
  
                     </ul>
-                    <!-- busqueda -->
-                    <form class="navbar-form navbar-left">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="" />
-                        </div>
-                        <button type="submit" class="btn btn-default">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </button>
-                    </form>
+
 
 
 

@@ -53,8 +53,12 @@ if (isset($_SESSION['usuario'])) {?>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="JavaScript:carga('Pantallalicitacion')">Licitaciones</a>
+                            <a href="JavaScript:carga('PantallaLicitacion')">Licitaciones</a>
                         </li>
+                        <li>
+                            <a href="JavaScript:carga('PantallaObra')">Obras</a>
+                        </li>
+                        <li role="separator" class="divider"></li>
                         <li>
                             <a href="JavaScript:carga('PantallaCliente')">Clientes</a>
                         </li>
@@ -65,13 +69,7 @@ if (isset($_SESSION['usuario'])) {?>
                         <li>
                             <a href="JavaScript:carga('PantallaCotizacion')">Cotización</a>
                         </li>
-                        <li>
-                            <a href="#">Separated link</a>
-                        </li>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a href="#">One more separated link</a>
-                        </li>
+                      
                     </ul>
                 </div>
 
