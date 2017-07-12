@@ -107,9 +107,33 @@ if (isset($_SESSION['usuario'])) {?>
                     carga('PantallaLicitacion');
                 });
         });
-
-
+        function desplegarLicitacion($idLicitacion) {
+            var idLicitacion = $idLicitacion
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "obtenerLicitacion",
+                          idLicitacion: idLicitacion
+                      },
+                function (response, status) { // Required Callback Function
+                    $("#contenido").hide();
+                    $("#subcontenido").show();
+                    $("#subcontenido").html(response);
+                });
+            
+        }
+        function mostrarocultar(action,id)
+        {
+            if (action == "mostrar") {
+                $("#" + id).show();
+            } else {
+                $("#" + id).hide();
+            }
+            
+        }
     </script>
+
+    
+
 
     <!--VENTANA PARA INGRESAR UN NUEVO LICITACION-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarLicitacion">
@@ -293,7 +317,7 @@ if (isset($_SESSION['usuario'])) {?>
         <!-- Table -->
         <table class="table">
             <tr>
-                <th>Numero compra directa</th>
+                <th>Nº compra directa</th>
                 <th>Estado</th>
                 <th></th>
             </tr>
@@ -304,13 +328,13 @@ if (isset($_SESSION['usuario'])) {?>
                     while($rs=mysqli_fetch_array($sql))
                     {
                         echo "<tr>"
-                        ."<td>".$rs[4]."</td>"
+                        .'<td><a onclick="desplegarLicitacion('.$rs[idLicitacion].')">'.$rs[4].'</a></td>'
                         ."<td>".$rs[3]."</td>"
                         ."<td></td>"
-                        ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[4].'" data-target="#ventanaEliminarLicitacion" data-toggle="modal">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
-                            .'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarLicitacion" data-toggle="modal">
+                        ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarLicitacion" data-toggle="modal">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
+                        .'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[4].'" data-target="#ventanaEliminarLicitacion" data-toggle="modal">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
                         ."</td>"
                         ."</tr>";
                     }

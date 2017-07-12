@@ -27,11 +27,14 @@ if (isset($_SESSION['usuario'])) {?>
         });
 
         function carga(script) {
+            $("#contenido").show();
+            $("#subcontenido").hide();
             jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
             ;
         }
     </script>
         
+
 
 
     <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
@@ -148,7 +151,11 @@ if (isset($_SESSION['usuario'])) {?>
    
     <div id="main">
         <div id="contenido"></div>
+        <div id="subcontenido"></div>
     </div>
+
+
+        
     
 </body>
 </html>

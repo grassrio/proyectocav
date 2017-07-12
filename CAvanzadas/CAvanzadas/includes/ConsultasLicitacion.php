@@ -46,6 +46,21 @@ function eliminarLicitacion($codigo)
     }
     return $sql;
 }
+
+function obtenerLicitacion($idLicitacion)
+{
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $lic = new Licitacion();
+        $sql = $lic->ObtenerLicitacion($connect,$idLicitacion);
+        return $sql;
+    }
+    return $sql;
+}
+
 function ListarLicitaciones()
 {
     require('config.php');
