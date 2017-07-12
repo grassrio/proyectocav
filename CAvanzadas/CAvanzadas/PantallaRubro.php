@@ -106,20 +106,38 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Agregar rubro</h4>
                 </div>
-                <form name="nuevoRubro" method="POST" action="nuevoRubro">
-                    <div class="modal-body">
-                        Nombre
-                        <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
-                        Unidad
-                        <input name="Unidad" id="Unidad" type="text" class="form-control" aria-describedby="basic-addon2" />
-                        Cantidad de stock
-                        <input name="cantidadStock" id="cantidadStock" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnNuevoRubro" type="button" class="btn btn-success success">Agregar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="nuevoRubro" method="POST" action="nuevoRubro">
+                        <div class="form-group row">
+                            <label for="Nombre" class="col-sm-2 col-form-label">
+                                Nombre:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Unidad" class="col-sm-2 col-form-label">
+                                Unidad:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="Unidad" id="Unidad" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Cantidad" class="col-sm-2 col-form-label">
+                                Cantidad de stock:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="cantidadStock" id="cantidadStock" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnNuevoRubro" type="button" class="btn btn-success success">Agregar</button>
+                        </div>
+                    </form>
+                </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -134,24 +152,44 @@ if (isset($_SESSION['usuario'])) {?>
                     </button>
                     <h4 class="modal-title">Modificar Cliente</h4>
                 </div>
-                <form name="modificarRubro" method="POST" action="modificarRubro">
-                    <div class="modal-body" id="modificarDinamico">
-                        <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
-                        <!-- esto se carga dinamico-->
-                    </div>
-                    <div class="modal-body">
-                        Nombre
-                        <input name="NombreM" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
-                        Unidad
-                        <input name="UnidadM" id="UnidadM" type="text" class="form-control" aria-describedby="basic-addon2" />
-                        Cantidad de stock
-                        <input name="cantidadStockM" id="cantidadStockM" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                        <button id="btnModificarRubro" type="button" class="btn btn-success success">Modificar</button>
-                    </div>
-                </form>
+                <div class="modal-body">
+                    <form name="modificarRubro" method="POST" action="modificarRubro">
+                        <div class="modal-body" id="modificarDinamico">
+                            <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+                            <!-- esto se carga dinamico-->
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group row">
+                                <label for="Nombre" class="col-sm-2 col-form-label">
+                                    Nombre:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="NombreM" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Unidad" class="col-sm-2 col-form-label">
+                                    Unidad:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="UnidadM" id="UnidadM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Cantidad" class="col-sm-2 col-form-label">
+                                    Cantidad de stock:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="cantidadStockM" id="cantidadStockM" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnModificarRubro" type="button" class="btn btn-success success">Modificar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -233,10 +271,7 @@ if (isset($_SESSION['usuario'])) {?>
                     ."<td>".$rs[3]."</td>"
                     ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarRubro" data-toggle="modal">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</button>
-                            '
-                    ."</td>"
-                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarRubro" data-toggle="modal">
+</button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarRubro" data-toggle="modal">
 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
                     ."</td>"
                     ."</tr>";
