@@ -49,16 +49,16 @@ class Zona
     public function EliminarZona($connect,$idZona)
     {
         $sql = mysqli_query($connect,"DELETE FROM Zona WHERE idZona='".$idZona."'")
-         or die ("Error al obtener las zonas");
+         or die ("Error al eliminar las zonas");
         $sql = mysqli_query($connect,"DELETE FROM ClienteZona WHERE idZona='".$idZona."'")
-         or die ("Error al obtener las zonas");
+         or die ("Error al eliminar las zonas");
         return $sql;
     }
 
     public function ModificarZona($connect,$id,$nombre)
     {
         $sql = mysqli_query($connect,"UPDATE Zona SET Nombre='".$nombre."' WHERE idZona='".$id."'")
-            or die ("Error al insertar zona");
+            or die ("Error al modificar zona");
         return $sql;
     }
 }

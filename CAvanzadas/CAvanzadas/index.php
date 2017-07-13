@@ -12,10 +12,12 @@ if (isset($_SESSION['usuario'])) {?>
     <link href="css/bootstrap.min.css" rel="stylesheet" />
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
     <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 </head>
 <body>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/sweetalert.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#loading").hide();

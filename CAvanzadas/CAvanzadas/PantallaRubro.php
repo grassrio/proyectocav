@@ -32,7 +32,31 @@ if (isset($_SESSION['usuario'])) {?>
             var unidadRubro = $('#Unidad').val();
             var cantidadStock = $('#cantidadStock').val();
             if (nombreRubro == '') {
-                alert("Please enter UserId");
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el nombre del rubro!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevoRubro').prop('disabled', false);
+            } else if (unidadRubro=='')
+            {
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar la unidad del rubro!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevoRubro').prop('disabled', false);
+            }else if(cantidadStock=='')
+            {
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar la cantidad del rubro!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevoRubro').prop('disabled', false);
             }
             else {
              $.post("ajaxRubro.php", //Required URL of the page on server
@@ -43,9 +67,18 @@ if (isset($_SESSION['usuario'])) {?>
                        cantidadStock: cantidadStock
                    },
              function (response, status) { // Required Callback Function
-                 //$("#bingo").html(response);//"response" receives - whatever written in echo of above PHP script.
-                 $('#ventanaAgregarRubro').modal('hide');
-                 carga('PantallaRubro');
+                 if (response == '') {
+                     $('#ventanaAgregarRubro').modal('hide');
+                     carga('PantallaRubro');
+                 
+                 } else
+                 {
+                     $('#btnNuevoRubro').prop('disabled', false);
+                     $('#Nombre').val('');
+                     $('#Unidad').val('');
+                     $('#cantidadStock').val('');
+                 }
+
              });
             }
         });
@@ -55,13 +88,29 @@ if (isset($_SESSION['usuario'])) {?>
             var unidadRubro = $('#UnidadM').val();
             var cantidadStock = $('#cantidadStockM').val();
             if (nombreRubro == '') {
-                alert("Debe ingresar el Nombre del Rubro");
-                if (unidadRubro == '') {
-                    alert("Debe ingresar la unidad del Rubro");
-                }
-                if (cantidadStock == '') {
-                    alert("Debe ingresar la Cantidad del Rubro");
-                }
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el nombre del rubro!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnModificarRubro').prop('disabled', false);
+            } else if (unidadRubro == '') {
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar la unidad del rubro!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnModificarRubro').prop('disabled', false);
+            } else if (cantidadStock == '') {
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar la cantidad del rubro!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnModificarRubro').prop('disabled', false);
             }
             else {
                 $.post("ajaxRubro.php", //Required URL of the page on server
@@ -73,8 +122,18 @@ if (isset($_SESSION['usuario'])) {?>
                           idRubro: id,
                       },
                 function (response, status) { // Required Callback Function
-                    $('#ventanaModificarRubro').modal('hide');
-                    carga('PantallaRubro');
+                    if (response=='')
+                    {
+                        $('#ventanaModificarRubro').modal('hide');
+                        carga('PantallaRubro');
+                    }
+                    else {
+                         $('#NombreM').val('');
+                         $('#UnidadM').val('');
+                         $('#cantidadStockM').val('');
+                         $('#btnModificarRubro').prop('disabled', false);
+                    }
+                    
                 });
             }
         });

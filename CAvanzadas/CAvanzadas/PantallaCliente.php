@@ -37,7 +37,13 @@ if ($rowcount>0) {?>
             $('#btnNuevoCliente').prop('disabled', true);
             var nombreCliente = $('#Nombre').val();
             if (nombreCliente == '') {
-                alert("Debe ingresar el Nombre del cliente");
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el Nombre del cliente!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevoCliente').prop('disabled', false);
             }
             else {
              $.post("ajaxCliente.php", //Required URL of the page on server
@@ -46,8 +52,22 @@ if ($rowcount>0) {?>
                        Nombre: nombreCliente
                    },
              function (response, status) { // Required Callback Function
-                 $('#ventanaAgregarCliente').modal('hide');
-                 carga('PantallaCliente');
+                 if(response=='')
+                 {
+                     $('#ventanaAgregarCliente').modal('hide');
+                     carga('PantallaCliente');
+                 }
+                 else
+                {
+                     swal({
+                         title: "Advertencia!",
+                         text: response,
+                         type: "warning",
+                         confirmButtonText: "OK"
+                     });
+                     $('#btnNuevoCliente').prop('disabled', false);
+                     $('#Nombre').val('');
+                }
              });
             }
         });
@@ -55,7 +75,13 @@ if ($rowcount>0) {?>
             $('#btnModificarCliente').prop('disabled', true);
             var nombreCliente = $('#NombreM').val();
             if (nombreCliente == '') {
-                alert("Debe ingresar el Nombre del cliente");
+                 swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el Nombre del cliente!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                 });
+                 $('#btnModificarCliente').prop('disabled', false);
             }
             else {
                 $.post("ajaxCliente.php", //Required URL of the page on server
@@ -65,23 +91,45 @@ if ($rowcount>0) {?>
                           idCliente : id
                       },
                 function (response, status) { // Required Callback Function
-                    $('#ventanaModificarCliente').modal('hide');
-                    carga('PantallaCliente');
+                    if (response == '') {
+                        $('#ventanaModificarCliente').modal('hide');
+                        carga('PantallaCliente');
+                    }
+                    else {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                        $('#btnModificarCliente').prop('disabled', false);
+                        $('#NombreM').val('');
+                    }
                 });
             }
         });
         $("#btnEliminarCliente").click(function () {
             $('#btnEliminarCliente').prop('disabled', true);
             var nombreCliente = nombreDinamico
-                $.post("ajaxCliente.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "eliminarCliente",
-                          Nombre: nombreCliente,
-                      },
-                function (response, status) { // Required Callback Function
+            $.post("ajaxCliente.php", //Required URL of the page on server
+                    { // Data Sending With Request To Server
+                        action: "eliminarCliente",
+                        Nombre: nombreCliente,
+                    },
+            function (response, status) { // Required Callback Function
+                if (response == '') {
                     $('#ventanaEliminarCliente').modal('hide');
                     carga('PantallaCliente');
-                });
+                }
+                else {
+                    swal({
+                        title: "Advertencia!",
+                        text: response,
+                        type: "warning",
+                        confirmButtonText: "OK"
+                    });
+                }
+            });
         });
         function EliminarZona($idZona,$idCliente) {
             var idZona = $idZona;
@@ -107,25 +155,47 @@ if ($rowcount>0) {?>
         $("#btnNuevaZona").click(function () {
             $('#btnNuevaZona').prop('disabled', true);
             var nombreZona = $('#NombreZ').val();
-            $.post("ajaxZona.php", //Required URL of the page on server
-                  { // Data Sending With Request To Server
-                      action: "nuevoZona",
-                      Nombre: nombreZona,
-                      idCliente: id,
-                  },
-            function (response, status) { // Required Callback Function
-                $('#ventanaAgregarZona').modal('hide');
-                $("#ventanaMostrarClienteBody").html("");
-                $.post("ajaxCliente.php", //Required URL of the page on server
-                  { // Data Sending With Request To Server
-                      action: "mostrarCliente",
-                      idCliente: id
-                  },
-                function (response, status) { // Required Callback Function
-                    $("#ventanaMostrarClienteBody").html(response);
-
+            if (nombreZona == '') {
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el Nombre de la zona!",
+                    type: "warning",
+                    confirmButtonText: "OK"
                 });
-            });
+                $('#btnNuevaZona').prop('disabled', false);
+            }
+            else {
+                $.post("ajaxZona.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "nuevoZona",
+                          Nombre: nombreZona,
+                          idCliente: id,
+                      },
+                function (response, status) { // Required Callback Function
+                    if (response == '') {
+                        $('#ventanaAgregarZona').modal('hide');
+                        $("#ventanaMostrarClienteBody").html("");
+                        $.post("ajaxCliente.php", //Required URL of the page on server
+                          { // Data Sending With Request To Server
+                              action: "mostrarCliente",
+                              idCliente: id
+                          },
+                        function (response, status) { // Required Callback Function
+                            $("#ventanaMostrarClienteBody").html(response);
+
+                        });
+                    } else {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                        $('#NombreZ').val('');
+                        $('#btnNuevaZona').prop('disabled', false);
+                    }
+                });
+            }
         });
 
         $("#ventanaMostrarCliente").on("show.bs.modal", function (e) {

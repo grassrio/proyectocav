@@ -44,14 +44,14 @@ class Cliente
     public function EliminarCliente($connect,$nombre)
     {
         $sql = mysqli_query($connect,"DELETE FROM Cliente WHERE Nombre='".$nombre."'")
-         or die ("Error al obtener las zonas");
+         or die ("Error al eliminar las zonas");
         return $sql;
     }
 
     public function ModificarCliente($connect,$id,$nombre)
     {
         $sql = mysqli_query($connect,"UPDATE Cliente SET Nombre='".$nombre."' WHERE idCliente='".$id."'")
-            or die ("Error al insertar cliente");
+            or die ("Error al modificar el cliente");
         return $sql;
     }
 }

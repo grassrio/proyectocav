@@ -45,7 +45,22 @@ if (isset($_SESSION['usuario'])) {?>
             }
             var presupuesto = $('#Presupuesto').val();
             if (codigo == '') {
-                alert("Ingresar numero de compra directa para continuar");
+                swal({
+                    title: "Advertencia!",
+                    text: "Ingresar numero de compra directa para continuar!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevaLicitacion').prop('disabled', false);
+            } else if (presupuesto == '')
+            {
+                swal({
+                    title: "Advertencia!",
+                    text: "Ingresar numero de compra directa para continuar!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevaLicitacion').prop('disabled', false);
             }
             else {
              $.post("ajaxLicitacion.php", //Required URL of the page on server
@@ -59,26 +74,46 @@ if (isset($_SESSION['usuario'])) {?>
                    },
              function (response, status) { // Required Callback Function
                  //$("#bingo").html(response);//"response" receives - whatever written in echo of above PHP script.
-                 $('#ventanaAgregarLicitacion').modal('hide');
-                 carga('PantallaLicitacion');
+                 if (response == '')
+                 {
+                     $('#ventanaAgregarLicitacion').modal('hide');
+                     carga('PantallaLicitacion');
+                 }
+                 else
+                 {
+                     swal({
+                         title: "Advertencia!",
+                         text: response,
+                         type: "warning",
+                         confirmButtonText: "OK"
+                     });
+                     $('#btnNuevaLicitacion').prop('disabled', false);
+                     $('#Codigo').val('');
+                     $('#Presupuesto').val('');
+                 }
+                 
              });
             }
         });
+
         $("#btnModificarLicitacion").click(function () {
             $('#btnModificarLicitacion').prop('disabled', true);
             var estado = document.getElementById("estadoCombo1").value;
-            alert(estado);
+            
             if (estado == 1) {
                 estado = 'Aprobada';
             }
             else {
                 estado = 'Rechazada';
             }
-            alert(id);
-            alert(estado);
             if (estado == '') {
-                alert("Debe ingresar el estado");
-
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el estado!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnModificarLicitacion').prop('disabled', false);
             }
             else {
                 $.post("ajaxLicitacion.php", //Required URL of the page on server
@@ -88,8 +123,22 @@ if (isset($_SESSION['usuario'])) {?>
                           idLicitacion: id,
                       },
                 function (response, status) { // Required Callback Function
-                    $('#ventanaModificarLicitacion').modal('hide');
-                    carga('PantallaLicitacion');
+                    if (response == '')
+                    {
+                        $('#ventanaModificarLicitacion').modal('hide');
+                        carga('PantallaLicitacion');
+                    }
+                    else
+                    {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                        $('#btnModificarLicitacion').prop('disabled', false);
+                    }
+
                 });
             }
         });

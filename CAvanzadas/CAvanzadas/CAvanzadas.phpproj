@@ -73,6 +73,7 @@
     <Content Include="css\bootstrap.css.map" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\bootstrap.min.css.map" />
+    <Content Include="css\sweetalert.css" />
     <Content Include="css\todc-bootstrap.css" />
     <Content Include="css\todc-bootstrap.css.map" />
     <Content Include="css\todc-bootstrap.min.css" />
@@ -89,6 +90,8 @@
     <Content Include="js\jquery.min.js" />
     <Content Include="js\md5.js" />
     <Content Include="js\npm.js" />
+    <Content Include="js\sweetalert-dev.js" />
+    <Content Include="js\sweetalert.min.js" />
     <None Include="Properties\PublishProfiles\Heliohost.pubxml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\DEVSENSE\PHP Tools\VS$(VisualStudioVersion)\Devsense.PHP.MsWebApplication.targets" />
