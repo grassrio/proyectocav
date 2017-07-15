@@ -73,6 +73,13 @@ if (isset($_SESSION['usuario'])) {?>
                  
                  } else
                  {
+                     swal({
+                         title: "Advertencia!",
+                         text: response,
+                         type: "warning",
+                         confirmButtonText: "OK"
+                     });
+                     $('#btnNuevoRubro').prop('disabled', false);
                      $('#btnNuevoRubro').prop('disabled', false);
                      $('#Nombre').val('');
                      $('#Unidad').val('');
@@ -128,6 +135,13 @@ if (isset($_SESSION['usuario'])) {?>
                         carga('PantallaRubro');
                     }
                     else {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                        $('#btnModificarRubro').prop('disabled', false);
                          $('#NombreM').val('');
                          $('#UnidadM').val('');
                          $('#cantidadStockM').val('');
