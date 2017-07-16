@@ -163,6 +163,7 @@ if ($rowcount>0) {?>
                     confirmButtonText: "OK"
                 });
                 $('#btnNuevaZona').prop('disabled', false);
+                $('#NombreZ').val('');
             }
             else {
                 $.post("ajaxZona.php", //Required URL of the page on server
@@ -174,12 +175,15 @@ if ($rowcount>0) {?>
                 function (response, status) { // Required Callback Function
                     if (response == '') {
                         $('#ventanaAgregarZona').modal('hide');
+                        $('#NombreZ').val('');
+                        $('#btnNuevaZona').prop('disabled', false);
                         $("#ventanaMostrarClienteBody").html("");
                         $.post("ajaxCliente.php", //Required URL of the page on server
                           { // Data Sending With Request To Server
                               action: "mostrarCliente",
                               idCliente: id
                           },
+
                         function (response, status) { // Required Callback Function
                             $("#ventanaMostrarClienteBody").html(response);
 

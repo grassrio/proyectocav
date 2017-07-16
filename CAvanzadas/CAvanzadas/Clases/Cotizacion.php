@@ -53,9 +53,9 @@ class Cotizacion
         return $sql;
     }
 
-    public function EliminarRubroPrecio($connect,$idRubro,$idCotizacion)
+    public function EliminarRubroPrecio($connect,$nombreRubro,$idCotizacion)
     {
-        $sql = mysqli_query($connect,"DELETE FROM RubroCotizacion WHERE idRubro='".$idRubro."' and idCotizacion='".$idCotizacion."'")
+        $sql = mysqli_query($connect,"DELETE FROM RubroCotizacion WHERE nombreRubro='".$nombreRubro."' and idCotizacion='".$idCotizacion."'")
          or die ("Error al obtener las cotización");
         return $sql;
     }
@@ -68,13 +68,13 @@ class Cotizacion
     }
     public function ObtenerRubro($connect,$idCotizacion)
     {
-        $sql = mysqli_query($connect,"SELECT idRubro,Precio FROM RubroCotizacion WHERE idCotizacion='".$idCotizacion."'")
+        $sql = mysqli_query($connect,"SELECT nombreRubro,Precio FROM RubroCotizacion WHERE idCotizacion='".$idCotizacion."'")
          or die ("Error al obtener las cotización");
         return $sql;
     }
-    public function InsertarRubroCotizacion($connect,$idCotizacion,$idRubro,$Precio)
+    public function InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$Precio)
     {
-        $sql = mysqli_query($connect,"INSERT INTO RubroCotizacion (idRubro,idCotizacion,Precio) VALUES ('".$idRubro."','".$idCotizacion."','".$Precio."')")
+        $sql = mysqli_query($connect,"INSERT INTO RubroCotizacion (nombreRubro,idCotizacion,Precio) VALUES ('".$nombreRubro."','".$idCotizacion."','".$Precio."')")
          or die ("Error al obtener las cotización");
         return $sql;
     }

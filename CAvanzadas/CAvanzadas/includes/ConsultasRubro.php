@@ -20,7 +20,7 @@ function buscarRubros($nombre){
     {
         mysqli_select_db($connect,$mysqldb);
         $rubro = new Rubro();
-        $sql = $rubro->BuscarRubro($connect);
+        $sql = $rubro->BuscarRubro($connect,$nombre);
         return $sql;
     }
     return $sql;
@@ -66,14 +66,26 @@ function eliminarRubro($nombre)
     }
     return $sql;
 }
-function devolverRubro($idRubro){
+function devolverRubro($nombreRubro){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
         $rubro = new Rubro();
-        $sql = $rubro->DevolverRubro($connect,$idRubro);
+        $sql = $rubro->DevolverRubro($connect,$nombreRubro);
+        return $sql;
+    }
+    return $sql;
+}
+function obtenerRubroPorId($idRubro){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $rubro = new Rubro();
+        $sql = $rubro->obtenerRubroId($connect,$idRubro);
         return $sql;
     }
     return $sql;

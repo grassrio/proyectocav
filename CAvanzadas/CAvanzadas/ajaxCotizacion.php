@@ -9,13 +9,15 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             InsertarCotizacion($_POST['Nombre']);
             break;
         case 'nuevoRubro' :
-            InsertarRubroCotizacion($_POST['idCotizacion'],$_POST['idRubro'],$_POST['Precio']);
+            InsertarRubroCotizacion($_POST['idCotizacion'],$_POST['nombreRubro'],$_POST['Precio']);
             break;
         case 'eliminarCotizacion' :
             eliminarCotizacion($_POST['Nombre']);
             break;
         case 'eliminarRubroPrecio' :
-            eliminarRubroPrecio($_POST['idRubro'],$_POST['idCotizacion']);
+            $rubro=obtenerRubroPorId($_POST['idRubro']);
+            $rsrubro=mysqli_fetch_array($rubro);
+            eliminarRubroPrecio($rsrubro[Nombre],$_POST['idCotizacion']);
             break;
         case 'modificarCotizacion' :
             modificarCotizacion($_POST['idCotizacion'],$_POST['Nombre']);

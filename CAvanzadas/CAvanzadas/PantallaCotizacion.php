@@ -133,7 +133,7 @@ if (isset($_SESSION['usuario'])) {?>
                      action: "nuevoRubro",
                      Precio: Precio,
                      idCotizacion: id,
-                     idRubro: idRubro,
+                     nombreRubro: idRubro,
                  },
            function (response, status) { // Required Callback Function
                $('#ventanaAgregarRubro').modal('hide');
@@ -238,7 +238,7 @@ if (isset($_SESSION['usuario'])) {?>
     $sql = devolverRubros();
     while ($rs=mysqli_fetch_array($sql))
     {
-        echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
+        echo "<option value='".$rs[1]."' selected>".$rs[1]."</option>";
     }
                                     ?>
                                 </select>
@@ -249,7 +249,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 Precio:
                             </label>
                             <div class="col-sm-8">
-                                <input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                <input name="Precio" id="Precio" type="number" value="0" class="form-control" aria-describedby="basic-addon2" />
                             </div>
                         </div>
                         <div class="modal-footer">

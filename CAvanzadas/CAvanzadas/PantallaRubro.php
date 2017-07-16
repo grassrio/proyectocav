@@ -202,7 +202,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 Cantidad de stock:
                             </label>
                             <div class="col-sm-8">
-                                <input name="cantidadStock" id="cantidadStock" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
+                                <input name="cantidadStock" id="cantidadStock" type="number" class="form-control" value="0" aria-describedby="basic-addon2" />
                             </div>
                         </div>
                         <div class="modal-footer">

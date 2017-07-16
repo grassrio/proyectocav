@@ -63,7 +63,7 @@ function eliminarCotizacion($nombre)
     return $sql;
 }
 
-function eliminarRubroPrecio($idRubro,$idCotizacion)
+function eliminarRubroPrecio($nombreRubro,$idCotizacion)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -71,7 +71,7 @@ function eliminarRubroPrecio($idRubro,$idCotizacion)
     {
         mysqli_select_db($connect,$mysqldb);
         $cotizacion = new Cotizacion();
-        $sql = $cotizacion->EliminarRubroPrecio($connect,$idRubro,$idCotizacion);
+        $sql = $cotizacion->EliminarRubroPrecio($connect,$nombreRubro,$idCotizacion);
 
         return $sql;
     }
@@ -106,14 +106,14 @@ function obtenerRubro($idCotizacion){
     return $sql;
 }
 
-function InsertarRubroCotizacion($idCotizacion,$idRubro,$Precio){
+function InsertarRubroCotizacion($idCotizacion,$nombreRubro,$Precio){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
         $cotizacion = new Cotizacion();
-        $sql = $cotizacion->InsertarRubroCotizacion($connect,$idCotizacion,$idRubro,$Precio);
+        $sql = $cotizacion->InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$Precio);
         return $sql;
     }
     return $sql;
