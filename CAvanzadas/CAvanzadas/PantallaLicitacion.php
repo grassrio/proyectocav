@@ -16,19 +16,47 @@ if (isset($_SESSION['usuario'])) {?>
     <script>
     var nombreDinamico;
     var id;
-    $(document).ready(function(){
+    $(document).ready(function () {
         $("#ventanaEliminarLicitacion").on("show.bs.modal", function(e) {
             nombreDinamico = $(e.relatedTarget).data('target-id');
-            $("#eliminarDinamico").html("Desea eliminar el rubro " + nombreDinamico + "?");
+            $("#eliminarDinamico").html("Desea eliminar la licitación " + nombreDinamico + "?");
         });
     });
+
+    function agregarObra(idLicitacion) {
+
+        alert(idLicitacion);
+        $('#btnNuevaObra').prop('disabled', true);
+        var NombreObra = $('#nombreObra').val();
+        var idCotizacionObra = $('#dSolicitudCotizacion').val();
+        var DireccionObra = $('#direccionObra').val();
+        var NumeroPuertaObra = $('#nPuertaObra').val();
+        var idZonaObra = $('#zonaObra').val();
+        var EstadoObra = "Pendiente";
+        var ObservacionObra = $('#observacionObra').val();
+        var FechaRecibidoObra = $('#fechaRecibidoObra').val();
+        var Esquina1 = $('#esquina1').val();
+        var Esquina2 = $('#esquina2').val();
+        alert(NombreObra + idCotizacionObra + DireccionObra + NumeroPuertaObra + idZonaObra + EstadoObra + ObservacionObra);
+        alert(FechaRecibidoObra + Esquina1 + Esquina2);
+        if ($('#chReqBaliza').prop('checked')) {
+            alert("req baliza check");
+            var ProveedorBaliza = $('#proveedorBaliza').val();
+            var CantidadBaliza = $('#balCantidad').val();
+            var FechaInicioBaliza = $('#balFechaInicio').val();
+            var FechaFinBaliza = $('#balFechaFin').val();
+            alert(ProveedorBaliza + CantidadBaliza + FechaInicioBaliza + FechaFinBaliza);
+        } else {
+            alert("No req baliza");
+        }
+        $('#btnNuevaObra').prop('disabled', false);
+    };
 
     $(document).ready(function () {
         $("#ventanaModificarLicitacion").on("show.bs.modal", function (e) {
             id = $(e.relatedTarget).data('target-id');
         });
     });
-
         $("#btnNuevaLicitacion").click(function () {
             $('#btnNuevaLicitacion').prop('disabled', true);
             var codigo       = $('#Codigo').val();

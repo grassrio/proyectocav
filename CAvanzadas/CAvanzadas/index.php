@@ -45,7 +45,7 @@ if (isset($_SESSION['usuario'])) {?>
 
     <div class="panel panel-info">
         <div class="panel-heading">
-            <h3 class="panel-title">Construcciones Avanzadas SRL</h3>
+            <h3 class="panel-title">Construcciones Avanzadas SRL  -  Pavimentación y veredas</h3>
         </div>
      </div>
 
@@ -83,13 +83,24 @@ if (isset($_SESSION['usuario'])) {?>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
-                  <!--    <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav">
+                    <li role="presentation">
+                        <a href="#">
+                            Alertas
+                            <span class="badge">7</span>
+                        </a>
+                    </li>
+                </ul>
+ 
+                    <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
+
+                        <!--    <ul class="nav navbar-nav">
                         <li class="active">
                             <button type="button" class="btn btn-default" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
                             </button>
                         </li>
+
                         <li>
                             <button type="button" class="btn btn-default" aria-label="Left Align">
                                 <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
@@ -111,7 +122,7 @@ if (isset($_SESSION['usuario'])) {?>
                             </button>
                         </li>
                     </ul>-->
-                    <!-- busqueda 
+                        <!-- busqueda 
                     <form class="navbar-form navbar-left">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="" />
@@ -122,34 +133,34 @@ if (isset($_SESSION['usuario'])) {?>
                     </form>
                                             -->
 
-                    <!-- desplegable derecha -->
-                    <div class="btn-group pull-right">
-                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="glyphicon glyphicon-cog"></i>
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-header">
-                                <?php echo $_SESSION['usuario']; ?>
-                            </li>
-                            <li role="separator" class="divider"></li>
-                            <li>
-                                <a href="#">
-                                    <i class="glyphicon glyphicon-user"></i>Usuarios
-                                </a>
-                            </li>
-                            <li role="separator" class="divider"></li>
-                            <li>
-                                <a href="includes/logout.php">
-                                    <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+                        <!-- desplegable derecha -->
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="glyphicon glyphicon-cog"></i>
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    <?php echo $_SESSION['usuario']; ?>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a href="#">
+                                        <i class="glyphicon glyphicon-user"></i>Usuarios
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a href="includes/logout.php">
+                                        <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
 
 
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
+                    </div><!-- /.navbar-collapse -->
+</div><!-- /.container-fluid -->
         </nav>
 
 

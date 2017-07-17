@@ -24,6 +24,7 @@ function devolverZona($idZona){
         $sql = $zona->DevolverZona($connect,$idZona);
         return $sql;
     }
+    mysqli_close($connect);
     return $sql;
 }
 

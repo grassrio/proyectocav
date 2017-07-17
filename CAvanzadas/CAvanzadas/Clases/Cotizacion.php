@@ -14,7 +14,7 @@ class Cotizacion
 
     public function DevolverCotizacion($connect,$idCotizacion)
     {
-        $sql = mysqli_query($connect,"SELECT * FROM Cotizacion WHERE idCotiacion='".$idCotizacion."'")
+        $sql = mysqli_query($connect,"SELECT * FROM Cotizacion WHERE idCotizacion='".$idCotizacion."'")
            or die ("Error al consultar cotización");
         return $sql;
     }

@@ -31,6 +31,7 @@ function InsertarCotizacion($nombre)
 
 //       return $sql;
     }
+    mysqli_close($connect);
     return $sql;
 }
 

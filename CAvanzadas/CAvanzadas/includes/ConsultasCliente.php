@@ -22,8 +22,24 @@ require 'Clases/Cliente.php';
             $sql = $cliente->ObtenerZonas($connect,$idCliente);
             return $sql;
         }
+        mysqli_close($connect);
         return $sql;
     }
+
+    function obtenerCliente($idCliente){
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $cliente = new Cliente();
+            $sql = $cliente->ObtenerCliente($connect,$idCliente);
+            return $sql;
+        }
+        mysqli_close($connect);
+        return $sql;
+    }
+
     function insertarCliente($nombre)
     {
         require('config.php');
