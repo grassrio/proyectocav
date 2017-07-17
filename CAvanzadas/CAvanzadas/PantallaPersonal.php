@@ -15,8 +15,8 @@ if (isset($_SESSION['usuario'])) {?>
         var id;
         $(document).ready(function () {
             $("#ventanaEliminarPersonal").on("show.bs.modal", function (e) {
-                id = $(e.relatedTarget).data('target-id');
-                $("#eliminarDinamico").html("Desea eliminar el empleado ?");
+                nombreDinamico = $(e.relatedTarget).data('target-id');
+                $("#eliminarDinamico").html("Desea eliminar el empleado " + nombreDinamico + "?");
             });
         });
 
@@ -28,12 +28,11 @@ if (isset($_SESSION['usuario'])) {?>
 
         $("#btnNuevoPersonal").click(function () {
             $('#btnNuevoPersonal').prop('disabled', true);
-            var nombrePersonal = $('#nombrePersonal').val();
-            var apellidoPersonal = $('#apellidoPersonal').val();
+            var nombreCompleto = $('#nombreCompleto').val();
             var direccionPersonal = $('#direccionPersonal').val();
             var telefonoPersonal = $('#telefonoPersonal').val();
             var cargoPersonal = document.getElementById("cargoPersonal").value;
-            if (nombrePersonal == '') {
+            if (nombreCompleto == '') {
                 swal({
                     title: "Advertencia!",
                     text: "Debe ingresar el nombre del empleado!",
@@ -41,15 +40,7 @@ if (isset($_SESSION['usuario'])) {?>
                     confirmButtonText: "OK"
                 });
                 $('#btnNuevoPersonal').prop('disabled', false);
-            } else if (apellidoPersonal == '') {
-                swal({
-                    title: "Advertencia!",
-                    text: "Debe ingresar el apellido del empleado!",
-                    type: "warning",
-                    confirmButtonText: "OK"
-                });
-                $('#btnNuevoPersonal').prop('disabled', false);
-            }
+            } 
             else if (telefonoPersonal == '') {
                 swal({
                     title: "Advertencia!",
@@ -72,8 +63,7 @@ if (isset($_SESSION['usuario'])) {?>
                 $.post("ajaxPersonal.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "nuevoPersonal",
-                          Nombre: nombrePersonal,
-                          Apellido: apellidoPersonal,
+                          NombreCompleto: nombreCompleto,
                           Direccion: direccionPersonal,
                           Cargo: cargoPersonal,
                           Telefono: telefonoPersonal,
@@ -90,8 +80,8 @@ if (isset($_SESSION['usuario'])) {?>
                             type: "warning",
                             confirmButtonText: "OK"
                         });
-                           $('#btnNuevoPersonal').prop('disabled', false);
-                        $('#nombrePersonal').val('');
+                        $('#btnNuevoPersonal').prop('disabled', false);
+                        $('#nombreCompleto').val('');
                         $('#apellidoPersonal').val('');
                         $('#direccionPersonal').val('');
                         $('#telefonoPersonal').val('');
@@ -158,7 +148,7 @@ if (isset($_SESSION['usuario'])) {?>
             $.post("ajaxPersonal.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "eliminarPersonal",
-                          idPersonal: id
+                          NombreCompleto: nombreDinamico
                       },
                 function (response, status) { // Required Callback Function
                     if (response == '') {
@@ -194,18 +184,10 @@ if (isset($_SESSION['usuario'])) {?>
                     <form name="nuevoPersonal" method="POST" action="nuevoRubro">
                         <div class="form-group row">
                             <label for="Nombre" class="col-sm-2 col-form-label">
-                                Nombre:
+                                Nombre Completo:
                             </label>
                             <div class="col-sm-8">
-                                <input name="nombrePersonal" id="nombrePersonal" type="text" class="form-control" aria-describedby="basic-addon2" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="Apellido" class="col-sm-2 col-form-label">
-                                Apellido:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="apellidoPersonal" id="apellidoPersonal" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                <input name="nombreCompleto" id="nombreCompleto" type="text" class="form-control" aria-describedby="basic-addon2" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -263,7 +245,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 Direccion:
                             </label>
                             <div class="col-sm-8">
-                                <input name="direccionPersonalM" id="direccionPersonalM" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
+                                <input name="direccionPersonalM" id="direccionPersonalM" type="text" class="form-control" aria-describedby="basic-addon2" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -271,7 +253,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 Telefono:
                             </label>
                             <div class="col-sm-8">
-                                <input name="telefonoPersonalM" id="telefonoPersonalM" type="text" class="form-control" value="0" aria-describedby="basic-addon2" />
+                                <input name="telefonoPersonalM" id="telefonoPersonalM" type="number" class="form-control" aria-describedby="basic-addon2" />
                             </div>
                         </div>
                         <div class="form-group row">
@@ -345,8 +327,7 @@ if (isset($_SESSION['usuario'])) {?>
         <!-- Table -->
         <table class="table">
             <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th>Nombre Completo</th>
                 <th>Cargo</th>
                 <th>Telefono</th>
                 <th></th>
@@ -361,10 +342,9 @@ if (isset($_SESSION['usuario'])) {?>
         {
             echo "<tr>"
             ."<td>".$rs[1]."</td>"
-            ."<td>".$rs[2]."</td>"
-            ."<td>".$rs[5]."</td>"
             ."<td>".$rs[4]."</td>"
-            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaEliminarPersonal" data-toggle="modal">
+            ."<td>".$rs[3]."</td>"
+            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarPersonal" data-toggle="modal">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 </button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarPersonal" data-toggle="modal">
 <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
@@ -376,12 +356,9 @@ if (isset($_SESSION['usuario'])) {?>
     {
         echo'<tr><td>No hay Empleados</td></tr>';
     }
-
             ?>
-
         </table>
     </div>
-
 </body>
 </html>
 <?php } ?>

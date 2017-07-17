@@ -78,7 +78,9 @@ if (isset($_SESSION['usuario'])) {?>
                         <li>
                             <a href="JavaScript:carga('PantallaPersonal')">Personal</a>
                         </li>
-                      
+                        <li>
+                            <a href="JavaScript:carga('PantallaCuadrilla')">Cuadrilla</a>
+                        </li>
                     </ul>
                 </div>
 
