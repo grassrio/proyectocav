@@ -23,15 +23,18 @@
   <ItemGroup>
     <Compile Include="ajaxCliente.php" />
     <Compile Include="ajaxCotizacion.php" />
+    <Compile Include="ajaxCuadrilla.php" />
     <Compile Include="ajaxLicitacion.php" />
     <Compile Include="ajaxPersonal.php" />
     <Compile Include="ajaxRubro.php" />
     <Compile Include="ajaxZona.php" />
     <Compile Include="Clases\Cliente.php" />
     <Compile Include="Clases\Cotizacion.php" />
+    <Compile Include="Clases\Cuadrilla.php" />
     <Compile Include="Clases\Personal.php" />
     <Compile Include="Clases\Rubro.php" />
     <Compile Include="FormularioIngresoCliente.php" />
+    <Compile Include="includes\ConsultasCuadrilla.php" />
     <Compile Include="includes\ConsultasLicitacion.php" />
     <Compile Include="includes\ConsultasCliente.php" />
     <Compile Include="includes\config.php" />
@@ -46,6 +49,7 @@
     <Compile Include="Clases\Licitacion.php" />
     <Compile Include="PantallaCliente.php" />
     <Compile Include="PantallaCotizacion.php" />
+    <Compile Include="PantallaCuadrilla.php" />
     <Compile Include="PantallaLicitacion.php" />
     <Compile Include="login.php" />
     <Compile Include="mysql.php" />
