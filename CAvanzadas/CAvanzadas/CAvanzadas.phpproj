@@ -96,6 +96,7 @@
     <Content Include="js\npm.js" />
     <Content Include="js\sweetalert-dev.js" />
     <Content Include="js\sweetalert.min.js" />
+    <Content Include="js\validator.min.js" />
     <None Include="Properties\PublishProfiles\Heliohost.pubxml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\DEVSENSE\PHP Tools\VS$(VisualStudioVersion)\Devsense.PHP.MsWebApplication.targets" />

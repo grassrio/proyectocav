@@ -18,6 +18,7 @@ if (isset($_SESSION['usuario'])) {?>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/sweetalert.min.js"></script>
+    <script src="js/validator.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             $("#loading").hide();

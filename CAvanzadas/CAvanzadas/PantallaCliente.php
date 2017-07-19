@@ -17,11 +17,35 @@ if ($rowcount>0) {?>
     <script>
         var nombreDinamico;
         var id;
+        $(document).ready(function () {
+            $('#ventanaAgregarCliente').on('shown.bs.modal', function (e) {
+                
+                $(this).find('form').validator()
+
+                $('#nuevoCliente').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        // Si se cumple la validacion llama a la funcion de agregar
+                        agregarCliente();
+                    }
+                })
+                $('#ventanaAgregarCliente').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaAgregarCliente').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+        });
+        
+
    $(document).ready(function(){
         $("#ventanaEliminarCliente").on("show.bs.modal", function(e) {
             nombreDinamico = $(e.relatedTarget).data('target-id');
             $("#eliminarDinamico").html("Desea eliminar el cliente " + nombreDinamico + "?");
         });
+        
    });
    $(document).ready(function () {
        $("#ventanaModificarCliente").on("show.bs.modal", function (e) {
@@ -33,7 +57,7 @@ if ($rowcount>0) {?>
            id = $(e.relatedTarget).data('target-id');
        });
    });
-        $("#btnNuevoCliente").click(function () {
+ function agregarCliente() {
             $('#btnNuevoCliente').prop('disabled', true);
             var nombreCliente = $('#Nombre').val();
             if (nombreCliente == '') {
@@ -70,7 +94,7 @@ if ($rowcount>0) {?>
                 }
              });
             }
-        });
+        };
         $("#btnModificarCliente").click(function () {
             $('#btnModificarCliente').prop('disabled', true);
             var nombreCliente = $('#NombreM').val();
@@ -249,18 +273,19 @@ if ($rowcount>0) {?>
                     <h4 class="modal-title">Agregar Cliente</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="nuevoCliente" method="POST" action="nuevoCliente">
+                    <form role="form" data-toggle="validator" id="nuevoCliente" name="nuevoCliente">
                         <div class="form-group row">
                             <label for="Nombre" class="col-sm-2 col-form-label">
                                 Nombre:
                             </label>
                             <div class="col-sm-8">
-                                <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                <input name="Nombre" data-error="Completa este campo" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" required />
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnNuevoCliente" type="button" class="btn btn-success success">Agregar</button>
+                            <button id="btnNuevoCliente" type="submit" class="btn btn-success success">Agregar</button>
                         </div>
                     </form>
                 </div>
