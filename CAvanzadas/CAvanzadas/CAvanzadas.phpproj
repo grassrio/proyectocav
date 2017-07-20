@@ -33,7 +33,6 @@
     <Compile Include="Clases\Cuadrilla.php" />
     <Compile Include="Clases\Personal.php" />
     <Compile Include="Clases\Rubro.php" />
-    <Compile Include="FormularioIngresoCliente.php" />
     <Compile Include="includes\ConsultasCuadrilla.php" />
     <Compile Include="includes\ConsultasLicitacion.php" />
     <Compile Include="includes\ConsultasCliente.php" />

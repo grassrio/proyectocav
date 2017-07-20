@@ -15,6 +15,61 @@ if (isset($_SESSION['usuario'])) {?>
         <script>
             var nombreDinamico;
             var id;
+
+            $(document).ready(function () {
+                $('#ventanaAgregarCuadrilla').on('shown.bs.modal', function (e) {
+                    $(this).find('form').validator()
+                    $('#nuevaCuadrilla').on('submit', function (e) {
+                        if (e.isDefaultPrevented()) {
+                        } else {
+                            e.preventDefault()
+                            // Si se cumple la validacion llama a la funcion de agregar
+                            agregarCuadrilla();
+                        }
+                    })
+                    $('#ventanaAgregarCuadrilla').on('hidden.bs.modal', function (e) {
+                        $(this).find('form').off('submit').validator('destroy')
+                    })
+                });
+                $('#ventanaAgregarCuadrilla').on('hidden.bs.modal', function () {
+                    $(this).find('form')[0].reset();
+                });
+                $('#ventanaModificarCuadrilla').on('shown.bs.modal', function (e) {
+                    $(this).find('form').validator()
+                    $('#modificarCuadrilla').on('submit', function (e) {
+                        if (e.isDefaultPrevented()) {
+                        } else {
+                            e.preventDefault()
+                            modificarCuadrilla();
+                        }
+                    })
+                    $('#ventanaModificarCuadrilla').on('hidden.bs.modal', function (e) {
+                        $(this).find('form').off('submit').validator('destroy')
+                    })
+                });
+                $('#ventanaModificarCuadrilla').on('hidden.bs.modal', function () {
+                    $(this).find('form')[0].reset();
+                });
+                $('#ventanaAgregarObrero').on('shown.bs.modal', function (e) {
+
+                    $(this).find('form').validator()
+
+                    $('#nuevoObrero').on('submit', function (e) {
+                        if (e.isDefaultPrevented()) {
+                        } else {
+                            e.preventDefault()
+                           nuevaObra();
+                        }
+                    })
+                    $('#ventanaAgregarObrero').on('hidden.bs.modal', function (e) {
+                        $(this).find('form').off('submit').validator('destroy')
+                    })
+                });
+                $('#ventanaAgregarObrero').on('hidden.bs.modal', function () {
+                    $(this).find('form')[0].reset();
+                });
+            });
+
             $(document).ready(function () {
                 $("#ventanaEliminarCuadrilla").on("show.bs.modal", function (e) {
                     nombreDinamico = $(e.relatedTarget).data('target-id');
@@ -32,7 +87,7 @@ if (isset($_SESSION['usuario'])) {?>
                     id = $(e.relatedTarget).data('target-id');
                 });
             });
-            $("#btnNuevoCuadrilla").click(function () {
+            function agregarCuadrilla() {
                 $('#btnNuevoCuadrilla').prop('disabled', true);
                 var nombreCuadrilla = $('#nombreCuadrilla').val();
                 if (nombreCuadrilla == '') {
@@ -67,8 +122,8 @@ if (isset($_SESSION['usuario'])) {?>
                         }
                     });
                 }
-            });
-            $("#btnModificarCuadrilla").click(function () {
+            };
+            function modificarCuadrilla() {
                 $('#btnModificarCuadrilla').prop('disabled', true);
                 var nombreCuadrilla = $('#nombreCuadrillaM').val();
                 if (nombreCuadrilla == '') {
@@ -106,7 +161,7 @@ if (isset($_SESSION['usuario'])) {?>
 
                     });
                 }
-            });
+            };
             $("#btnEliminarCuadrilla").click(function () {
                 $('#btnEliminarCuadrilla').prop('disabled', true);
                 $.post("ajaxCuadrilla.php", //Required URL of the page on server
@@ -169,10 +224,12 @@ if (isset($_SESSION['usuario'])) {?>
 
                 });
             }
-            $("#btnNuevoObrero").click(function () {
+            function nuevaObra () {
                 $('#btnNuevoObrero').prop('disabled', true);
                 var porcentaje = $('#Porcentaje').val();
                 var NombreCompleto = document.getElementById("ObreroCombo").value;
+                alert(porcentaje);
+                alert(NombreCompleto);
                 alert(id);
                 if (porcentaje < 0 || porcentaje > 100) {
                     swal({
@@ -193,23 +250,30 @@ if (isset($_SESSION['usuario'])) {?>
                               Nombre: NombreCompleto,
                           },
                     function (response, status) { // Required Callback Function
-                        $('#ventanaAgregarObrero').modal('hide');
-                        $('#Porcentaje').val('');
-                        $('#btnNuevoObrero').prop('disabled', false);
-                        $("#ventanaMostrarCuadrillaBody").html("");
-                        $.post("ajaxCuadrilla.php", //Required URL of the page on server
-                            { // Data Sending With Request To Server
-                                action: "mostrarCuadrilla",
-                                idCuadrilla: id
-                            },
+                        if (response == '')
+                        {
+                            $('#ventanaAgregarObrero').modal('hide');
+                            $('#Porcentaje').val('');
+                            $('#btnNuevoObrero').prop('disabled', false);
+                            $("#ventanaMostrarCuadrillaBody").html("");
+                            $.post("ajaxCuadrilla.php", //Required URL of the page on server
+                                { // Data Sending With Request To Server
+                                    action: "mostrarCuadrilla",
+                                    idCuadrilla: id
+                                },
 
-                        function (response, status) { // Required Callback Function
-                            $("#ventanaMostrarCuadrillaBody").html(response);
+                            function (response, status) { // Required Callback Function
+                                $("#ventanaMostrarCuadrillaBody").html(response);
+                            });
+                        }
+                        else
+                        {
+                            alert(response);
+                        }
 
-                        });
                     });
                 }
-            });
+            };
         </script>
 
         <!--VENTANA MUESTRA DETALLE CUADRILLA-->
@@ -230,7 +294,7 @@ if (isset($_SESSION['usuario'])) {?>
             </div>
         </div>
 
-        <!--VENTANA PARA INGRESAR UN NUEVaA CUADRILLA-->
+        <!--VENTANA PARA INGRESAR UN NUEVA CUADRILLA-->
         <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarCuadrilla">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -241,21 +305,22 @@ if (isset($_SESSION['usuario'])) {?>
                         <h4 class="modal-title">Agregar Cuadrilla</h4>
                     </div>
                     <div class="modal-body">
-                        <form name="nuevaCuadrilla" method="POST" action="nuevaCuadrilla">
-                            <div class="form-group row">
-                                <label for="Nombre" class="col-sm-2 col-form-label">
-                                    Nombre:
-                                </label>
-                                <div class="col-sm-8">
-                                    <input name="nombreCuadrilla" id="nombreCuadrilla" type="text" class="form-control" aria-describedby="basic-addon2" />
+                        <form role="form" data-toggle="validator" id="nuevaCuadrilla" name="nuevaCuadrilla">
+                                <div class="form-group row">
+                                    <label for="Nombre" class="col-sm-2 col-form-label">
+                                        Nombre:
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="nombreCuadrilla" data-error="Completa este campo" id="nombreCuadrilla" type="text" class="form-control" aria-describedby="basic-addon2" required />
+                                        <div class="help-block with-errors"></div>                                   
+                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                <button id="btnNuevoCuadrilla" type="button" class="btn btn-success success">Agregar</button>
-                            </div>
-                        </form>
-                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button id="btnNuevoCuadrilla" type="submit" class="btn btn-success success">Agregar</button>
+                                </div>
+                            </form>
+</div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -271,37 +336,38 @@ if (isset($_SESSION['usuario'])) {?>
                         <h4 class="modal-title">Agregar Obrero</h4>
                     </div>
                     <div class="modal-body">
-                        <form name="nuevoObrero" method="POST" action="nuevoObrero">
-                            <div class="form-group row">
-                                <label for="Obrero" class="col-sm-2 col-form-label">
-                                    Obrero:
-                                </label>
-                                <div class="col-sm-8">
-                                    <select name='ObreroCombo' id='ObreroCombo'>
-                                        <?php
+                        <form role="form" data-toggle="validator" id="nuevoObrero" name="nuevoObrero">
+                                <div class="form-group row">
+                                    <label for="Obrero" class="col-sm-2 col-form-label">
+                                        Obrero:
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select name='ObreroCombo' id='ObreroCombo'>
+                                            <?php
                                             $sql = devolverObreros();
                                             while ($rs=mysqli_fetch_array($sql))
                                             {
                                                 echo "<option value='".$rs[1]."' selected>".$rs[1]."</option>";
                                             }
-                                        ?>
-                                    </select>
+                                            ?>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="Porcentaje" class="col-sm-2 col-form-label">
-                                    Porcentaje:
-                                </label>
-                                <div class="col-sm-8">
-                                    <input name="Porcentaje" id="Porcentaje" type="number" class="form-control" aria-describedby="basic-addon2" />
+                                <div class="form-group row">
+                                    <label for="Porcentaje" class="col-sm-2 col-form-label">
+                                        Porcentaje:
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="Porcentaje" data-error="Completa este campo" id="Porcentaje" type="number" class="form-control" aria-describedby="basic-addon2" required />
+                                        <div class="help-block with-errors"></div>
+                                      </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                <button id="btnNuevoObrero" type="button" class="btn btn-success success">Agregar</button>
-                            </div>
-                        </form>
-                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button id="btnNuevoObrero" type="submit" class="btn btn-success success">Agregar</button>
+                                </div>
+                            </form>
+</div>
                 </div>
             </div>
         </div>
@@ -317,21 +383,22 @@ if (isset($_SESSION['usuario'])) {?>
                         <h4 class="modal-title">Modificar Cuadrilla</h4>
                     </div>
                     <div class="modal-body">
-                        <form name="modificarCuadrilla" method="POST" action="modificarCuadrilla">
-                            <div class="form-group row">
-                                <label for="Nombre" class="col-sm-2 col-form-label">
-                                    Nombre:
-                                </label>
-                                <div class="col-sm-8">
-                                    <input name="nombreCuadrillaM" id="nombreCuadrillaM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                        <form role="form" data-toggle="validator" id="modificarCuadrilla" name="modificarCuadrilla">
+                                <div class="form-group row">
+                                    <label for="Nombre" class="col-sm-2 col-form-label">
+                                        Nombre:
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="nombreCuadrillaM" data-error="Completa este campo" id="nombreCuadrillaM" type="text" class="form-control" aria-describedby="basic-addon2" required />
+                                        <div class="help-block with-errors"></div>                                
+                                   </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                                <button id="btnModificarCuadrilla" type="button" class="btn btn-success success">Modificar</button>
-                            </div>
-                        </form>
-                    </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                    <button id="btnModificarCuadrilla" type="submit" class="btn btn-success success">Modificar</button>
+                                </div>
+                            </form>
+</div>
                 </div>
             </div>
         </div>
