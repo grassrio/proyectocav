@@ -40,6 +40,7 @@
     <Compile Include="includes\ConsultasCotizacion.php" />
     <Compile Include="includes\ConsultasPersonal.php" />
     <Compile Include="includes\ConsultasRubro.php" />
+    <Compile Include="includes\ConsultasUsuarios.php" />
     <Compile Include="includes\ConsultaZonas.php" />
     <Compile Include="includes\loginheader.php" />
     <Compile Include="includes\logout.php" />

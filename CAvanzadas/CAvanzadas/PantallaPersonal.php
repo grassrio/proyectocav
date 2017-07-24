@@ -73,6 +73,8 @@ if (isset($_SESSION['usuario'])) {?>
             var direccionPersonal = $('#direccionPersonal').val();
             var telefonoPersonal = $('#telefonoPersonal').val();
             var cargoPersonal = document.getElementById("cargoPersonal").value;
+            var nombreUsuario = $('#Usuario').val();
+            var passUsuario = $('#Contrasenia').val();
             if (nombreCompleto == '') {
                 swal({
                     title: "Advertencia!",
@@ -108,6 +110,8 @@ if (isset($_SESSION['usuario'])) {?>
                           Direccion: direccionPersonal,
                           Cargo: cargoPersonal,
                           Telefono: telefonoPersonal,
+                          NombreUsu: nombreUsuario,
+                          Pass: passUsuario,
                       },
                 function (response, status) { // Required Callback Function
                     if (response == '') {
@@ -262,6 +266,28 @@ if (isset($_SESSION['usuario'])) {?>
                                     </select>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="Usuario" class="col-sm-2 col-form-label">
+                                  Nombre usuario:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="Usuario" data-error="Completa este campo" id="Usuario" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                        <div class="form-group row">
+                            <label for="Contrasenia" class="col-sm-2 col-form-label">
+                                Contraseña:
+                            </label>
+                            <div class="form-group col-sm-4">
+                                <input name="Contrasenia" data-minlength="6" placeholder="Contraseña" id="Contrasenia" type="password" class="form-control" aria-describedby="basic-addon2" required>
+                                <div class="help-block with-errors">Mínimo de 6 caracteres</div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <input name="CContrasenia" data-match="#Contrasenia" placeholder="Confirmar" data-match-error="Las contraseñas no coinciden" id="CContrasenia" type="password" class="form-control" aria-describedby="basic-addon2" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                                 <button id="btnNuevoPersonal" type="submit" class="btn btn-success success">Agregar</button>
@@ -390,10 +416,10 @@ if (isset($_SESSION['usuario'])) {?>
             ."<td>".$rs[1]."</td>"
             ."<td>".$rs[4]."</td>"
             ."<td>".$rs[3]."</td>"
-            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarPersonal" data-toggle="modal">
+            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarPersonal" data-toggle="modal">
+<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarPersonal" data-toggle="modal">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarPersonal" data-toggle="modal">
-<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
+</button>'
             ."</td>"
             ."</tr>";
         }
