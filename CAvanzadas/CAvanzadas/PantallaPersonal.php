@@ -14,6 +14,47 @@ if (isset($_SESSION['usuario'])) {?>
         var nombreDinamico;
         var id;
         $(document).ready(function () {
+            $('#ventanaAgregarPersonal').on('shown.bs.modal', function (e) {
+
+                $(this).find('form').validator()
+
+                $('#nuevoPersonal').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        // Si se cumple la validacion llama a la funcion de agregar
+                        agregarPersonal();
+                    }
+                })
+                $('#ventanaAgregarPersonal').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaAgregarPersonal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+
+            $('#ventanaModificarPersonal').on('shown.bs.modal', function (e) {
+
+                $(this).find('form').validator()
+
+                $('#modificarPersonal').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        // Si se cumple la validacion llama a la funcion de agregar
+                        ModificarPersonal();
+                    }
+                })
+                $('#ventanaModificarPersonal').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaModificarPersonal').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+        });
+        $(document).ready(function () {
             $("#ventanaEliminarPersonal").on("show.bs.modal", function (e) {
                 nombreDinamico = $(e.relatedTarget).data('target-id');
                 $("#eliminarDinamico").html("Desea eliminar el empleado " + nombreDinamico + "?");
@@ -26,12 +67,14 @@ if (isset($_SESSION['usuario'])) {?>
             });
         });
 
-        $("#btnNuevoPersonal").click(function () {
+        function agregarPersonal() {
             $('#btnNuevoPersonal').prop('disabled', true);
             var nombreCompleto = $('#nombreCompleto').val();
             var direccionPersonal = $('#direccionPersonal').val();
             var telefonoPersonal = $('#telefonoPersonal').val();
             var cargoPersonal = document.getElementById("cargoPersonal").value;
+            var nombreUsuario = $('#Usuario').val();
+            var passUsuario = $('#Contrasenia').val();
             if (nombreCompleto == '') {
                 swal({
                     title: "Advertencia!",
@@ -67,6 +110,8 @@ if (isset($_SESSION['usuario'])) {?>
                           Direccion: direccionPersonal,
                           Cargo: cargoPersonal,
                           Telefono: telefonoPersonal,
+                          NombreUsu: nombreUsuario,
+                          Pass: passUsuario,
                       },
                 function (response, status) { // Required Callback Function
                     if (response == '') {
@@ -90,8 +135,8 @@ if (isset($_SESSION['usuario'])) {?>
 
                 });
             }
-        });
-        $("#btnModificarPersonal").click(function () {
+        };
+        function ModificarPersonal() {
             $('#btnModificarPersonal').prop('disabled', true);
             var direccionPersonal = $('#direccionPersonalM').val();
             var telefonoPersonal = $('#telefonoPersonalM').val();
@@ -142,7 +187,7 @@ if (isset($_SESSION['usuario'])) {?>
 
                 });
             }
-        });
+        };
         $("#btnEliminarPersonal").click(function () {
             $('#btnEliminarPersonal').prop('disabled', true);
             $.post("ajaxPersonal.php", //Required URL of the page on server
@@ -181,49 +226,74 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Agregar Empleado</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="nuevoPersonal" method="POST" action="nuevoRubro">
+                    <form role="form" data-toggle="validator" id="nuevoPersonal" name="nuevoPersonal">
+                            <div class="form-group row">
+                                <label for="Nombre" class="col-sm-2 col-form-label">
+                                    Nombre Completo:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="nombreCompleto" data-error="Completa este campo" id="nombreCompleto" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Direccion" class="col-sm-2 col-form-label">
+                                    Direccion:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="direccionPersonal" data-error="Completa este campo" id="direccionPersonal" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>                                
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Telefono" class="col-sm-2 col-form-label">
+                                    Telefono:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="telefonoPersonal" data-error="Completa este campo" id="telefonoPersonal" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>                              
+                                  </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Cargo" class="col-sm-2 col-form-label">
+                                    Cargo:
+                                </label>
+                                <div class="col-sm-8">
+                                    <select name='cargoPersonal' id='cargoPersonal'>
+                                        <option value='Director' selected>Director</option>
+                                        <option value='Administrador' selected>Administrador</option>
+                                        <option value='Obrero' selected>Obrero</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="Usuario" class="col-sm-2 col-form-label">
+                                  Nombre usuario:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="Usuario" data-error="Completa este campo" id="Usuario" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
                         <div class="form-group row">
-                            <label for="Nombre" class="col-sm-2 col-form-label">
-                                Nombre Completo:
+                            <label for="Contrasenia" class="col-sm-2 col-form-label">
+                                Contraseña:
                             </label>
-                            <div class="col-sm-8">
-                                <input name="nombreCompleto" id="nombreCompleto" type="text" class="form-control" aria-describedby="basic-addon2" />
+                            <div class="form-group col-sm-4">
+                                <input name="Contrasenia" data-minlength="6" placeholder="Contraseña" id="Contrasenia" type="password" class="form-control" aria-describedby="basic-addon2" required>
+                                <div class="help-block with-errors">Mínimo de 6 caracteres</div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <input name="CContrasenia" data-match="#Contrasenia" placeholder="Confirmar" data-match-error="Las contraseñas no coinciden" id="CContrasenia" type="password" class="form-control" aria-describedby="basic-addon2" required>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="Direccion" class="col-sm-2 col-form-label">
-                                Direccion:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="direccionPersonal" id="direccionPersonal" type="text" class="form-control"  aria-describedby="basic-addon2" />
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button id="btnNuevoPersonal" type="submit" class="btn btn-success success">Agregar</button>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="Telefono" class="col-sm-2 col-form-label">
-                                Telefono:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="telefonoPersonal" id="telefonoPersonal" type="text" class="form-control"  aria-describedby="basic-addon2" />
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="Telefono" class="col-sm-2 col-form-label">
-                                Telefono:
-                            </label>
-                            <div class="col-sm-8">
-                                <select name='cargoPersonal' id='cargoPersonal'>
-                                    <option value='Director' selected>Director</option>
-                                    <option value='Administrador' selected>Administrador</option>
-                                    <option value='Obrero' selected>Obrero</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnNuevoPersonal" type="button" class="btn btn-success success">Agregar</button>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+</div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
@@ -239,41 +309,43 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Modificar Personal</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="modificarPersonal" method="POST" action="modificarPersonal">
-                        <div class="form-group row">
-                            <label for="Direccion" class="col-sm-2 col-form-label">
-                                Direccion:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="direccionPersonalM" id="direccionPersonalM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                    <form role="form" data-toggle="validator" id="modificarPersonal" name="modificarPersonal">
+                            <div class="form-group row">
+                                <label for="Direccion" class="col-sm-2 col-form-label">
+                                    Direccion:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="direccionPersonalM"  data-error="Completa este campo" id="direccionPersonalM" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>                                      
+                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="Telefono" class="col-sm-2 col-form-label">
-                                Telefono:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="telefonoPersonalM" id="telefonoPersonalM" type="number" class="form-control" aria-describedby="basic-addon2" />
+                            <div class="form-group row">
+                                <label for="Telefono" class="col-sm-2 col-form-label">
+                                    Telefono:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="telefonoPersonalM"  data-error="Completa este campo" id="telefonoPersonalM" type="number" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>                                       
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="Cargo" class="col-sm-2 col-form-label">
-                                Cargo:
-                            </label>
-                            <div class="col-sm-8">
-                                <select name='cargoPersonalM' id='cargoPersonalM'>
-                                    <option value='Director' selected>Director</option>
-                                    <option value='Administrador' selected>Administrador</option>
-                                    <option value='Obrero' selected>Obrero</option>
-                                </select>
+                            <div class="form-group row">
+                                <label for="Cargo" class="col-sm-2 col-form-label">
+                                    Cargo:
+                                </label>
+                                <div class="col-sm-8">
+                                    <select name='cargoPersonalM' id='cargoPersonalM'>
+                                        <option value='Director' selected>Director</option>
+                                        <option value='Administrador' selected>Administrador</option>
+                                        <option value='Obrero' selected>Obrero</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnModificarPersonal" type="button" class="btn btn-success success">Modificar</button>
-                        </div>
-                    </form>
-                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button id="btnModificarPersonal" type="submit" class="btn btn-success success">Modificar</button>
+                            </div>
+                        </form>
+</div>
             </div>
         </div>
     </div>
@@ -344,10 +416,10 @@ if (isset($_SESSION['usuario'])) {?>
             ."<td>".$rs[1]."</td>"
             ."<td>".$rs[4]."</td>"
             ."<td>".$rs[3]."</td>"
-            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarPersonal" data-toggle="modal">
+            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarPersonal" data-toggle="modal">
+<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarPersonal" data-toggle="modal">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarPersonal" data-toggle="modal">
-<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
+</button>'
             ."</td>"
             ."</tr>";
         }

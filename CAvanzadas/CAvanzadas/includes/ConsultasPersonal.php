@@ -23,6 +23,7 @@ function insertarPersonal($nombreCompleto,$direccion,$telefono,$cargo)
         $personal = new Personal();
         $sql = $personal->InsertarPersonal($connect,$nombreCompleto,$direccion,$telefono,$cargo);
         return $sql;
+
     }
     return $sql;
 }

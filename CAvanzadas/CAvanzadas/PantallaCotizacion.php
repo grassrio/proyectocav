@@ -15,6 +15,61 @@ if (isset($_SESSION['usuario'])) {?>
     <script>
         var nombreDinamico;
         var id;
+
+        $(document).ready(function () {
+            $('#ventanaAgregarCotizacion').on('shown.bs.modal', function (e) {
+                $(this).find('form').validator()
+                $('#nuevaCotizacion').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        // Si se cumple la validacion llama a la funcion de agregar
+                        agregarCotizacion();
+                    }
+                })
+                $('#ventanaAgregarCotizacion').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaAgregarCotizacion').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+            $('#ventanaModificarCotizacion').on('shown.bs.modal', function (e) {
+                $(this).find('form').validator()
+                $('#modificarCotizacion').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        modificarCotizacion();
+                    }
+                })
+                $('#ventanaModificarCotizacion').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaModificarCotizacion').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+            $('#ventanaAgregarRubro').on('shown.bs.modal', function (e) {
+
+                $(this).find('form').validator()
+
+                $('#nuevoRubro').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        nuevoRubro();
+                    }
+                })
+                $('#ventanaAgregarRubro').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaAgregarRubro').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+        });
+
    $(document).ready(function(){
         $("#ventanaEliminarCotizacion").on("show.bs.modal", function(e) {
             nombreDinamico = $(e.relatedTarget).data('target-id');
@@ -31,19 +86,24 @@ if (isset($_SESSION['usuario'])) {?>
            id = $(e.relatedTarget).data('target-id');
        });
    });
-       $("#btnNuevoCotizacion").click(function () {
+   function agregarCotizacion () {
            $('#btnNuevoCotizacion').prop('disabled', true);
            var nombreCotizacion = $('#Nombre').val();
-         //  var PrecioRubro = $('#Precio').val();
             if (nombreCotizacion == '') {
                 alert("Debe ingresar el Nombre del cotizacion");
+                swal({
+                    title: "Advertencia!",
+                    text: "Debe ingresar el nombre de la cotizacion!",
+                    type: "warning",
+                    confirmButtonText: "OK"
+                });
+                $('#btnNuevoCotizacion').prop('disabled', false);
             }
             else {
                 $.post("ajaxCotizacion.php", //Required URL of the page on server
                    { // Data Sending With Request To Server
                        action: "nuevaCotizacion",
                        Nombre: nombreCotizacion,
-                    //   Precio: PrecioRubro,
                    },
              function (response, status) { // Required Callback Function
                  $('#ventanaAgregarCotizacion').modal('hide');
@@ -51,8 +111,8 @@ if (isset($_SESSION['usuario'])) {?>
                  carga('PantallaCotizacion');
              });
             }
-        });
-       $("#btnModificarCotizacion").click(function () {
+        };
+         function modificarCotizacion() {
            $('#btnModificarCotizacion').prop('disabled', true);
             var nombreCotizacion = $('#NombreM').val();
             if (nombreCotizacion == '') {
@@ -70,7 +130,7 @@ if (isset($_SESSION['usuario'])) {?>
                     carga('PantallaCotizacion');
                 });
             }
-        });
+        };
        $("#btnEliminarCotizacion").click(function () {
            $('#btnEliminarCotizacion').prop('disabled', true);
            var nombreCotizacion = nombreDinamico
@@ -124,7 +184,7 @@ if (isset($_SESSION['usuario'])) {?>
            });
        }
 
-       $("#btnNuevaRubro").click(function () {
+       function nuevoRubro () {
            $('#btnNuevaRubro').prop('disabled', true);
            var Precio  = $('#Precio').val();
            var idRubro = document.getElementById("rubroCombo").value;
@@ -150,7 +210,7 @@ if (isset($_SESSION['usuario'])) {?>
 
                });
            });
-       });
+       };
 
     </script>
 
@@ -184,33 +244,21 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Agregar Cotizacion</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="nuevaCotizacion" method="POST" action="nuevaCotizacion">
-                        <div class="form-group row">
-                            <label for="Nombre" class="col-sm-2 col-form-label">
-                                Nombre:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="Nombre" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" />
+                    <form role="form" data-toggle="validator" id="nuevaCotizacion" name="nuevaCotizacion">
+                            <div class="form-group row">
+                                <label for="Nombre" class="col-sm-2 col-form-label">
+                                    Nombre:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="Nombre" data-error="Completa este campo" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" required />
+                                    <div class="help-block with-errors"></div>
+                                </div>
                             </div>
-                        </div>
-                        <!--<select name='rubro' id='rubro'>    
-						//    <?php
-    //      $sql = devolverRubros();
-    //    while ($rs=mysqli_fetch_array($sql))
-    //  {
-    //    echo "<option value='".$rs[0]."' selected>'".$rs[1]."'</option>";
-    //}
-                              ?> 
-						</select> 
-						<div class="modal-body">
-							Precio
-							<input name="Precio" id="Precio" type="text" class="form-control" aria-describedby="basic-addon2" />
-						</div>-->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnNuevoCotizacion" type="button" class="btn btn-success success">Agregar</button>
-                        </div>
-                    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button id="btnNuevoCotizacion" type="submit" class="btn btn-success success">Agregar</button>
+                            </div>
+                        </form>
                 </div>
             </div>
         </div>
@@ -227,37 +275,38 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Agregar Rubro</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="nuevoRubro" method="POST" action="nuevoRubro">
-                        <div class="form-group row">
-                            <label for="Rubro" class="col-sm-2 col-form-label">
-                                Rubro:
-                            </label>
-                            <div class="col-sm-8">
-                                <select name='rubroCombo' id='rubroCombo'>
-                                    <?php
+                    <form role="form" data-toggle="validator" id="nuevoRubro" name="nuevoRubro">
+                            <div class="form-group row">
+                                <label for="Rubro" class="col-sm-2 col-form-label">
+                                    Rubro:
+                                </label>
+                                <div class="col-sm-8">
+                                    <select name='rubroCombo' id='rubroCombo'>
+                                        <?php
     $sql = devolverRubros();
     while ($rs=mysqli_fetch_array($sql))
     {
         echo "<option value='".$rs[1]."' selected>".$rs[1]."</option>";
     }
-                                    ?>
-                                </select>
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="Compra" class="col-sm-2 col-form-label">
-                                Precio:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="Precio" id="Precio" type="number" value="0" class="form-control" aria-describedby="basic-addon2" />
+                            <div class="form-group row">
+                                <label for="Compra" class="col-sm-2 col-form-label">
+                                    Precio:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="Precio" data-error="Completa este campo" id="Precio" type="number" class="form-control" aria-describedby="basic-addon2" required />
+                                    <div class="help-block with-errors"></div>
+                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnNuevaRubro" type="button" class="btn btn-success success">Agregar</button>
-                        </div>
-                    </form>
-                </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button id="btnNuevaRubro" type="submit" class="btn btn-success success">Agregar</button>
+                            </div>
+                        </form>
+</div>
             </div>
         </div>
     </div>
@@ -273,23 +322,24 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Modificar Cotizaci�n</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="modificarCotizacion" method="POST" action="modificarCotizacion">
-                        <div class="modal-body" id="modificarDinamico">
-                            <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
-                            <!-- esto se carga dinamico-->
-                        </div>
-                        <div class="form-group row">
-                            <label for="Nombre" class="col-sm-2 col-form-label">
-                                Nombre:
-                            </label>
-                            <div class="col-sm-8">
-                                <input name="Nombre" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" />
+                    <form role="form" data-toggle="validator" id="modificarCotizacion" name="modificarCotizacion">
+                            <div class="modal-body" id="modificarDinamico">
+                                <input name="idModificar" type="hidden" id="idModificar" class="form-control" aria-describedby="basic-addon2" />
+                                <!-- esto se carga dinamico-->
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnModificarCotizacion" type="button" class="btn btn-success success">Modificar</button>
-                        </div>
+                            <div class="form-group row">
+                                <label for="Nombre" class="col-sm-2 col-form-label">
+                                    Nombre:
+                                </label>
+                                <div class="col-sm-8">
+                                    <input name="Nombre" data-error="Completa este campo" id="NombreM" type="text" class="form-control" aria-describedby="basic-addon2" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                <button id="btnModificarCotizacion" type="submit" class="btn btn-success success">Modificar</button>
+                            </div>
                     </form>
                 </div>
             </div>

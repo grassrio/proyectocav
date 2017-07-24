@@ -30,5 +30,12 @@ class Usuario
          or die ("Error al consultar el tipo de usuario");
         return $sql;
     }
+    public function insertarUsuario($connect,$NombreUsu,$pass,$cargo,$idEmpleado)
+    {
+
+        $sql = mysqli_query($connect,"INSERT INTO Usuario (NombreUsuario,Password,TipoUsuario,idPersonal) VALUES ('".$NombreUsu."','".$pass."','".$cargo."','".$idEmpleado."')")
+         or die ("Error al insertar el usuario");
+        return $sql;
+    }
 }
 ?>
