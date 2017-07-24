@@ -90,7 +90,7 @@ if (isset($_SESSION['usuario'])) {?>
                     <li role="presentation">
                         <a href="#">
                             Alertas
-                            <span class="badge">7</span>
+                            <span class="badge"><!--7--></span>
                         </a>
                     </li>
                 </ul>

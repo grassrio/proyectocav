@@ -23,10 +23,9 @@ if (isset($_SESSION['usuario'])) {?>
         });
     });
 
-    function agregarObra(idLicitacion) {
-
-        alert(idLicitacion);
+    function agregarObra() {
         $('#btnNuevaObra').prop('disabled', true);
+        var idLicitacion = $('#idLicitacion').val();
         var NombreObra = $('#nombreObra').val();
         var idCotizacionObra = $('#dSolicitudCotizacion').val();
         var DireccionObra = $('#direccionObra').val();
@@ -37,19 +36,63 @@ if (isset($_SESSION['usuario'])) {?>
         var FechaRecibidoObra = $('#fechaRecibidoObra').val();
         var Esquina1 = $('#esquina1').val();
         var Esquina2 = $('#esquina2').val();
-        alert(NombreObra + idCotizacionObra + DireccionObra + NumeroPuertaObra + idZonaObra + EstadoObra + ObservacionObra);
-        alert(FechaRecibidoObra + Esquina1 + Esquina2);
-        if ($('#chReqBaliza').prop('checked')) {
-            alert("req baliza check");
-            var ProveedorBaliza = $('#proveedorBaliza').val();
-            var CantidadBaliza = $('#balCantidad').val();
-            var FechaInicioBaliza = $('#balFechaInicio').val();
-            var FechaFinBaliza = $('#balFechaFin').val();
-            alert(ProveedorBaliza + CantidadBaliza + FechaInicioBaliza + FechaFinBaliza);
-        } else {
-            alert("No req baliza");
-        }
-        $('#btnNuevaObra').prop('disabled', false);
+
+        $.post("ajaxLicitacion.php",
+                   {
+                       action: "nuevaObra",
+                       idLicitacion: idLicitacion,
+                       NombreObra: NombreObra,
+                       idCotizacionObra: idCotizacionObra,
+                       DireccionObra: DireccionObra,
+                       NumeroPuertaObra: NumeroPuertaObra,
+                       idZonaObra: idZonaObra,
+                       EstadoObra: EstadoObra,
+                       ObservacionObra: ObservacionObra,
+                       FechaRecibidoObra: FechaRecibidoObra,
+                       Esquina1: Esquina1,
+                       Esquina2: Esquina2
+                   },
+             function (response, status) {
+                 if (response > 0) {
+                     idObra = response;
+                     if ($('#chReqBaliza').prop('checked')) {
+                         var ProveedorBaliza = $('#proveedorBaliza').val();
+                         var CantidadBaliza = $('#balCantidad').val();
+                         var FechaInicioBaliza = $('#balFechaInicio').val();
+                         var FechaFinBaliza = $('#balFechaFin').val();
+                         $.post("ajaxLicitacion.php",
+                             {
+                                 action: "agregarBaliza",
+                                 idObra: idObra,
+                                 ProveedorBaliza: ProveedorBaliza,
+                                 CantidadBaliza: CantidadBaliza,
+                                 FechaInicioBaliza: FechaInicioBaliza,
+                                 FechaFinBaliza: FechaFinBaliza
+                             },
+                         function (response, status) {
+                             if (response != '') {
+                                 swal({
+                                     title: "Error",
+                                     text: "Error al agregar baliza",
+                                     type: "warning",
+                                     confirmButtonText: "OK"
+                                 });
+                             }
+                             });
+                     }
+                     $('#ventanaAgregarObra').modal('hide');
+                     desplegarLicitacion(idLicitacion);
+                 }
+                 else {
+                     swal({
+                         title: "Error",
+                         text: "Error al agregar obra",
+                         type: "warning",
+                         confirmButtonText: "OK"
+                     });
+                 }
+
+             });
     };
 
     $(document).ready(function () {
@@ -100,8 +143,7 @@ if (isset($_SESSION['usuario'])) {?>
                        Codigo: codigo,
                        Presupuesto: presupuesto,
                    },
-             function (response, status) { // Required Callback Function
-                 //$("#bingo").html(response);//"response" receives - whatever written in echo of above PHP script.
+             function (response, status) { 
                  if (response == '')
                  {
                      $('#ventanaAgregarLicitacion').modal('hide');
@@ -405,7 +447,7 @@ if (isset($_SESSION['usuario'])) {?>
                     while($rs=mysqli_fetch_array($sql))
                     {
                         echo "<tr>"
-                        .'<td><a onclick="desplegarLicitacion('.$rs[idLicitacion].')">'.$rs[4].'</a></td>'
+                        .'<td><a href="#" onclick="desplegarLicitacion('.$rs[idLicitacion].')">'.$rs[4].'</a></td>'
                         ."<td>".$rs[3]."</td>"
                         ."<td></td>"
                         ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarLicitacion" data-toggle="modal">

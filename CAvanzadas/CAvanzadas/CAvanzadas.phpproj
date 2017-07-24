@@ -31,6 +31,7 @@
     <Compile Include="Clases\Cliente.php" />
     <Compile Include="Clases\Cotizacion.php" />
     <Compile Include="Clases\Cuadrilla.php" />
+    <Compile Include="Clases\Obra.php" />
     <Compile Include="Clases\Personal.php" />
     <Compile Include="Clases\Rubro.php" />
     <Compile Include="FormularioIngresoCliente.php" />
@@ -39,6 +40,7 @@
     <Compile Include="includes\ConsultasCliente.php" />
     <Compile Include="includes\config.php" />
     <Compile Include="includes\ConsultasCotizacion.php" />
+    <Compile Include="includes\ConsultasObra.php" />
     <Compile Include="includes\ConsultasPersonal.php" />
     <Compile Include="includes\ConsultasRubro.php" />
     <Compile Include="includes\ConsultaZonas.php" />

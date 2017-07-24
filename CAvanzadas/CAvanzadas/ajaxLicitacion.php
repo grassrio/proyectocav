@@ -3,11 +3,20 @@ require 'includes/ConsultasLicitacion.php';
 require 'includes/ConsultasCotizacion.php';
 require 'includes/ConsultasCliente.php';
 require 'includes/ConsultaZonas.php';
+require 'includes/ConsultasObra.php';
+
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
     switch($action) {
         case 'nuevaLicitacion' :
             insertarLicitacion($_POST['idCliente'],$_POST['idCotizacion'],$_POST['Estado'],$_POST['Codigo'],$_POST['Presupuesto']);
+            break;
+        case 'nuevaObra' :
+            $idObra = insertarObra($_POST['NombreObra'],$_POST['idCotizacionObra'],$_POST['DireccionObra'],$_POST['NumeroPuertaObra'],$_POST['idZonaObra'],$_POST['EstadoObra'],$_POST['ObservacionObra'],$_POST['FechaRecibidoObra'],$_POST['idLicitacion'],$_POST['Esquina1'],$_POST['Esquina2']);
+            echo $idObra;
+            break;
+        case 'agregarBaliza' :
+            agregarBaliza($_POST['idObra'],$_POST['ProveedorBaliza'],$_POST['CantidadBaliza'],$_POST['FechaInicioBaliza'],$_POST['FechaFinBaliza']);
             break;
         case 'eliminarLicitacion' :
             eliminarLicitacion($_POST['Codigo']);
@@ -35,6 +44,29 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             $rsCotizacion=mysqli_fetch_array($cotizacion);
             $fechaActual=date("Y-m-d");
             echo '
+<script>
+        $(document).ready(function () {
+            $(\'#ventanaAgregarObra\').on(\'shown.bs.modal\', function (e) {
+
+                $(this).find(\'form\').validator()
+
+                $(\'#nuevaObraForm\').on(\'submit\', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        agregarObra();
+                    }
+                })
+                $(\'#ventanaAgregarObra\').on(\'hidden.bs.modal\', function (e) {
+                    $(this).find(\'form\').off(\'submit\').validator(\'destroy\')
+                })
+            });
+            $(\'#ventanaAgregarObra\').on(\'hidden.bs.modal\', function () {
+                $(this).find(\'form\')[0].reset();
+            });
+        });
+</script>
+
                 <!--VENTANA PARA INGRESAR UNA NUEVA OBRA-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarObra">
         <div class="modal-dialog modal-lg" role="document">
@@ -46,14 +78,16 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     <h4 class="modal-title">Agregar obra</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="nuevaObraForm" method="POST" action="nuevaObra" ">
+                    <form id="nuevaObraForm" name="nuevaObraForm">
+                    <input type="hidden" id="idLicitacion" value="'.$idLicitacion.'">
                         <div class="form-group row">
 
                             <label for="nombreObra" class="col-sm-2 col-form-label">
                                 Nombre
                             </label>
                             <div class="col-sm-8">
-                                <input id="nombreObra" name="nombreObra" class="form-control" type="text" value="" placeholder="Nombre o número de obra" />
+                                <input id="nombreObra" name="nombreObra" class="form-control" type="text" value="" data-error="Requerido" placeholder="Nombre o número de obra" required>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
 
@@ -86,7 +120,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 Dirección
                             </label>
                             <div class="col-sm-8">
-                                <input id="direccionObra" class="form-control" type="text" value="" placeholder="" />
+                                <input id="direccionObra" class="form-control" data-error="Requerido" type="text" value="" placeholder="" required>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
 
@@ -105,7 +140,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 Zona
                             </label>
                             <div class="col-sm-8">
-                                <select id="zonaObra" class="form-control">
+                                <select id="zonaObra" data-error="Requerido" class="form-control" required>
                                 <option disabled selected value>Seleccione zona</option>';
                                 while ($rsZonasLicitacion=mysqli_fetch_array($zonasLicitacion))
                                 {
@@ -116,6 +151,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                     echo "<option value='".$rsZona[idZona]."'>".$rsZona[Nombre]."</option>";
                                 }
                                 echo '</select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
 
@@ -217,25 +253,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 
 
 
-
-
-            <button type="button" class="btn-sm btn-default" onclick="mostrarocultar(\'mostrar\',\'contenido\'); mostrarocultar(\'ocultar\',\'subcontenido\');">
-                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>
-            <div class="panel panel-default">
-
-                <div class="panel-heading">
-                    <span class="label label-info">Licitación '.$rsLicitacion[codigo].'</span>
-                </div>
-            Estado: '.$rsLicitacion[estado].'
-            </div>
-            <div class="panel panel-default">
-            <!-- Default panel contents -->
-            <div class="panel-heading">
-                <h3 class="panel-title">Obras</h3>
-            </div>
-
-
-            <nav class="navbar navbar-toolbar navbar-default">
+<nav class="navbar navbar-toolbar navbar-default">
                 <div class="container-fluid">
 
 
@@ -243,9 +261,12 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li>
-                                <a type="button" class="btn btn-default" aria-label="Left Align" href="#ventanaAgregarObra" data-toggle="modal">
-                                    <span onclick="" class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                                </a>
+                                <button type="button" class="btn-xs btn-default" onclick="mostrarocultar(\'mostrar\',\'contenido\'); mostrarocultar(\'ocultar\',\'subcontenido\');">
+                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button>
+            <div class="panel panel-default">
+                            </li>
+                            <li>
+                                 <span class="label label-info">Licitación '.$rsLicitacion[codigo].'</span>
                             </li>
 
                         </ul>
@@ -257,7 +278,60 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             </nav>
 
 
-             </div>
+
+                <div class="panel-heading">
+                    Estado: '.$rsLicitacion[estado].'
+                </div>
+
+            </div>
+            <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <h3 class="panel-title">Obras</h3>
+            </div>
+
+
+            <nav class="navbar navbar-toolbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li>
+<button type="button" class="btn btn-success btn-xs" data-target="#ventanaAgregarObra" data-toggle="modal">Agregar obra</button>
+                            </li>
+
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+
+        <!-- Tabla Obras -->
+        <table class="table">
+            <tr>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Recibido</th>
+            </tr>
+            ';
+                $sqlObras = ListarObras($idLicitacion);
+                $rowcount = mysqli_num_rows($sqlObras);
+                if ($rowcount>0) {
+                    while($rsObra=mysqli_fetch_array($sqlObras))
+                    {
+                        echo "<tr>"
+                        ."<td>".$rsObra[Nombre]."</td>"
+                        ."<td>".$rsObra[Direccion]."</td>"
+                        ."<td>".$rsObra[Estado]."</td>"
+                        ."<td>".$rsObra[fechaRecibido]."</td>"
+                        ."</tr>";
+                    }
+                }
+
+
+
+                echo '</table>
+                       </div>
             ';
             break;
     }
