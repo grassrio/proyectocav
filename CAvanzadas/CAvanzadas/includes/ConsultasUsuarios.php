@@ -15,4 +15,42 @@ require 'Clases/Usuario.php';
         return $sql;
     }
 
+    function DevolverUsuarios(){
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $usuario = new Usuario();
+            $sql     = $usuario->DevolverUsuarios($connect);
+            return $sql;
+        }
+        return $sql;
+    }
+    function modificarUsuario($id,$pass){
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $usuario = new Usuario();
+            $passConMd5 = md5($pass);
+            $sql     = $usuario->ModificarUsuario($connect,$id,$passConMd5);
+            return $sql;
+        }
+        return $sql;
+    }
+    function eliminarUsuario($nombre){
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $usuario = new Usuario();
+            $sql     = $usuario->EliminarUsuario($connect,$nombre);
+            return $sql;
+        }
+        return $sql;
+    }
+
 ?>

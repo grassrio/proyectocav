@@ -37,5 +37,24 @@ class Usuario
          or die ("Error al insertar el usuario");
         return $sql;
     }
+
+    public function DevolverUsuarios($connect)
+    {
+        $sql = mysqli_query($connect,"SELECT * FROM Usuario")
+         or die ("Error al consultar el tipo de usuario");
+        return $sql;
+    }
+    public function EliminarUsuario($connect,$nombre)
+    {
+        $sql = mysqli_query($connect,"DELETE FROM Usuario WHERE NombreUsuario='".$nombre."'")
+         or die ("Error al eliminar el usuario");
+        return $sql;
+    }
+    public function ModificarUsuario($connect,$idUsuario,$pass)
+    {
+        $sql = mysqli_query($connect,"UPDATE Usuario SET Password='".$pass."' WHERE Id='".$idUsuario."'")
+         or die ("Error al modificar el tipo de usuario");
+        return $sql;
+    }
 }
 ?>

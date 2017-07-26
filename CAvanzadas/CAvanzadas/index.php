@@ -37,10 +37,6 @@ if (isset($_SESSION['usuario'])) {?>
             ;
         }
     </script>
-        
-
-
-
     <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
         <img src="img/Loading.gif" />
     </div>
@@ -99,7 +95,6 @@ if (isset($_SESSION['usuario'])) {?>
                                 $sql = DevolverBalizasProximoVencimiento();
                                 $rowcount = mysqli_num_rows($sql);
                                 if($rowcount>0){
-                            //        $rs=mysqli_fetch_array($sql);
                                     echo $rowcount;
                                 }
                                 else
@@ -124,7 +119,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
-                                    <a href="#">
+                                    <a href="JavaScript:carga('PantallaUsuario')">
                                         <i class="glyphicon glyphicon-user"></i>Usuarios
                                     </a>
                                 </li>

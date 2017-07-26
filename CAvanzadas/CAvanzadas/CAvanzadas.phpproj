@@ -64,6 +64,7 @@
     <Compile Include="PantallaPersonal.php" />
     <Compile Include="PantallaRubro.php" />
     <Compile Include="Clases\Zona.php" />
+    <Compile Include="PantallaUsuario.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />

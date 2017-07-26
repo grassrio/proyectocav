@@ -345,7 +345,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 <button id="btnModificarPersonal" type="submit" class="btn btn-success success">Modificar</button>
                             </div>
                         </form>
-</div>
+                </div>
             </div>
         </div>
     </div>

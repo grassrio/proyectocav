@@ -29,6 +29,13 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'modificarPersonal' :
             modificarPersonal($_POST['idPersonal'],$_POST['Direccion'],$_POST['Telefono'],$_POST['Cargo']);
             break;
+        case 'modificarUsuario' :
+            $passConMd5 = md5($_POST['Pass']);
+            modificarUsuario($_POST['IdUsuario'],$passConMd5);
+            break;
+        case 'eliminarUsuario' :
+            eliminarUsuario($_POST['NombreUsuario']);
+            break;
     }
 }
 ?>
