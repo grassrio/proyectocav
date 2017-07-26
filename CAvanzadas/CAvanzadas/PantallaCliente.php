@@ -279,7 +279,7 @@ if ($rowcount>0) {?>
                                 Nombre:
                             </label>
                             <div class="col-sm-8">
-                                <input name="Nombre" data-error="Completa este campo" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" required />
+                                <input name="Nombre" data-error="Requerido" id="Nombre" type="text" class="form-control" aria-describedby="basic-addon2" required />
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
