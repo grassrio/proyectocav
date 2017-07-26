@@ -20,7 +20,7 @@ if ($rowcount>0) {
        $(document).ready(function(){
            $("#ventanaDevolverBaliza").on("show.bs.modal", function (e) {
                 id = $(e.relatedTarget).data('target-id');
-                $("#DevolverBaliza").html("Desea devolver la balizas?");
+                $("#DevolverBaliza").html("Desea devolver la baliza?");
             });
 
        });
@@ -30,14 +30,10 @@ if ($rowcount>0) {
            $.post("ajaxBaliza.php", //Required URL of the page on server
                    { // Data Sending With Request To Server
                        action: "devolverBaliza",
-                       idBaliza: id,
+                       idBaliza: id
                    },
            function (response, status) { // Required Callback Function
-               if (response == '') {
-                   $('#ventanaDevolverBaliza').modal('hide');
-                   carga('PantallaBaliza');
-               }
-               else {
+               if (response == 'Error al devolver Baliza') {
                    swal({
                        title: "Advertencia!",
                        text: response,
@@ -45,6 +41,10 @@ if ($rowcount>0) {
                        confirmButtonText: "OK"
                    });
                    $('#btnDevolverBaliza').prop('disabled', false);
+               }
+               else {
+                   $('#ventanaDevolverBaliza').modal('hide');
+                   carga('PantallaBaliza');
                }
            });
        });
