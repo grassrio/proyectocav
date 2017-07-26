@@ -281,7 +281,7 @@ if (isset($_SESSION['usuario'])) {?>
                             </label>
                             <div class="form-group col-sm-4">
                                 <input name="Contrasenia" data-minlength="6" placeholder="Contraseña" id="Contrasenia" type="password" class="form-control" aria-describedby="basic-addon2" required>
-                                <div class="help-block with-errors">Mínimo de 6 caracteres</div>
+                                <div class="help-block">Mínimo de 6 caracteres</div>
                             </div>
                             <div class="form-group col-sm-4">
                                 <input name="CContrasenia" data-match="#Contrasenia" placeholder="Confirmar" data-match-error="Las contraseñas no coinciden" id="CContrasenia" type="password" class="form-control" aria-describedby="basic-addon2" required>

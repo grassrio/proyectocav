@@ -18,9 +18,9 @@ if(isset($_POST['submit'])){
         }else{
             session_start();
             $sql = $usuario->ObtenertipoUsuario($connect);
-            $tipousuario = mysqli_fetch_array($sql);
+            $tipoUsuarioSql = mysqli_fetch_array($sql);
             $_SESSION['usuario']=$username;
-            $_SESSION['tipoUsuario']=$tipousuario;
+            $_SESSION['tipoUsuario']=$tipoUsuarioSql[TipoUsuario];
             header("location:../index.php");
         }
     }

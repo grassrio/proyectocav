@@ -1,6 +1,6 @@
 <?php
 require 'Clases/Obra.php';
-function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Estado,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2)
+function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -8,9 +8,52 @@ function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Es
     {
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
-        $idObra = $obra->InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Estado,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2);
+        $idObra = $obra->InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2);
         return $idObra;
     }
+    return $sql;
+}
+
+function auditoriaEstado($idObra){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->auditoriaEstado($connect,$idObra);
+        return $sql;
+    }
+    return $sql;
+}
+
+function metrajesEstimados($idObra){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->MetrajesEstimados($connect,$idObra);
+        mysqli_close($connect);
+        return $sql;
+    }
+    mysqli_close($connect);
+    return $sql;
+}
+
+function obtenerObra($idObra){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->ObtenerObra($connect,$idObra);
+        mysqli_close($connect);
+        return $sql;
+    }
+    mysqli_close($connect);
     return $sql;
 }
 

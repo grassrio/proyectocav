@@ -12,11 +12,104 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             insertarLicitacion($_POST['idCliente'],$_POST['idCotizacion'],$_POST['Estado'],$_POST['Codigo'],$_POST['Presupuesto']);
             break;
         case 'nuevaObra' :
-            $idObra = insertarObra($_POST['NombreObra'],$_POST['idCotizacionObra'],$_POST['DireccionObra'],$_POST['NumeroPuertaObra'],$_POST['idZonaObra'],$_POST['EstadoObra'],$_POST['ObservacionObra'],$_POST['FechaRecibidoObra'],$_POST['idLicitacion'],$_POST['Esquina1'],$_POST['Esquina2']);
+            $idObra = insertarObra($_POST['NombreObra'],$_POST['idCotizacionObra'],$_POST['DireccionObra'],$_POST['NumeroPuertaObra'],$_POST['idZonaObra'],$_POST['ObservacionObra'],$_POST['FechaRecibidoObra'],$_POST['idLicitacion'],$_POST['Esquina1'],$_POST['Esquina2']);
             echo $idObra;
             break;
         case 'agregarBaliza' :
             agregarBaliza($_POST['idObra'],$_POST['ProveedorBaliza'],$_POST['CantidadBaliza'],$_POST['FechaInicioBaliza'],$_POST['FechaFinBaliza']);
+            break;
+        case 'auditoriaEstado' :
+            $idObra = $_POST['idObra'];
+            $estadoObraSql = auditoriaEstado($idObra);
+            $rowcount = mysqli_num_rows($estadoObraSql);
+            if ($rowcount>0){
+                echo '
+                <!-- Tabla Auditoria de estados -->
+                <table class="table">
+                <tr>
+                    <th>Estado anterior</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                </tr>
+                ';
+                while($rsEstadoObra=mysqli_fetch_array($estadoObraSql))
+                {
+                    echo "<tr>"
+                    ."<td>".$rsEstadoObra[EstadoAnterior]."</td>"
+                    ."<td>".$rsEstadoObra[EstadoPosterior]."</td>"
+                    ."<td>".$rsEstadoObra[Fecha]."</td>"
+                    ."</tr>";
+                }
+
+
+
+                echo '</table>
+                      </div>
+                ';
+            }
+            break;
+        case 'metrajesEstimados' :
+            $idCotizacion=$_POST['idCotizacion'];
+            echo '<div class="panel">
+                  <br>
+                   <form role="form" data-toggle="validator" id="agregarMetrajeForm" name="agregarMetrajeForm">
+                    <div class="form-group row">
+                        <label for="Rubro" class="col-sm-2 col-form-label">
+                            Rubro:
+                        </label>
+                        <div class="col-sm-8">
+                        <select name=\'rubroCombo\' id=\'rubroCombo\'>';
+             $rubrosCotizacion = obtenerRubro($idCotizacion);
+             while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
+             {
+                 echo "<option value='".$rsRubrosCotizacion[nombreRubro]."' selected>".$rsRubrosCotizacion[nombreRubro]."</option>";
+             }
+             echo '
+                        </select>
+                     </div>
+                    </div>
+                    <div class="form-group row">
+                            <label for="cantidadMetraje" class="col-sm-2 col-form-label">
+                                Metraje
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="number" min="1" onkeypress="return event.charCode >= 48" id="cantidadMetraje" data-error="Requerido" class="form-control" type="text" value="" placeholder="" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                     </div>
+                    <button type="button" id="btnAgregarMetraje" class="btn btn-success btn-xs">Agregar metraje</button>
+                    </form>
+                </div>
+
+                    ';
+              $idObra=$_POST['idObra'];
+              $metrajeObraSql = metrajesEstimados($idObra);
+            $rowcount = mysqli_num_rows($metrajeObraSql);
+            if ($rowcount>0){
+                echo '
+                <!-- Tabla Metrajes Estimados -->
+                <table class="table">
+                <tr>
+                    <th>Rubro</th>
+                    <th>Cantidad</th>
+                </tr>
+                ';
+                while($rsMetrajeObra=mysqli_fetch_array($metrajeObraSql))
+                {
+                    echo "<tr>"
+                    ."<td>".$rsMetrajeObra[NombreRubro]."</td>"
+                    ."<td>".$rsMetrajeObra[MetrajeEstimado]." ".$rsMetrajeObra[Unidad]."</td>"
+                    ."</tr>";
+                }
+
+
+
+                echo '</table>
+                      </div>
+                ';
+            }else{
+                echo "Sin metrajes";
+            }
             break;
         case 'eliminarLicitacion' :
             eliminarLicitacion($_POST['Codigo']);
@@ -24,6 +117,49 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'modificarLicitacion' :
             modificarLicitacion($_POST['idLicitacion'],$_POST['Estado']);
             break;
+
+        case 'mostrarObra' :
+            $idObra = $_POST['idObra'];
+            $obraSql = obtenerObra($idObra);
+            $rowcount = mysqli_num_rows($obraSql);
+            if ($rowcount>0){
+                $rsObra=mysqli_fetch_array($obraSql);
+                $idZona = $rsObra[idZona];
+                $zona = devolverZona($idZona);
+                $rsZona=mysqli_fetch_array($zona);
+
+                $idCotizacion = $rsObra[idCotizacion];
+                $cotizacion = devolverCotizacion($idCotizacion);
+                $rsCotizacion=mysqli_fetch_array($cotizacion);
+                echo '
+
+      <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target="#ventanaAuditoriaEstado"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="glyphicon-class">Estados</span></button></ul> </div> </span>
+      <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <span class="glyphicon-class">Fotos</span></button></ul> </div> </span>
+';
+                echo 'Cotización: '.$rsCotizacion[Nombre].'<br>
+                      Zona: '.$rsZona[Nombre].'<br>
+                      Dirección: '.$rsObra[Direccion].'<br>
+                      Esquina: '.$rsObra[Esquina1].'<br>
+                      Esquina: '.$rsObra[Esquina2].'<br><br>'
+                    ;
+
+                $estado = $rsObra[Estado];
+                switch($estado){
+                    case 'Pendiente de cuadrilla' :
+                        echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">Metrajes estimados</button><br><br>';
+                        if ($_SESSION['tipoUsuario']=1){
+                            echo '<button type="button" data-target-id="'.$rsObra[idObra].'" class="btn btn-success btn-xs" data-target="#ventanaAsignarCuadrilla" data-toggle="modal">Asignar cuadrilla</button><br>';
+                        }else{
+                            echo '<button type="button" data-target-id="'.$rsObra[idObra].'" class="btn btn-success btn-xs disabled" data-target="#ventanaAsignarCuadrilla" data-toggle="modal">Asignar cuadrilla</button><br>';
+                        }
+                        break;
+                }
+
+            }
+            break;
+
+
+
         case 'obtenerLicitacion' :
             $idLicitacion = $_POST['idLicitacion'];
             $licitacion = obtenerLicitacion($idLicitacion);
@@ -64,8 +200,124 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             $(\'#ventanaAgregarObra\').on(\'hidden.bs.modal\', function () {
                 $(this).find(\'form\')[0].reset();
             });
+
+
+
+            $("#ventanaAuditoriaEstado").on("show.bs.modal", function (e) {
+                $("#ventanaAuditoriaEstadoBody").html("");
+                var idObra = $(e.relatedTarget).data(\'target-id\');
+                $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "auditoriaEstado",
+                      idObra: idObra
+                  },
+                function (response, status) { // Required Callback Function
+                    $("#ventanaAuditoriaEstadoBody").html(response);
+                });
+            });
+
+            $("#ventanaMostrarObra").on("show.bs.modal", function (e) {
+            $("#ventanaMostrarObraBody").html("");
+            var idObra = $(e.relatedTarget).data(\'target-id\');
+            var nombreObra = $(e.relatedTarget).data(\'target-nombre\');
+            var estadoObra = $(e.relatedTarget).data(\'target-estado\');
+            $("#ventanaMostrarObraTitle").html(\'<span class="label label-info">\' + nombreObra + \'</span>  -  \' + estadoObra);
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+              { // Data Sending With Request To Server
+                  action: "mostrarObra",
+                  idObra: idObra
+              },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMostrarObraBody").html(response);
+
+            });
+
+            function cargaMetrajesEstimados($idObra,$idCotizacion){
+                 $("#ventanaMetrajesEstimadosBody").html("");
+                var idObra = $idObra
+                var idCotizacion = $idCotizacion
+                $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "metrajesEstimados",
+                          idObra: idObra,
+                          idCotizacion: idCotizacion
+                      },
+                function (response, status) { // Required Callback Function
+                    $("#ventanaMetrajesEstimadosBody").html(response);
+                });
+            }
+
+
+
+            $("#ventanaMetrajesEstimados").on("show.bs.modal", function (e) {
+                var idObra = $(e.relatedTarget).data(\'target-id\');
+                var idCotizacion = $(e.relatedTarget).data(\'target-idcotizacion\');
+                cargaMetrajesEstimados(idObra,idCotizacion);
+            });
+
+        });
+
+
         });
 </script>
+
+
+
+<!--VENTANA MUESTRA DETALLE OBRA-->
+    <div class="modal fade" tabindex="0" role="dialog" id="ventanaMostrarObra">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaMostrarObraTitle">Obra</h4>
+                </div>
+                <div class="modal-body" id="ventanaMostrarObraBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--VENTANA MUESTRA AUDITORIA ESTADOS-->
+    <div class="modal fade" tabindex="1" role="dialog" id="ventanaAuditoriaEstado">
+        <div class="modal-dialog modal-lg"" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaAuditoriaEstadoTitle">Auditoria de estados</h4>
+                </div>
+                <div class="modal-body" id="ventanaAuditoriaEstadoBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--VENTANA METRAJES ESTIMADOS-->
+    <div class="modal fade" tabindex="1" role="dialog" id="ventanaMetrajesEstimados">
+        <div class="modal-dialog modal-lg"" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaMetrajesEstimadosTitle">Metrajes estimados</h4>
+                </div>
+                <div class="modal-body" id="ventanaMetrajesEstimadosBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
                 <!--VENTANA PARA INGRESAR UNA NUEVA OBRA-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarObra">
@@ -320,7 +572,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     while($rsObra=mysqli_fetch_array($sqlObras))
                     {
                         echo "<tr>"
-                        ."<td>".$rsObra[Nombre]."</td>"
+                        .'<td><a href="#" data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target-nombre="'.$rsObra[Nombre].'" data-target-estado="'.$rsObra[Estado].'" data-target="#ventanaMostrarObra">'.$rsObra[Nombre].'</a></td>'
                         ."<td>".$rsObra[Direccion]."</td>"
                         ."<td>".$rsObra[Estado]."</td>"
                         ."<td>".$rsObra[fechaRecibido]."</td>"

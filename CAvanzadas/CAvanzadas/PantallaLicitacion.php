@@ -23,6 +23,8 @@ if (isset($_SESSION['usuario'])) {?>
         });
     });
 
+
+
     function agregarObra() {
         $('#btnNuevaObra').prop('disabled', true);
         var idLicitacion = $('#idLicitacion').val();
@@ -31,7 +33,6 @@ if (isset($_SESSION['usuario'])) {?>
         var DireccionObra = $('#direccionObra').val();
         var NumeroPuertaObra = $('#nPuertaObra').val();
         var idZonaObra = $('#zonaObra').val();
-        var EstadoObra = "Pendiente";
         var ObservacionObra = $('#observacionObra').val();
         var FechaRecibidoObra = $('#fechaRecibidoObra').val();
         var Esquina1 = $('#esquina1').val();
@@ -46,7 +47,6 @@ if (isset($_SESSION['usuario'])) {?>
                        DireccionObra: DireccionObra,
                        NumeroPuertaObra: NumeroPuertaObra,
                        idZonaObra: idZonaObra,
-                       EstadoObra: EstadoObra,
                        ObservacionObra: ObservacionObra,
                        FechaRecibidoObra: FechaRecibidoObra,
                        Esquina1: Esquina1,
@@ -249,8 +249,11 @@ if (isset($_SESSION['usuario'])) {?>
             }
             
         }
+
+        
     </script>
 
+    
     
 
 
