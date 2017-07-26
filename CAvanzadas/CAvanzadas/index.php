@@ -1,5 +1,6 @@
 <?php
 require('includes/loginheader.php');
+
 session_start();
 if (isset($_SESSION['usuario'])) {?>
 <!DOCTYPE html>
@@ -86,57 +87,32 @@ if (isset($_SESSION['usuario'])) {?>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
+
+
                 <ul class="nav navbar-nav">
                     <li role="presentation">
-                        <a href="#">
+                        <a href="JavaScript:carga('PantallaBaliza')">
                             Alertas
-                            <span class="badge">7</span>
+                            <span class="badge">
+                                <?php
+                                require 'includes/ConsultasBaliza.php';
+                                $sql = DevolverBalizasProximoVencimiento();
+                                $rowcount = mysqli_num_rows($sql);
+                                if($rowcount>0){
+                            //        $rs=mysqli_fetch_array($sql);
+                                    echo $rowcount;
+                                }
+                                else
+                                {
+                                    echo '0';
+                                }
+                                ?>
+                            </span>
                         </a>
                     </li>
                 </ul>
  
                     <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
-
-                        <!--    <ul class="nav navbar-nav">
-                        <li class="active">
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-                            </button>
-                        </li>
-
-                        <li>
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" class="btn btn-default" aria-label="Left Align">
-                                <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-                            </button>
-                        </li>
-                    </ul>-->
-                        <!-- busqueda 
-                    <form class="navbar-form navbar-left">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="" />
-                        </div>
-                        <button type="submit" class="btn btn-default">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-                        </button>
-                    </form>
-                                            -->
-
-                        <!-- desplegable derecha -->
                         <div class="btn-group pull-right">
                             <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                                 <i class="glyphicon glyphicon-cog"></i>
@@ -160,21 +136,13 @@ if (isset($_SESSION['usuario'])) {?>
                                 </li>
                             </ul>
                         </div>
-
-
                     </div><!-- /.navbar-collapse -->
-</div><!-- /.container-fluid -->
-        </nav>
-
-
-   
+            </div><!-- /.container-fluid -->
+        </nav>   
     <div id="main">
         <div id="contenido"></div>
         <div id="subcontenido"></div>
-    </div>
-
-
-        
+    </div>      
     
 </body>
 </html>
