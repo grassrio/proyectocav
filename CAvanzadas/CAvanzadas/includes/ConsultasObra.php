@@ -14,6 +14,33 @@ function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Ob
     return $sql;
 }
 
+function agregarMetrajeEstimado($idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->agregarMetrajeEstimado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
+        return $sql;
+    }
+    return $sql;
+}
+
+function eliminarMetrajeEstimado($idMetrajeEstimado){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->eliminarMetrajeEstimado($connect,$idMetrajeEstimado);
+        return $sql;
+    }
+    return $sql;
+}
+
+
 function auditoriaEstado($idObra){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');

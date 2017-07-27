@@ -11,6 +11,19 @@ class Obra
         return $idObra;
     }
 
+    public function agregarMetrajeEstimado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
+        $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','".$cantidadMetraje."',NULL,'".$unidadRubro."')")
+            or die ("Error al agregar metraje");
+        return $sql;
+    }
+
+    public function eliminarMetrajeEstimado($connect,$idMetrajeEstimado){
+        $sql = mysqli_query($connect,"DELETE FROM MetrajeObra WHERE idMetrajeObra='".$idMetrajeEstimado."'")
+            or die ("Error al eliminar metraje estimado");
+        return $sql;
+    }
+
+
     public function MetrajesEstimados($connect,$idObra){
         $sql = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."'")
             or die ("Error al consultar estados de obra");

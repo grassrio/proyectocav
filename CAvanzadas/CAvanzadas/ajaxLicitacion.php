@@ -48,50 +48,34 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 ';
             }
             break;
+        case 'agregarMetraje' :
+                $idObra=$_POST['idObra'];
+                $nombreUnidadRubro_explode = explode('|', $_POST['NombreRubro']);
+                $nombreRubro = $nombreUnidadRubro_explode[0];
+                $unidadRubro = $nombreUnidadRubro_explode[1];
+                $cantidadMetraje=$_POST['CantidadMetraje'];
+                agregarMetrajeEstimado($idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
+                break;
+        case 'eliminarMetrajeEstimado' :
+            $idMetrajeEstimado = $_POST['idMetrajeEstimado'];
+            eliminarMetrajeEstimado($idMetrajeEstimado);
+            break;
         case 'metrajesEstimados' :
-            $idCotizacion=$_POST['idCotizacion'];
-            echo '<div class="panel">
-                  <br>
-                   <form role="form" data-toggle="validator" id="agregarMetrajeForm" name="agregarMetrajeForm">
-                    <div class="form-group row">
-                        <label for="Rubro" class="col-sm-2 col-form-label">
-                            Rubro:
-                        </label>
-                        <div class="col-sm-8">
-                        <select name=\'rubroCombo\' id=\'rubroCombo\'>';
-             $rubrosCotizacion = obtenerRubro($idCotizacion);
-             while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
-             {
-                 echo "<option value='".$rsRubrosCotizacion[nombreRubro]."' selected>".$rsRubrosCotizacion[nombreRubro]."</option>";
-             }
-             echo '
-                        </select>
-                     </div>
-                    </div>
-                    <div class="form-group row">
-                            <label for="cantidadMetraje" class="col-sm-2 col-form-label">
-                                Metraje
-                            </label>
-                            <div class="col-sm-8">
-                                <input type="number" min="1" onkeypress="return event.charCode >= 48" id="cantidadMetraje" data-error="Requerido" class="form-control" type="text" value="" placeholder="" required>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                     </div>
-                    <button type="button" id="btnAgregarMetraje" class="btn btn-success btn-xs">Agregar metraje</button>
-                    </form>
-                </div>
-
-                    ';
-              $idObra=$_POST['idObra'];
-              $metrajeObraSql = metrajesEstimados($idObra);
+            $idObra=$_POST['idObra'];
+            $metrajeObraSql = metrajesEstimados($idObra);
             $rowcount = mysqli_num_rows($metrajeObraSql);
             if ($rowcount>0){
                 echo '
+                <br>
+                <br>
+                <br>
+                <div class="panel panel-info" >
                 <!-- Tabla Metrajes Estimados -->
                 <table class="table">
                 <tr>
                     <th>Rubro</th>
                     <th>Cantidad</th>
+                    <th></th>
                 </tr>
                 ';
                 while($rsMetrajeObra=mysqli_fetch_array($metrajeObraSql))
@@ -99,6 +83,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     echo "<tr>"
                     ."<td>".$rsMetrajeObra[NombreRubro]."</td>"
                     ."<td>".$rsMetrajeObra[MetrajeEstimado]." ".$rsMetrajeObra[Unidad]."</td>"
+                    .'<td><button onclick="eliminarMetrajeEstimado('.$rsMetrajeObra[idMetrajeObra].','.$idObra.')" type="button" class="btn btn-default">
+                              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'
                     ."</tr>";
                 }
 
@@ -108,7 +94,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                       </div>
                 ';
             }else{
-                echo "Sin metrajes";
+                echo "<br> Sin metrajes";
             }
             break;
         case 'eliminarLicitacion' :
@@ -190,7 +176,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     if (e.isDefaultPrevented()) {
                     } else {
                         e.preventDefault()
-                        agregarObra();
+                        agregarObra('.$idLicitacion.');
                     }
                 })
                 $(\'#ventanaAgregarObra\').on(\'hidden.bs.modal\', function (e) {
@@ -232,27 +218,33 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 
             });
 
-            function cargaMetrajesEstimados($idObra,$idCotizacion){
-                 $("#ventanaMetrajesEstimadosBody").html("");
-                var idObra = $idObra
-                var idCotizacion = $idCotizacion
-                $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "metrajesEstimados",
-                          idObra: idObra,
-                          idCotizacion: idCotizacion
-                      },
-                function (response, status) { // Required Callback Function
-                    $("#ventanaMetrajesEstimadosBody").html(response);
-                });
-            }
+
 
 
 
             $("#ventanaMetrajesEstimados").on("show.bs.modal", function (e) {
                 var idObra = $(e.relatedTarget).data(\'target-id\');
                 var idCotizacion = $(e.relatedTarget).data(\'target-idcotizacion\');
-                cargaMetrajesEstimados(idObra,idCotizacion);
+                $(this).find(\'form\').validator()
+
+                $(\'#agregarMetrajeForm\').on(\'submit\', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        // Si se cumple la validacion llama a la funcion de agregar
+                        agregarMetraje(idObra)
+                    }
+                })
+
+
+
+                cargaMetrajesEstimados(idObra);
+
+
+            });
+
+            $(\'#ventanaMetrajesEstimados\').on(\'hidden.bs.modal\', function () {
+                $(this).find(\'form\')[0].reset();
             });
 
         });
@@ -310,7 +302,40 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     </button>
                     <h4 class="modal-title" id="ventanaMetrajesEstimadosTitle">Metrajes estimados</h4>
                 </div>
-                <div class="modal-body" id="ventanaMetrajesEstimadosBody"></div>
+                <div class="modal-body" id="ventanaMetrajesEstimadosBody">
+                <div class="panel">
+                  <br>
+                   <form role="form" data-toggle="validator" id="agregarMetrajeForm" name="agregarMetrajeForm">
+                    <div class="form-group row">
+                        <label for="Rubro" class="col-sm-2 col-form-label">
+                            Rubro:
+                        </label>
+                        <div class="col-sm-8">
+                        <select name=\'rubroCombo\' id=\'rubroCombo\'>';
+            $rubrosCotizacion = obtenerRubro($idCotizacion);
+            while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
+            {
+                echo "<option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]."</option>";
+            }
+            echo '
+                        </select>
+                     </div>
+                    </div>
+                    <div class="form-group row">
+                            <label for="cantidadMetraje" class="col-sm-2 col-form-label">
+                                Metraje
+                            </label>
+                            <div class="col-sm-8">
+                                <input type="number" min="1" id="cantidadMetraje" data-error="Requerido" class="form-control" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                     </div>
+                    <span class="form-control-static pull-right"> <button id="btnAgregarMetraje" type="submit" class="btn btn-success success">Agregar metraje</button> </span>
+
+                    </form>
+                    <div id="ventanaMetrajesEstimadosBodyTabla"></div>
+                </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
@@ -329,8 +354,9 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     </button>
                     <h4 class="modal-title">Agregar obra</h4>
                 </div>
+<form role="form" data-toggle="validator" id="nuevaObraForm" name="nuevaObraForm">
                 <div class="modal-body">
-                    <form id="nuevaObraForm" name="nuevaObraForm">
+
                     <input type="hidden" id="idLicitacion" value="'.$idLicitacion.'">
                         <div class="form-group row">
 
@@ -491,14 +517,13 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         </div>
                         </div>
 
-
-
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button id="btnNuevaObra" onclick="agregarObra(\''.$idLicitacion.'\')" type="button" class="btn btn-success success">Agregar</button>
+                    <button id="btnNuevaObra" type="submit" class="btn btn-success success">Agregar obra</button>
+
                 </div>
+</form>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->

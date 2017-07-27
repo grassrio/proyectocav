@@ -68,13 +68,13 @@ class Cotizacion
     }
     public function ObtenerRubro($connect,$idCotizacion)
     {
-        $sql = mysqli_query($connect,"SELECT nombreRubro,Precio FROM RubroCotizacion WHERE idCotizacion='".$idCotizacion."'")
+        $sql = mysqli_query($connect,"SELECT * FROM RubroCotizacion WHERE idCotizacion='".$idCotizacion."'")
          or die ("Error al obtener las cotización");
         return $sql;
     }
-    public function InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$Precio)
+    public function InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$unidadRubro,$Precio)
     {
-        $sql = mysqli_query($connect,"INSERT INTO RubroCotizacion (nombreRubro,idCotizacion,Precio) VALUES ('".$nombreRubro."','".$idCotizacion."','".$Precio."')")
+        $sql = mysqli_query($connect,"INSERT INTO RubroCotizacion (nombreRubro,Unidad,idCotizacion,Precio) VALUES ('".$nombreRubro."','".$unidadRubro."','".$idCotizacion."','".$Precio."')")
          or die ("Error al obtener las cotización");
         return $sql;
     }

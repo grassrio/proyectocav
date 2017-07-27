@@ -107,14 +107,14 @@ function obtenerRubro($idCotizacion){
     return $sql;
 }
 
-function InsertarRubroCotizacion($idCotizacion,$nombreRubro,$Precio){
+function InsertarRubroCotizacion($idCotizacion,$nombreRubro,$unidadRubro,$Precio){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
         $cotizacion = new Cotizacion();
-        $sql = $cotizacion->InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$Precio);
+        $sql = $cotizacion->InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$unidadRubro,$Precio);
         return $sql;
     }
     return $sql;

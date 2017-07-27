@@ -9,7 +9,11 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             InsertarCotizacion($_POST['Nombre']);
             break;
         case 'nuevoRubro' :
-            InsertarRubroCotizacion($_POST['idCotizacion'],$_POST['nombreRubro'],$_POST['Precio']);
+            $nombreUnidadRubro = $_POST['nombreRubro'];
+            $nombreUnidadRubro_explode = explode('|', $nombreUnidadRubro);
+            $nombreRubro = $nombreUnidadRubro_explode[0];
+            $unidadRubro = $nombreUnidadRubro_explode[1];
+            InsertarRubroCotizacion($_POST['idCotizacion'],$nombreRubro,$unidadRubro,$_POST['Precio']);
             break;
         case 'eliminarCotizacion' :
             eliminarCotizacion($_POST['Nombre']);

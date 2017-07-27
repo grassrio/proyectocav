@@ -23,8 +23,6 @@ if (isset($_SESSION['usuario'])) {?>
         });
     });
 
-
-
     function agregarObra() {
         $('#btnNuevaObra').prop('disabled', true);
         var idLicitacion = $('#idLicitacion').val();
@@ -248,6 +246,51 @@ if (isset($_SESSION['usuario'])) {?>
                 $("#" + id).hide();
             }
             
+        }
+
+        function cargaMetrajesEstimados($idObra) {
+            $("#ventanaMetrajesEstimadosBodyTabla").html("");
+            var idObra = $idObra
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "metrajesEstimados",
+                      idObra: idObra
+                  },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMetrajesEstimadosBodyTabla").html(response);
+            });
+        }
+
+        function agregarMetraje($idObra) {
+            var idObra = $idObra
+            var CantidadMetraje = $('#cantidadMetraje').val();
+            var NombreRubro = document.getElementById("rubroCombo").value;
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "agregarMetraje",
+                          idObra: idObra,
+                          NombreRubro: NombreRubro,
+                          CantidadMetraje: CantidadMetraje
+                      },
+                function (response, status) { // Required Callback Function
+                    cargaMetrajesEstimados(idObra);
+
+                });
+
+        }
+
+        function eliminarMetrajeEstimado($idMetrajeEstimado, $idObra) {
+            var idObra = $idObra;
+            var idMetrajeEstimado = $idMetrajeEstimado;
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "eliminarMetrajeEstimado",
+                          idMetrajeEstimado: idMetrajeEstimado
+                      },
+                function (response, status) { // Required Callback Function
+                    cargaMetrajesEstimados(idObra);
+
+                });
         }
 
         

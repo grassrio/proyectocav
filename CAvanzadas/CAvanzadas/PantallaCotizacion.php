@@ -286,7 +286,7 @@ if (isset($_SESSION['usuario'])) {?>
     $sql = devolverRubros();
     while ($rs=mysqli_fetch_array($sql))
     {
-        echo "<option value='".$rs[1]."' selected>".$rs[1]."</option>";
+        echo "<option value='".$rs[Nombre]."|".$rs[Unidad]."' selected>".$rs[Nombre]."</option>";
     }
                                         ?>
                                     </select>
