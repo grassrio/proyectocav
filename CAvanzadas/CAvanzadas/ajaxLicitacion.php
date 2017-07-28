@@ -4,6 +4,7 @@ require 'includes/ConsultasCotizacion.php';
 require 'includes/ConsultasCliente.php';
 require 'includes/ConsultaZonas.php';
 require 'includes/ConsultasObra.php';
+require 'includes/ConsultasCuadrilla.php';
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -55,7 +56,12 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 $unidadRubro = $nombreUnidadRubro_explode[1];
                 $cantidadMetraje=$_POST['CantidadMetraje'];
                 agregarMetrajeEstimado($idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
-                break;
+            break;
+        case 'asignarCuadrilla' :
+                $idObra=$_POST['idObra'];
+                $idCuadrilla=$_POST['idCuadrilla'];
+                asignarCuadrilla($idObra,$idCuadrilla);
+            break;
         case 'eliminarMetrajeEstimado' :
             $idMetrajeEstimado = $_POST['idMetrajeEstimado'];
             eliminarMetrajeEstimado($idMetrajeEstimado);
@@ -126,18 +132,41 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                       Zona: '.$rsZona[Nombre].'<br>
                       Dirección: '.$rsObra[Direccion].'<br>
                       Esquina: '.$rsObra[Esquina1].'<br>
-                      Esquina: '.$rsObra[Esquina2].'<br><br>'
-                    ;
-
+                      Esquina: '.$rsObra[Esquina2].'<br><br>';
+                      echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">Metrajes estimados</button><br><br>';
                 $estado = $rsObra[Estado];
                 switch($estado){
                     case 'Pendiente de cuadrilla' :
-                        echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">Metrajes estimados</button><br><br>';
+
                         if ($_SESSION['tipoUsuario']=1){
-                            echo '<button type="button" data-target-id="'.$rsObra[idObra].'" class="btn btn-success btn-xs" data-target="#ventanaAsignarCuadrilla" data-toggle="modal">Asignar cuadrilla</button><br>';
-                        }else{
-                            echo '<button type="button" data-target-id="'.$rsObra[idObra].'" class="btn btn-success btn-xs disabled" data-target="#ventanaAsignarCuadrilla" data-toggle="modal">Asignar cuadrilla</button><br>';
+                            echo '<form role="form" data-toggle="validator" id="asignarCuadrillaForm" name="asignarCuadrillaForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="cmbCuadrilla" class="col-sm-2 col-form-label">
+                                    Cuadrilla:
+                                </label>
+                                <div class="col-sm-10">
+                                    <select name=\'cmbCuadrilla\' id=\'cmbCuadrilla\' required>
+                                    <option disabled selected value>Seleccione cuadrilla</option>';
+
+                                    $cuadrillas = listarCuadrillas();
+                                    while ($rsCuadrillas=mysqli_fetch_array($cuadrillas))
+                                    {
+                                        echo "<option value='".$rsCuadrillas[idCuadrilla]."'>".$rsCuadrillas[Nombre]."</option>";
+                                    }
+                                    echo '
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-xs">Asignar cuadrilla</button></form><br>
+                            ';
                         }
+                        break;
+                    case 'Asignado' :
+                        $idCuadrilla = $rsObra[idCuadrilla];
+                        $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
+                        $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
+                        echo 'Cuadrilla: '.$rsCuadrillaAsignada[Nombre];
                         break;
                 }
 
@@ -208,16 +237,9 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             var nombreObra = $(e.relatedTarget).data(\'target-nombre\');
             var estadoObra = $(e.relatedTarget).data(\'target-estado\');
             $("#ventanaMostrarObraTitle").html(\'<span class="label label-info">\' + nombreObra + \'</span>  -  \' + estadoObra);
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-              { // Data Sending With Request To Server
-                  action: "mostrarObra",
-                  idObra: idObra
-              },
-            function (response, status) { // Required Callback Function
-                $("#ventanaMostrarObraBody").html(response);
+            mostrarObra(idObra);
 
             });
-
 
 
 
@@ -250,7 +272,6 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         });
 
 
-        });
 </script>
 
 

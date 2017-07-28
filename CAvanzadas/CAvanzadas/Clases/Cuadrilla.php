@@ -27,6 +27,13 @@ class Cuadrilla
             or die ("Error al listar las cuadrillas");
         return $sql;
     }
+
+    public function ObtenerCuadrilla($connect,$idCuadrilla){
+        $sql = mysqli_query($connect,"SELECT * FROM Cuadrilla WHERE idCuadrilla=".$idCuadrilla."")
+            or die ("Error al obtener cuadrilla");
+        return $sql;
+    }
+
     public function ObtenerObreros($connect,$idCuadrilla)
     {
         $sql = mysqli_query($connect,"SELECT * FROM PersonalCuadrilla WHERE idCuadrilla=".$idCuadrilla."")

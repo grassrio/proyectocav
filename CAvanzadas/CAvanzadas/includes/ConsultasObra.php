@@ -54,6 +54,19 @@ function auditoriaEstado($idObra){
     return $sql;
 }
 
+function asignarCuadrilla($idObra,$idCuadrilla){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->asignarCuadrilla($connect,$idObra,$idCuadrilla);
+        return $sql;
+    }
+    return $sql;
+}
+
 function metrajesEstimados($idObra){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');

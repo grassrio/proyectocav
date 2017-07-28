@@ -452,7 +452,7 @@ if (isset($_SESSION['usuario'])) {?>
                     <th></th>
                 </tr>
                 <?php
-        $sql = devolverCuadrilla();
+        $sql = listarCuadrillas();
         $rowcount = mysqli_num_rows($sql);
         if ($rowcount>0) {
             while($rs=mysqli_fetch_array($sql))

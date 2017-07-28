@@ -42,7 +42,7 @@ function eliminarCuadrilla($nombre)
     }
     return $sql;
 }
-function devolverCuadrilla()
+function listarCuadrillas()
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -51,6 +51,20 @@ function devolverCuadrilla()
         mysqli_select_db($connect,$mysqldb);
         $cuadrilla = new Cuadrilla();
         $sql  = $cuadrilla->ListarCuadrillas($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
+function obtenerCuadrilla($idCuadrilla)
+{
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $cuadrilla = new Cuadrilla();
+        $sql  = $cuadrilla->ObtenerCuadrilla($connect,$idCuadrilla);
         return $sql;
     }
     return $sql;

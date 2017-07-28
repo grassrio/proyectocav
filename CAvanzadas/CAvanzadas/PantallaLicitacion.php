@@ -261,6 +261,28 @@ if (isset($_SESSION['usuario'])) {?>
             });
         }
 
+        function mostrarObra($idObra) {
+            $("#ventanaMostrarObraBody").html("");
+            var idObra = $idObra;
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "mostrarObra",
+                      idObra: idObra
+                  },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMostrarObraBody").html(response);
+                $(this).find('form').validator()
+
+                $('#asignarCuadrillaForm').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                } else {
+                        e.preventDefault()
+                        asignarCuadrilla(idObra);
+                }
+                })
+            });
+        }
+
         function agregarMetraje($idObra) {
             var idObra = $idObra
             var CantidadMetraje = $('#cantidadMetraje').val();
@@ -275,6 +297,31 @@ if (isset($_SESSION['usuario'])) {?>
                 function (response, status) { // Required Callback Function
                     cargaMetrajesEstimados(idObra);
 
+                });
+
+        }
+
+        function asignarCuadrilla($idObra) {
+            var idObra = $idObra
+            var cmbCuadrilla = $('#cmbCuadrilla').val();
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "asignarCuadrilla",
+                          idObra: idObra,
+                          idCuadrilla: cmbCuadrilla
+                      },
+                function (response, status) { // Required Callback Function
+                    if (response == '') {
+                        mostrarObra(idObra);
+                    }
+                    else {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                    }
                 });
 
         }
