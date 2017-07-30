@@ -320,7 +320,7 @@ if (isset($_SESSION['usuario'])) {?>
                                     <button id="btnNuevoCuadrilla" type="submit" class="btn btn-success success">Agregar</button>
                                 </div>
                             </form>
-</div>
+                    </div>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
@@ -458,7 +458,7 @@ if (isset($_SESSION['usuario'])) {?>
             while($rs=mysqli_fetch_array($sql))
             {
                 echo "<tr>"
-                ."<td>".'</button><a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCuadrilla">'.$rs[1].'</a>'."</td>"
+                ."<td>".'<a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCuadrilla">'.$rs[1].'</a>'."</td>"
                 ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCuadrilla" data-toggle="modal">
     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarCuadrilla" data-toggle="modal">
     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>

@@ -125,6 +125,12 @@ if (isset($_SESSION['usuario'])) {?>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
+                                    <a href="JavaScript:carga('PantallaProductividadEmpleado')">
+                                        <i class="glyphicon glyphicon-user"></i>Productividad
+                                    </a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
                                     <a href="includes/logout.php">
                                         <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
                                     </a>
