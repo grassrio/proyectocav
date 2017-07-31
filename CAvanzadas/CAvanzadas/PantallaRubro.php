@@ -376,11 +376,10 @@ if (isset($_SESSION['usuario'])) {?>
                     ."<td>".$rs[1]."</td>"
                     ."<td>".$rs[2]."</td>"
                     ."<td>".$rs[3]."</td>"
-                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarRubro" data-toggle="modal">
+                    ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarRubro" data-toggle="modal">
+<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarRubro" data-toggle="modal">
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-</button>'.'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarRubro" data-toggle="modal">
-<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
-                    ."</td>"
+</button>'."</td>"
                     ."</tr>";
                 }
             }
