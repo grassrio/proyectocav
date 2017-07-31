@@ -62,7 +62,6 @@
     <Compile Include="Clases\Usuario.php" />
     <Compile Include="PantallaObra.php" />
     <Compile Include="PantallaPersonal.php" />
-    <Compile Include="PantallaProductividadEmpleado.php" />
     <Compile Include="PantallaRubro.php" />
     <Compile Include="Clases\Zona.php" />
     <Compile Include="PantallaUsuario.php" />

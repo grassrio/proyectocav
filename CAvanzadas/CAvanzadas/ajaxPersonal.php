@@ -40,22 +40,11 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             $sql =   ObrasFinalizadasEntreFecha($_POST['FechaInicio'],$_POST['FechaFin']);
             echo   '    <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">
-            <h3 class="panel-title">Empleados</h3>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Empleados</h3>
+            </div>
         </div>
-
-        <nav class="navbar navbar-toolbar navbar-default">
-            <div class="container-fluid">
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <button type="button" class="btn btn-success btn-xs" data-target="#ventanaSeleccionaFecha" data-toggle="modal">Ingresar Fechas</button>
-                        </li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
         <!-- Table -->
         <table class="table">
             <tr>

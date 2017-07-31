@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require('includes/loginheader.php');
 session_start();
 require 'includes/ConsultasUsuarios.php';
@@ -157,8 +157,10 @@ if ($rowcount>0) {
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">
-            <h3 class="panel-title">Usuarios</h3>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Usuarios</h3>
+            </div>
         </div>
         <!-- Table -->
         <table class="table">

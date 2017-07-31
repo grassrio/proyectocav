@@ -1,6 +1,6 @@
 <?php
 require('includes/loginheader.php');
-
+$fechaActual=date("Y-m-d");
 session_start();
 if (isset($_SESSION['usuario'])) {?>
 <!DOCTYPE html>
@@ -36,12 +36,89 @@ if (isset($_SESSION['usuario'])) {?>
             jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
             ;
         }
+        $(document).ready(function () {
+            $('#ventanaSeleccionaFecha').on('shown.bs.modal', function (e) {
+                $(this).find('form').validator()
+                $('#consultaProductividad').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    }
+                    else {
+                        e.preventDefault()
+                        ProductividadEmpleado();
+                    }
+                })
+                $('#ventanaSeleccionaFecha').on('hidden.bs.modal', function (e) {
+                    $(this).find('form').off('submit').validator('destroy')
+                })
+            });
+            $('#ventanaSeleccionaFecha').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+        });
+        function ProductividadEmpleado() {
+            $('#btnConsulta').prop('disabled', true);
+            var fechaInicio = $('#fechaInicio').val();
+            var fechaFin = $('#fechaFin').val();
+            $.post("ajaxPersonal.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "ProductividadEmpleado",
+                      FechaInicio: fechaInicio,
+                      FechaFin: fechaFin,
+                  },
+            function (response, status) { // Required Callback Function
+                $("#contenido").hide();
+                $('#ventanaSeleccionaFecha').modal('hide');
+                $("#subcontenido").show();
+                $("#subcontenido").html(response);
+            });
+        };
     </script>
+
+    <!--CONSULTA PRODUCTIVIDAD-->
+    <div class="modal fade" tabindex="-1" role="dialog" id="ventanaSeleccionaFecha">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Seleccione el periodo para realizar la consulta</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form" data-toggle="validator" id="consultaProductividad" name="consultaProductividad">
+                        <div class="form-group row">
+                            <label for="fechaI" class="col-sm-2 col-form-label">
+                                Fecha desde:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="fechaInicio" data-error="Completa este campo" id="fechaInicio" type="date" value="<?php echo $fechaActual;?>" class="form-control" aria-describedby="basic-addon2" required />
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="Direccion" class="col-sm-2 col-form-label">
+                                Fecha hasta:
+                            </label>
+                            <div class="col-sm-8">
+                                <input name="fechaFin" data-error="Completa este campo" id="fechaFin" type="date" value="<?php echo $fechaActual;?>" class="form-control" aria-describedby="basic-addon2" required />
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                            <button id="btnConsulta" type="submit" class="btn btn-success success">Consulta</button>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
         <img src="img/Loading.gif" />
     </div>
 
-    <div class="panel panel-info">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">Construcciones Avanzadas SRL  -  Pavimentación y veredas</h3>
         </div>
@@ -125,9 +202,7 @@ if (isset($_SESSION['usuario'])) {?>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>
-                                    <a href="JavaScript:carga('PantallaProductividadEmpleado')">
-                                        <i class="glyphicon glyphicon-user"></i>Productividad
-                                    </a>
+                                    <a href="#" data-toggle="modal" data-target-id="1" data-target-nombre="1" data-target="#ventanaSeleccionaFecha">Productividad</a>
                                 </li>
                                 <li role="separator" class="divider"></li>
                                 <li>

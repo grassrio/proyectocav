@@ -337,8 +337,10 @@ if (isset($_SESSION['usuario'])) {?>
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
-        <div class="panel-heading">
-            <h3 class="panel-title">Rubros</h3>
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Rubros</h3>
+            </div>
         </div>
         <nav class="navbar navbar-toolbar navbar-default">
             <div class="container-fluid">
