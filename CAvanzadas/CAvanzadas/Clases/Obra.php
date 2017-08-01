@@ -3,10 +3,10 @@ class Obra
 {
     public function InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2)
     {
+        $estado = "Pendiente de cuadrilla";
         mysqli_query($connect,"INSERT INTO Obra (Nombre,idCotizacion,Direccion,numeroPuerta,idZona,Estado,Observacion,fechaRecibido,fechaInformado,nombreInforme,idLicitacion,Esquina1,Esquina2) VALUES ('".$nombre."','".$idCotizacion."','".$direccion."','".$numeroPuerta."','".$idZona."','".$estado."','".$Observacion."','".$fechaRecibido."',NULL,NULL,'".$idLicitacion."','".$Esquina1."','".$Esquina2."')")
             or die ("Error al insertar obra");
         $idObra = $connect->insert_id;
-        $estado = "Pendiente de cuadrilla";
         $this->AuditarEstado($connect,$idObra,"Ingresada",$estado);
         return $idObra;
     }

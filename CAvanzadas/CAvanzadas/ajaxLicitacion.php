@@ -132,7 +132,21 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                       Zona: '.$rsZona[Nombre].'<br>
                       Dirección: '.$rsObra[Direccion].'<br>
                       Esquina: '.$rsObra[Esquina1].'<br>
-                      Esquina: '.$rsObra[Esquina2].'<br><br>';
+                      Esquina: '.$rsObra[Esquina2].'<br>
+                      <div class="form-group row">
+                            <label for="reqBaliza" class="col-sm-2 col-form-label">
+                                Requiere baliza
+                            </label>
+                            <div class="col-sm-8">
+                            <div class="form-check has-success">
+                                <label data-toggle="collapse" data-target="#optBalizas">
+                                    <input class="form-control" type="checkbox" id="chReqBaliza">
+                                </label>
+                            </div>
+                            </div>
+                      </div>
+<br>
+                        ';
                       echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">Metrajes estimados</button><br><br>';
                 $estado = $rsObra[Estado];
                 switch($estado){
