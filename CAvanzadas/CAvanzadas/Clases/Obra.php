@@ -1,10 +1,10 @@
 <?php
 class Obra
 {
-    public function InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2)
+    public function InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2,$RequiereBaliza)
     {
         $estado = "Pendiente de cuadrilla";
-        mysqli_query($connect,"INSERT INTO Obra (Nombre,idCotizacion,Direccion,numeroPuerta,idZona,Estado,Observacion,fechaRecibido,fechaInformado,nombreInforme,idLicitacion,Esquina1,Esquina2) VALUES ('".$nombre."','".$idCotizacion."','".$direccion."','".$numeroPuerta."','".$idZona."','".$estado."','".$Observacion."','".$fechaRecibido."',NULL,NULL,'".$idLicitacion."','".$Esquina1."','".$Esquina2."')")
+        mysqli_query($connect,"INSERT INTO Obra (Nombre,idCotizacion,Direccion,numeroPuerta,idZona,Estado,Observacion,fechaRecibido,fechaInformado,nombreInforme,idLicitacion,Esquina1,Esquina2,RequiereBaliza) VALUES ('".$nombre."','".$idCotizacion."','".$direccion."','".$numeroPuerta."','".$idZona."','".$estado."','".$Observacion."','".$fechaRecibido."',NULL,NULL,'".$idLicitacion."','".$Esquina1."','".$Esquina2."','".$RequiereBaliza."')")
             or die ("Error al insertar obra");
         $idObra = $connect->insert_id;
         $this->AuditarEstado($connect,$idObra,"Ingresada",$estado);
@@ -31,6 +31,29 @@ class Obra
         return $sql;
     }
 
+    public function cambiarEstado($connect,$idObra,$estado){
+        $sql = null;
+        $sqlEstadoAnterior = mysqli_query($connect,"SELECT Estado FROM Obra WHERE idObra='".$idObra."'")
+            or die ("Error al consultar estado anterior de obra");
+        $rsEstadoAnterior=mysqli_fetch_array($sqlEstadoAnterior);
+        $estadoAnterior = $rsEstadoAnterior[Estado];
+        $estadoPosterior = $estado;
+        switch ($estadoAnterior){
+            case 'Pendiente de cuadrilla':
+                if ($estadoPosterior=='Pendiente de baliza'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
+            case 'Pendiente de baliza':
+                if ($estadoPosterior=='Pendiente de cuadrilla'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
+        }
+        return $sql;
+    }
 
     public function MetrajesEstimados($connect,$idObra){
         $sql = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."'")

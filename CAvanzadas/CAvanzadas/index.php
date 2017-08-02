@@ -14,13 +14,19 @@ if (isset($_SESSION['usuario'])) {?>
     <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
     <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
-</head>
-<body>
+
+
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/sweetalert.min.js"></script>
     <script src="js/validator.min.js"></script>
+
+</head>
+<body>
+    
+
     <script type="text/javascript">
+
         $(document).ready(function () {
             $("#loading").hide();
             $(document).ajaxStart(function () {
@@ -29,6 +35,8 @@ if (isset($_SESSION['usuario'])) {?>
                 $("#loading").hide();
             });
         });
+
+
 
         function carga(script) {
             $("#contenido").show();
@@ -117,6 +125,7 @@ if (isset($_SESSION['usuario'])) {?>
     <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
         <img src="img/Loading.gif" />
     </div>
+    
 
     <div class="panel panel-primary">
         <div class="panel-heading">
@@ -215,11 +224,15 @@ if (isset($_SESSION['usuario'])) {?>
                     </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>   
-    <div id="main">
-        <div id="contenido"></div>
-        <div id="subcontenido"></div>
-    </div>      
-    
+
+
+        <div id="main">
+            <div id="contenido"></div>
+            <div id="subcontenido"></div>
+        </div>
+
+
+
 </body>
 </html>
 <?php } ?>

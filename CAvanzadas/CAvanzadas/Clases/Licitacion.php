@@ -3,7 +3,7 @@ class Licitacion
 {
     public function InsertarLicitacion($connect,$idCliente,$idCotizacion,$estado,$codigo)
     {
-        $sql = mysqli_query($connect,"INSERT INTO Licitacion (idCliente,idCotizacion,estado,codigo) VALUES ('".$idCliente."','".$idCotizacion."','".$estado."','".$codigo."')")
+        $sql = mysqli_query($connect,"INSERT INTO Licitacion (idCliente,idCotizacion,estado,codigo,fecha) VALUES ('".$idCliente."','".$idCotizacion."','".$estado."','".$codigo."',now())")
            or die ("Error al insertar licitacion");
         return $sql;
     }
@@ -23,7 +23,7 @@ class Licitacion
     }
     public function listarLicitacion($connect)
     {
-        $sql = mysqli_query($connect,"SELECT * FROM Licitacion")
+        $sql = mysqli_query($connect,"SELECT * FROM Licitacion ORDER BY FECHA DESC")
          or die ("Error al listar las licitaciones");
         return $sql;
     }

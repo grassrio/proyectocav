@@ -1,6 +1,6 @@
 <?php
 require 'Clases/Obra.php';
-function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2)
+function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2,$RequiereBaliza)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -8,7 +8,7 @@ function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Ob
     {
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
-        $idObra = $obra->InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2);
+        $idObra = $obra->InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2,$RequiereBaliza);
         return $idObra;
     }
     return $sql;
@@ -62,6 +62,19 @@ function asignarCuadrilla($idObra,$idCuadrilla){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->asignarCuadrilla($connect,$idObra,$idCuadrilla);
+        return $sql;
+    }
+    return $sql;
+}
+
+function cambiarEstado($idObra,$estado){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->cambiarEstado($connect,$idObra,$estado);
         return $sql;
     }
     return $sql;

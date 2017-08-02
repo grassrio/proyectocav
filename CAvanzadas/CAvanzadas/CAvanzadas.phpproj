@@ -88,6 +88,7 @@
     <Content Include="css\bootstrap.css.map" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\bootstrap.min.css.map" />
+    <Content Include="css\filtros.css" />
     <Content Include="css\sweetalert.css" />
     <Content Include="css\todc-bootstrap.css" />
     <Content Include="css\todc-bootstrap.css.map" />
@@ -100,6 +101,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="img\checkmark.png" />
     <Content Include="img\Loading.gif" />
+    <Content Include="js\bootstrap-table-filter-control.js" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
     <Content Include="js\jquery.min.js" />

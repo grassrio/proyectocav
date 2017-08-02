@@ -13,11 +13,14 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             insertarLicitacion($_POST['idCliente'],$_POST['idCotizacion'],$_POST['Estado'],$_POST['Codigo'],$_POST['Presupuesto']);
             break;
         case 'nuevaObra' :
-            $idObra = insertarObra($_POST['NombreObra'],$_POST['idCotizacionObra'],$_POST['DireccionObra'],$_POST['NumeroPuertaObra'],$_POST['idZonaObra'],$_POST['ObservacionObra'],$_POST['FechaRecibidoObra'],$_POST['idLicitacion'],$_POST['Esquina1'],$_POST['Esquina2']);
+            $idObra = insertarObra($_POST['NombreObra'],$_POST['idCotizacionObra'],$_POST['DireccionObra'],$_POST['NumeroPuertaObra'],$_POST['idZonaObra'],$_POST['ObservacionObra'],$_POST['FechaRecibidoObra'],$_POST['idLicitacion'],$_POST['Esquina1'],$_POST['Esquina2'],$_POST['RequiereBaliza']);
             echo $idObra;
             break;
         case 'agregarBaliza' :
             agregarBaliza($_POST['idObra'],$_POST['ProveedorBaliza'],$_POST['CantidadBaliza'],$_POST['FechaInicioBaliza'],$_POST['FechaFinBaliza']);
+            break;
+        case 'cambiarEstado' :
+            cambiarEstado($_POST['idObra'],$_POST['estado']);
             break;
         case 'auditoriaEstado' :
             $idObra = $_POST['idObra'];
@@ -128,33 +131,61 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
       <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target="#ventanaAuditoriaEstado"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="glyphicon-class">Estados</span></button></ul> </div> </span>
       <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <span class="glyphicon-class">Fotos</span></button></ul> </div> </span>
 ';
-                echo 'Cotización: '.$rsCotizacion[Nombre].'<br>
+
+                $estado = $rsObra[Estado];
+
+                echo 'Estado: '.$estado.'<br>
+                      Cotización: '.$rsCotizacion[Nombre].'<br>
                       Zona: '.$rsZona[Nombre].'<br>
                       Dirección: '.$rsObra[Direccion].'<br>
                       Esquina: '.$rsObra[Esquina1].'<br>
-                      Esquina: '.$rsObra[Esquina2].'<br>
-                      <div class="form-group row">
-                            <label for="reqBaliza" class="col-sm-2 col-form-label">
-                                Requiere baliza
-                            </label>
-                            <div class="col-sm-8">
-                            <div class="form-check has-success">
-                                <label data-toggle="collapse" data-target="#optBalizas">
-                                    <input class="form-control" type="checkbox" id="chReqBaliza">
+                      Esquina: '.$rsObra[Esquina2].'<br>';
+                $reqBaliza=$rsObra[requiereBaliza];
+                if ($reqBaliza == 1 && $estado=="Pendiente de cuadrilla"){
+                    echo '<form role="form" id="pendienteBalizaForm" name="pendienteBalizaForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="chPendBaliza" class="col-sm-1 col-form-label">
+                                    Baliza pendiente
                                 </label>
-                            </div>
-                            </div>
-                      </div>
-<br>
-                        ';
-                      echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">Metrajes estimados</button><br><br>';
-                $estado = $rsObra[Estado];
+                                <div class="col-sm-8">
+                                <div class="form-check has-success">
+                                    <label>
+                                        <input class="form-control" type="checkbox" id="chPendBaliza">
+                                    </label>
+                                </div>
+                                </div>
+                                </div>
+                                </form><br>
+                            ';
+                }
+                if ($reqBaliza == 1 && $estado=="Pendiente de baliza"){
+                    echo '<form role="form" id="pendienteBalizaForm" name="pendienteBalizaForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="chPendBaliza" class="col-sm-1 col-form-label">
+                                    Baliza pendiente
+                                </label>
+                                <div class="col-sm-8">
+                                <div class="form-check has-success">
+                                    <label>
+                                        <input class="form-control" type="checkbox" id="chPendBaliza" checked>
+                                    </label>
+                                </div>
+                                </div>
+                                </div>
+                                </form><br>
+                            ';
+                }
+                echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">Metrajes estimados</button><br><br>';
+
                 switch($estado){
                     case 'Pendiente de cuadrilla' :
 
                         if ($_SESSION['tipoUsuario']=1){
                             echo '<form role="form" data-toggle="validator" id="asignarCuadrillaForm" name="asignarCuadrillaForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+
                                 <div class="form-group row">
                                 <label for="cmbCuadrilla" class="col-sm-2 col-form-label">
                                     Cuadrilla:
@@ -209,7 +240,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             $rsCotizacion=mysqli_fetch_array($cotizacion);
             $fechaActual=date("Y-m-d");
             echo '
-<script>
+        <script>
         $(document).ready(function () {
             $(\'#ventanaAgregarObra\').on(\'shown.bs.modal\', function (e) {
 
@@ -250,8 +281,17 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             var idObra = $(e.relatedTarget).data(\'target-id\');
             var nombreObra = $(e.relatedTarget).data(\'target-nombre\');
             var estadoObra = $(e.relatedTarget).data(\'target-estado\');
-            $("#ventanaMostrarObraTitle").html(\'<span class="label label-info">\' + nombreObra + \'</span>  -  \' + estadoObra);
+            $("#ventanaMostrarObraTitle").html(\'<span class="label label-info">\' + nombreObra + \'</span>\');
             mostrarObra(idObra);
+
+            });
+
+            $("#ventanaMostrarObra").on("hide.bs.modal", function (e) {
+            if (cambiosActivos=="true"){
+                cambiosActivos=="false";
+                desplegarLicitacion(idLicitacionActiva);
+            }
+
 
             });
 
