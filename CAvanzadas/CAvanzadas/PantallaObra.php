@@ -79,7 +79,8 @@ if (isset($_SESSION['usuario'])) {
                 data: { action: "guardarObservacion", idObraObservacion: idObraObservacion, observacion: observacion },
                 dataType: "text",
                 success: function (data) {
-                    $('#autoSave').text('Guardado..');
+                    $("#lblGuardarObservacion").empty();
+                    $("#lblGuardarObservacion").append("Guardado...");
                 }
             });
         }
@@ -342,17 +343,7 @@ if (isset($_SESSION['usuario'])) {
                           estado: estado
                       },
                 function (response, status) { // Required Callback Function
-                    if (response == '') {
                         mostrarObra(idObra);
-                    }
-                    else {
-                        swal({
-                            title: "Advertencia!",
-                            text: response,
-                            type: "warning",
-                            confirmButtonText: "OK"
-                        });
-                    }
                 });
 
         }

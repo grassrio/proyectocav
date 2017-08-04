@@ -24,7 +24,7 @@ class Obra
     }
 
     public function guardarObservacion($connect,$idObraObservacion,$observacion){
-        $sql = mysqli_query($connect,"UPDATE Obra SET observacion='".$observacion."' WHERE idLicitacion='".$idObraObservacion."'")
+        $sql = mysqli_query($connect,"UPDATE Obra SET Observacion='".$observacion."' WHERE idObra='".$idObraObservacion."'")
             or die ("Error al guardar observacion");
         return $sql;
     }

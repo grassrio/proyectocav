@@ -149,10 +149,10 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 <div class="form-group">
                     <label>Observaciones</label>
                      <textarea onblur="guardarObservacion()" name="observacion" id="observacion" rows="4" class="form-control">'.$rsObra[Observacion].'</textarea>
+                     <label id="lblGuardarObservacion"></label>
                 </div> </span>
                 <div class="form-group">
                      <input type="hidden" name="idObraObservacion" id="idObraObservacion" value="'.$rsObra[idObra].'"/>
-                     <div id="autoSave"></div>
                 </div>
                 '
                       ;
