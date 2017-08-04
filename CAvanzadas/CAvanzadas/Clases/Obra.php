@@ -23,6 +23,12 @@ class Obra
         return $sql;
     }
 
+    public function guardarObservacion($connect,$idObraObservacion,$observacion){
+        $sql = mysqli_query($connect,"UPDATE Obra SET observacion='".$observacion."' WHERE idLicitacion='".$idObraObservacion."'")
+            or die ("Error al guardar observacion");
+        return $sql;
+    }
+
     public function asignarCuadrilla($connect,$idObra,$idCuadrilla){
         $sql = mysqli_query($connect,"UPDATE Obra SET idCuadrilla='".$idCuadrilla."', Estado='Asignado' WHERE idObra='".$idObra."'")
             or die ("Error al asignar cuadrilla");
@@ -47,6 +53,18 @@ class Obra
                 break;
             case 'Pendiente de baliza':
                 if ($estadoPosterior=='Pendiente de cuadrilla'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
+            case 'Asignado':
+                if ($estadoPosterior=='Pendiente de asfalto'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
+            case 'Pendiente de asfalto':
+                if ($estadoPosterior=='Asignado'){
                     $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
                     $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
                 }

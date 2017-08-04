@@ -14,6 +14,7 @@ function insertarLicitacion($idCliente,$idCotizacion,$estado,$codigo,$presupuest
         $rs=mysqli_fetch_array($sql);
         $sql = mysqli_query($connect,"INSERT INTO PresupuestoLicitacion (PresupuestoTotal,Debe,Haber,idLicitacion) VALUES ('".$presupuesto."','".$presupuesto."','".'0'."','".$rs[0]."')")
                  or die ("Error al insertar PresupuestoLicitacion");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -28,12 +29,13 @@ function modificarLicitacion($id,$estado)
         mysqli_select_db($connect,$mysqldb);
         $lic = new Licitacion();
         $sql = $lic->ModificarLicitacion($connect,$id,$estado);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
 }
 
-function eliminarLicitacion($codigo)
+function eliminarLicitacion($idLicitacionDinamico)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -41,7 +43,8 @@ function eliminarLicitacion($codigo)
     {
         mysqli_select_db($connect,$mysqldb);
         $lic = new Licitacion();
-        $sql = $lic->EliminarLicitacion($connect,$codigo);
+        $sql = $lic->EliminarLicitacion($connect,$idLicitacionDinamico);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -56,6 +59,7 @@ function obtenerLicitacion($idLicitacion)
         mysqli_select_db($connect,$mysqldb);
         $lic = new Licitacion();
         $sql = $lic->ObtenerLicitacion($connect,$idLicitacion);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -70,6 +74,7 @@ function ListarLicitaciones()
         mysqli_select_db($connect,$mysqldb);
         $lic = new Licitacion();
         $sql = $lic->ListarLicitacion($connect);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;

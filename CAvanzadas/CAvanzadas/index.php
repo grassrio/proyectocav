@@ -21,6 +21,17 @@ if (isset($_SESSION['usuario'])) {?>
     <script src="js/sweetalert.min.js"></script>
     <script src="js/validator.min.js"></script>
 
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/editable/bootstrap-table-editable.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/export/bootstrap-table-export.js"></script>
+    <script src="http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css" />
+
+
 </head>
 <body>
     
@@ -39,11 +50,25 @@ if (isset($_SESSION['usuario'])) {?>
 
 
         function carga(script) {
+            document.getElementById("iframeContenido").src = "";
             $("#contenido").show();
             $("#subcontenido").hide();
             jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
             ;
         }
+
+        function cargaIframe(script) {
+            $("#loading").show();
+            $("#contenido").hide();
+            $("#subcontenido").hide();
+            document.getElementById("iframeContenido").src = script + ".php";
+            document.getElementById("iframeContenido").style.visibility = "visible";
+        }
+
+        function onMyFrameLoad(iframe) {
+            $("#loading").hide();
+        };
+
         $(document).ready(function () {
             $('#ventanaSeleccionaFecha').on('shown.bs.modal', function (e) {
                 $(this).find('form').validator()
@@ -143,10 +168,7 @@ if (isset($_SESSION['usuario'])) {?>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="JavaScript:carga('PantallaLicitacion')">Licitaciones</a>
-                        </li>
-                        <li>
-                            <a href="JavaScript:carga('PantallaObra')">Obras</a>
+                            <a href="JavaScript:cargaIframe('PantallaLicitacion')">Licitaciones</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
@@ -227,10 +249,15 @@ if (isset($_SESSION['usuario'])) {?>
 
 
         <div id="main">
-            <div id="contenido"></div>
-            <div id="subcontenido"></div>
-        </div>
+                <div id="contenido"></div>
+            
+                <div id="subcontenido"></div>
+</div>
+    <iframe id="iframeContenido" onload="onMyFrameLoad(this), this.style.height = (this.contentDocument.body.scrollHeight) + 'px';" style="width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+        Your browser doesn't support iframes
+    </iframe>
 
+        
 
 
 </body>

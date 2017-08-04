@@ -5,99 +5,78 @@ require 'includes/ConsultasLicitacion.php';
 require 'includes/ConsultasCliente.php';
 session_start();
 if (isset($_SESSION['usuario'])) {?>
-    <script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        var nombreDinamico;
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/sweetalert.min.js"></script>
+    <script src="js/validator.min.js"></script>
+
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-table-export.min.js"></script>
+    <script src="js/tableExport.min.js"></script>
+    <script src="js/bootstrap-table-filter-control.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-table.min.css" />
+</head>
+<body>
+    <script>
+        $(document).ready(function () {
+            mostrarocultar('ocultar', 'btnAtras');
+            $("#loading").hide();
+            $(document).ajaxStart(function () {
+                $("#loading").show();
+            }).ajaxStop(function () {
+                $("#loading").hide();
+            });
+
+            $('input[type="text"][placeholder="Search"]').attr('placeholder', 'Búsqueda rápida');
+        });
+
+        function cargaIframe(idLicitacion) {
+            $("#loading").show();
+            mostrarocultar('ocultar', 'divLicitaciones');
+            mostrarocultar('mostrar', 'btnAtras');
+            document.getElementById("iframeObras").src = "PantallaObra.php?idLicitacion=" + idLicitacion;
+            document.getElementById("iframeObras").style.visibility = "visible";
+        }
+
+        function onMyFrameLoad(iframe) {
+            $("#loading").hide();
+            mostrarocultar('mostrar', 'iframeObras');
+        };
+
+        var idLicitacionDinamico;
         var id;
         var idLicitacionActiva;
         var cambiosActivos = false;
         $(document).ready(function () {
             $("#ventanaEliminarLicitacion").on("show.bs.modal", function (e) {
-                nombreDinamico = $(e.relatedTarget).data('target-id');
-                $("#eliminarDinamico").html("Desea eliminar la licitación " + nombreDinamico + "?");
+                idLicitacionDinamico = $(e.relatedTarget).data('target-id');
+                $("#eliminarDinamico").html("Desea eliminar la licitación ?");
             });
         });
 
 
-        function agregarObra() {
-            $('#btnNuevaObra').prop('disabled', true);
-            var idLicitacion = $('#idLicitacion').val();
-            var NombreObra = $('#nombreObra').val();
-            var idCotizacionObra = $('#dSolicitudCotizacion').val();
-            var DireccionObra = $('#direccionObra').val();
-            var NumeroPuertaObra = $('#nPuertaObra').val();
-            var idZonaObra = $('#zonaObra').val();
-            var ObservacionObra = $('#observacionObra').val();
-            var FechaRecibidoObra = $('#fechaRecibidoObra').val();
-            var Esquina1 = $('#esquina1').val();
-            var Esquina2 = $('#esquina2').val();
-            var RequiereBaliza = 0;
-            if ($('#chReqBaliza').prop('checked')) {
-                RequiereBaliza = 1;
-            }
-            $.post("ajaxLicitacion.php",
-                       {
-                           action: "nuevaObra",
-                           idLicitacion: idLicitacion,
-                           NombreObra: NombreObra,
-                           idCotizacionObra: idCotizacionObra,
-                           DireccionObra: DireccionObra,
-                           NumeroPuertaObra: NumeroPuertaObra,
-                           idZonaObra: idZonaObra,
-                           ObservacionObra: ObservacionObra,
-                           FechaRecibidoObra: FechaRecibidoObra,
-                           Esquina1: Esquina1,
-                           Esquina2: Esquina2,
-                           RequiereBaliza: RequiereBaliza
-                       },
-                 function (response, status) {
-                     if (response > 0) {
-                         idObra = response;
-                         if ($('#chReqBaliza').prop('checked')) {
-                             var ProveedorBaliza = $('#proveedorBaliza').val();
-                             var CantidadBaliza = $('#balCantidad').val();
-                             var FechaInicioBaliza = $('#balFechaInicio').val();
-                             var FechaFinBaliza = $('#balFechaFin').val();
-                             $.post("ajaxLicitacion.php",
-                                 {
-                                     action: "agregarBaliza",
-                                     idObra: idObra,
-                                     ProveedorBaliza: ProveedorBaliza,
-                                     CantidadBaliza: CantidadBaliza,
-                                     FechaInicioBaliza: FechaInicioBaliza,
-                                     FechaFinBaliza: FechaFinBaliza
-                                 },
-                             function (response, status) {
-                                 if (response != '') {
-                                     swal({
-                                         title: "Error",
-                                         text: "Error al agregar baliza",
-                                         type: "warning",
-                                         confirmButtonText: "OK"
-                                     });
-                                 }
-                             });
-                         }
-                         $('#ventanaAgregarObra').modal('hide');
-                         desplegarLicitacion(idLicitacion);
-                     }
-                     else {
-                         swal({
-                             title: "Error",
-                             text: "Error al agregar obra",
-                             type: "warning",
-                             confirmButtonText: "OK"
-                         });
-                     }
-
-                 });
-        };
 
         $(document).ready(function () {
             $("#ventanaModificarLicitacion").on("show.bs.modal", function (e) {
                 id = $(e.relatedTarget).data('target-id');
             });
         });
+
+        $(document).ready(function () {
         $("#btnNuevaLicitacion").click(function () {
             $('#btnNuevaLicitacion').prop('disabled', true);
             var codigo = $('#Codigo').val();
@@ -141,7 +120,8 @@ if (isset($_SESSION['usuario'])) {?>
                 function (response, status) {
                     if (response == '') {
                         $('#ventanaAgregarLicitacion').modal('hide');
-                        carga('PantallaLicitacion');
+                        $("#loading").show();
+                        window.location.reload();
                     }
                     else {
                         swal({
@@ -158,6 +138,7 @@ if (isset($_SESSION['usuario'])) {?>
                 });
             }
         });
+        
 
         $("#btnModificarLicitacion").click(function () {
             $('#btnModificarLicitacion').prop('disabled', true);
@@ -188,7 +169,8 @@ if (isset($_SESSION['usuario'])) {?>
                 function (response, status) { // Required Callback Function
                     if (response == '') {
                         $('#ventanaModificarLicitacion').modal('hide');
-                        carga('PantallaLicitacion');
+                        $("#loading").show();
+                        window.location.reload();
                     }
                     else {
                         swal({
@@ -205,17 +187,19 @@ if (isset($_SESSION['usuario'])) {?>
         });
         $("#btnEliminarLicitacion").click(function () {
             $('#btnEliminarLicitacion').prop('disabled', true);
-            var nombreLicitacion = nombreDinamico
             $.post("ajaxLicitacion.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "eliminarLicitacion",
-                          Codigo: nombreLicitacion
+                          idLicitacionDinamico: idLicitacionDinamico
                       },
                 function (response, status) { // Required Callback Function
                     //$("#bingo").html(response);//"response" receives - whatever written in echo of above PHP script.
                     $('#ventanaEliminarLicitacion').modal('hide');
-                    carga('PantallaLicitacion');
+                    $("#loading").show();
+                    window.location.reload();
                 });
+        });
+
         });
         function desplegarLicitacion($idLicitacion) {
             var idLicitacion = $idLicitacion;
@@ -241,143 +225,45 @@ if (isset($_SESSION['usuario'])) {?>
 
         }
 
-        function cargaMetrajesEstimados($idObra) {
-            $("#ventanaMetrajesEstimadosBodyTabla").html("");
-            var idObra = $idObra
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                  { // Data Sending With Request To Server
-                      action: "metrajesEstimados",
-                      idObra: idObra
-                  },
-            function (response, status) { // Required Callback Function
-                $("#ventanaMetrajesEstimadosBodyTabla").html(response);
-            });
+
+
+        function identifierFormatter(value, row, index) {
+            return [
+                    '<a href="#">',
+                        value,
+                    '</a>'].join('');
         }
 
-        function mostrarObra($idObra) {
-            $("#ventanaMostrarObraBody").html("");
-            var idObra = $idObra;
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                  { // Data Sending With Request To Server
-                      action: "mostrarObra",
-                      idObra: idObra
-                  },
-            function (response, status) { // Required Callback Function
-                $("#ventanaMostrarObraBody").html(response);
-                $(this).find('form').validator()
+        $(function () {
+            $('table').on('click', '.clickableRow', function () {
+                var $this = $(this);
+                var idLicitacion = $this.data('id');
+                cargaIframe(idLicitacion);
+            })
+        });
 
-                $('#asignarCuadrillaForm').on('submit', function (e) {
-                    if (e.isDefaultPrevented()) {
-                    } else {
-                        e.preventDefault()
-                        cambiosActivos = "true";
-                        asignarCuadrilla(idObra);
-                    }
-                })
-                $("#pendienteBalizaForm").on("change", "input:checkbox", function () {
-                    if ($('#chPendBaliza').prop('checked')) {
-                        cambiosActivos = "true";
-                        cambiarEstado(idObra,"Pendiente de baliza");
-                    } else {
-                        cambiosActivos = "true";
-                        cambiarEstado(idObra, "Pendiente de cuadrilla");
-                    }
- 
-                });
-            });
-        }
-
-        function agregarMetraje($idObra) {
-            var idObra = $idObra
-            var CantidadMetraje = $('#cantidadMetraje').val();
-            var NombreRubro = document.getElementById("rubroCombo").value;
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "agregarMetraje",
-                          idObra: idObra,
-                          NombreRubro: NombreRubro,
-                          CantidadMetraje: CantidadMetraje
-                      },
-                function (response, status) { // Required Callback Function
-                    cargaMetrajesEstimados(idObra);
-
-                });
-
-        }
-
-        function asignarCuadrilla($idObra) {
-            var idObra = $idObra
-            var cmbCuadrilla = $('#cmbCuadrilla').val();
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "asignarCuadrilla",
-                          idObra: idObra,
-                          idCuadrilla: cmbCuadrilla
-                      },
-                function (response, status) { // Required Callback Function
-                    if (response == '') {
-                        mostrarObra(idObra);
-                    }
-                    else {
-                        swal({
-                            title: "Advertencia!",
-                            text: response,
-                            type: "warning",
-                            confirmButtonText: "OK"
-                        });
-                    }
-                });
-
-        }
-
-        function cambiarEstado($idObra,$estado) {
-            var idObra = $idObra;
-            var estado = $estado;
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "cambiarEstado",
-                          idObra: idObra,
-                          estado: estado
-                      },
-                function (response, status) { // Required Callback Function
-                    if (response == '') {
-                        mostrarObra(idObra);
-                    }
-                    else {
-                        swal({
-                            title: "Advertencia!",
-                            text: response,
-                            type: "warning",
-                            confirmButtonText: "OK"
-                        });
-                    }
-                });
-
-        }
-
-        function eliminarMetrajeEstimado($idMetrajeEstimado, $idObra) {
-            var idObra = $idObra;
-            var idMetrajeEstimado = $idMetrajeEstimado;
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "eliminarMetrajeEstimado",
-                          idMetrajeEstimado: idMetrajeEstimado
-                      },
-                function (response, status) { // Required Callback Function
-                    cargaMetrajesEstimados(idObra);
-
-                });
+        function actionFormatter(value, row, index) {
+            return [
+                '<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="',
+                value,
+                '" data-target="#ventanaModificarLicitacion" data-toggle="modal"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>',
+                '<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="',
+                value,
+                '" data-target="#ventanaEliminarLicitacion" data-toggle="modal"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
+            ].join('');
         }
 
 
     </script>
 
 
-
+    <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
+        <img src="img/Loading.gif" />
+    </div>
 
     <!--VENTANA PARA INGRESAR UN NUEVO LICITACION-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarLicitacion">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog" style="overflow-y: scroll; overflow: inherit;" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -511,33 +397,33 @@ if (isset($_SESSION['usuario'])) {?>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-    
 
-
-    <div class="container">
-
-
-
-        <div class="panel panel-primary filterable">
+<div id="divLicitaciones">
+<div class="panel panel-info">
             <div class="panel-heading">
-                <div class="pull-right">
-                    <button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarLicitacion" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar licitación</button>
-                    <button class="btn btn-default btn-xs btn-filter"><span class="glyphicon glyphicon-filter"></span> Filtros</button>
-                </div>
                 <h3 class="panel-title">Licitaciones</h3>
-
-
             </div>
-            <table class="table">
-                <thead>
-                    <tr class="filters">
-                        <th><input type="text" class="form-control" placeholder="Nº Licitación" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Cliente" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Fecha" disabled></th>
-                        <th><input type="text" class="form-control" placeholder="Estado" disabled></th>
-                    </tr>
-                </thead>
-                <tbody><?php
+<br>
+<br>
+<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarLicitacion" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar licitación</button>
+
+<table id="table" 
+			 data-toggle="table"
+			 data-search="true"
+			 data-filter-control="true" 
+			 data-show-export="true"
+			 data-click-to-select="true">
+	<thead>
+		<tr>
+			<th data-field="licitacion" data-formatter="identifierFormatter" data-filter-control="input" data-sortable="true">Nº Licitación</th>
+			<th data-field="cliente" data-filter-control="select" data-sortable="true">Cliente</th>
+			<th data-field="fecha" data-filter-control="input" data-sortable="true">Fecha</th>
+            <th data-field="estado" data-filter-control="select" data-sortable="true">Estado</th>
+            <th data-field="action" data-formatter="actionFormatter"></th>
+		</tr>
+	</thead>
+	<tbody>
+        <?php
     $sql = ListarLicitaciones();
     $rowcount = mysqli_num_rows($sql);
     if ($rowcount>0) {
@@ -546,28 +432,26 @@ if (isset($_SESSION['usuario'])) {?>
             $sqlCliente = obtenerCliente($rs[idCliente]);
             $rsCliente=mysqli_fetch_array($sqlCliente);
             echo "<tr>"
-            .'<td><a href="#" onclick="desplegarLicitacion('.$rs[idLicitacion].')">'.$rs[4].'</a></td>'
+            .'<td class="clickableRow" data-id=\''.$rs[idLicitacion].'\'>'.$rs[4].'</td>'
             ."<td>".$rsCliente[Nombre]."</td>"
             ."<td>".$rs[fecha]."</td>"
             ."<td>".$rs[estado]."</td>"
-            ."<td></td>"
-            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarLicitacion" data-toggle="modal">
-                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button>'
-            .'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[4].'" data-target="#ventanaEliminarLicitacion" data-toggle="modal">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
-            ."</td>"
+            ."<td>".$rs[idLicitacion]."</td>"
             ."</tr>";
         }
     }
-                       ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        ?>
+	</tbody>
+</table>
+</div>
+</div>
+    <button id="btnAtras" type="button" class="btn-xs btn-default" onclick="mostrarocultar('ocultar', 'iframeObras'); mostrarocultar('ocultar', 'btnAtras'); mostrarocultar('mostrar', 'divLicitaciones');">
+                            <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                        </button>
+    <iframe id="iframeObras" onload="onMyFrameLoad(this), this.style.height = ((this.contentDocument.body.scrollHeight)*1.5) + 'px';" style="width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+        Your browser doesn't support iframes
+    </iframe>
+    </body>
 
-
-
-
-
-
+</html>
     <?php } ?>

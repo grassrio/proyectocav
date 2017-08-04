@@ -9,6 +9,7 @@ function insertarObra($nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Ob
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $idObra = $obra->InsertarObra($connect,$nombre,$idCotizacion,$direccion,$numeroPuerta,$idZona,$Observacion,$fechaRecibido,$idLicitacion,$Esquina1,$Esquina2,$RequiereBaliza);
+        mysqli_close($connect);
         return $idObra;
     }
     return $sql;
@@ -22,6 +23,7 @@ function agregarMetrajeEstimado($idObra,$nombreRubro,$unidadRubro,$cantidadMetra
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->agregarMetrajeEstimado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -35,6 +37,7 @@ function eliminarMetrajeEstimado($idMetrajeEstimado){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->eliminarMetrajeEstimado($connect,$idMetrajeEstimado);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -49,6 +52,7 @@ function auditoriaEstado($idObra){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->auditoriaEstado($connect,$idObra);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -62,6 +66,7 @@ function asignarCuadrilla($idObra,$idCuadrilla){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->asignarCuadrilla($connect,$idObra,$idCuadrilla);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -75,6 +80,21 @@ function cambiarEstado($idObra,$estado){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->cambiarEstado($connect,$idObra,$estado);
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
+function guardarObservacion($idObraObservacion,$observacion){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->guardarObservacion($connect,$idObraObservacion,$observacion);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -91,7 +111,6 @@ function metrajesEstimados($idObra){
         mysqli_close($connect);
         return $sql;
     }
-    mysqli_close($connect);
     return $sql;
 }
 
@@ -106,7 +125,6 @@ function obtenerObra($idObra){
         mysqli_close($connect);
         return $sql;
     }
-    mysqli_close($connect);
     return $sql;
 }
 
@@ -118,6 +136,7 @@ function agregarBaliza($idObra,$Proveedor,$Cantidad,$fechaInicio,$fechaFin){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->agregarBaliza($connect,$idObra,$Proveedor,$Cantidad,$fechaInicio,$fechaFin);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -131,6 +150,7 @@ function ListarObras($idLicitacion){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->ListarObras($connect,$idLicitacion);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;

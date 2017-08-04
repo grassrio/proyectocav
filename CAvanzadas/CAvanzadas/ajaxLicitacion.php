@@ -107,7 +107,12 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             }
             break;
         case 'eliminarLicitacion' :
-            eliminarLicitacion($_POST['Codigo']);
+            eliminarLicitacion($_POST['idLicitacionDinamico']);
+            break;
+        case 'guardarObservacion' :
+            $idObraObservacion=$_POST['idObraObservacion'];
+            $observacion=$_POST['observacion'];
+            guardarObservacion($idObraObservacion,$observacion);
             break;
         case 'modificarLicitacion' :
             modificarLicitacion($_POST['idLicitacion'],$_POST['Estado']);
@@ -139,7 +144,18 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                       Zona: '.$rsZona[Nombre].'<br>
                       Dirección: '.$rsObra[Direccion].'<br>
                       Esquina: '.$rsObra[Esquina1].'<br>
-                      Esquina: '.$rsObra[Esquina2].'<br>';
+                      Esquina: '.$rsObra[Esquina2].'<br>'
+                .'<span class="form-control-static pull-right">
+                <div class="form-group">
+                    <label>Observaciones</label>
+                     <textarea onblur="guardarObservacion()" name="observacion" id="observacion" rows="4" class="form-control">'.$rsObra[Observacion].'</textarea>
+                </div> </span>
+                <div class="form-group">
+                     <input type="hidden" name="idObraObservacion" id="idObraObservacion" value="'.$rsObra[idObra].'"/>
+                     <div id="autoSave"></div>
+                </div>
+                '
+                      ;
                 $reqBaliza=$rsObra[requiereBaliza];
                 if ($reqBaliza == 1 && $estado=="Pendiente de cuadrilla"){
                     echo '<form role="form" id="pendienteBalizaForm" name="pendienteBalizaForm">
@@ -212,6 +228,44 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
                         $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
                         echo 'Cuadrilla: '.$rsCuadrillaAsignada[Nombre];
+                        echo '<form role="form" id="pendienteAsfaltoForm" name="pendienteAsfaltoForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="chPendAsfalto" class="col-sm-1 col-form-label">
+                                    Asfalto pendiente
+                                </label>
+                                <div class="col-sm-8">
+                                <div class="form-check has-success">
+                                    <label>
+                                        <input class="form-control" type="checkbox" id="chPendAsfalto">
+                                    </label>
+                                </div>
+                                </div>
+                                </div>
+                                </form><br>
+                        ';
+                        break;
+                    case 'Pendiente de asfalto' :
+                        $idCuadrilla = $rsObra[idCuadrilla];
+                        $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
+                        $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
+                        echo 'Cuadrilla: '.$rsCuadrillaAsignada[Nombre];
+                        echo '<form role="form" id="pendienteAsfaltoForm" name="pendienteAsfaltoForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="chPendAsfalto" class="col-sm-1 col-form-label">
+                                    Asfalto pendiente
+                                </label>
+                                <div class="col-sm-8">
+                                <div class="form-check has-success">
+                                    <label>
+                                        <input class="form-control" type="checkbox" id="chPendAsfalto" checked>
+                                    </label>
+                                </div>
+                                </div>
+                                </div>
+                                </form><br>
+                        ';
                         break;
                 }
 

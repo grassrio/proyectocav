@@ -15,9 +15,9 @@ class Licitacion
         return $sql;
     }
 
-    public function EliminarLicitacion($connect,$codigo)
+    public function EliminarLicitacion($connect,$idLicitacionDinamico)
     {
-        $sql = mysqli_query($connect,"DELETE FROM Licitacion WHERE codigo='".$codigo."'")
+        $sql = mysqli_query($connect,"DELETE FROM Licitacion WHERE idLicitacion='".$idLicitacionDinamico."'")
          or die ("Error al eliminar licitacion");
         return $sql;
     }
