@@ -8,7 +8,6 @@ if (isset($_SESSION['usuario'])) {
     require 'includes/ConsultaZonas.php';
     require 'includes/ConsultasObra.php';
     require 'includes/ConsultasCuadrilla.php';
-
     $idLicitacion = $_GET['idLicitacion'];
     $licitacion = obtenerLicitacion($idLicitacion);
     $rsLicitacion=mysqli_fetch_array($licitacion);
@@ -49,7 +48,9 @@ if (isset($_SESSION['usuario'])) {
     <script src="js/bootstrap-table-export.min.js"></script>
     <script src="js/tableExport.min.js"></script>
     <script src="js/bootstrap-table-filter-control.min.js"></script>
-
+    <link href="css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <script src="js/fileinput.min.js" type="text/javascript"></script>
+    <script src="js/fileinput_locale_es.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap-table.min.css" />
 </head>
 <body>
@@ -118,6 +119,19 @@ if (isset($_SESSION['usuario'])) {
                   },
                 function (response, status) { // Required Callback Function
                     $("#ventanaAuditoriaEstadoBody").html(response);
+                });
+            });
+
+            $("#ventanaFotosObra").on("show.bs.modal", function (e) {
+                $("#ventanaFotosObraBody").html("");
+                var idObra = $(e.relatedTarget).data('target-id');
+                $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "fotosObra",
+                      idObra: idObra
+                  },
+                function (response, status) { // Required Callback Function
+                    $("#ventanaFotosObraBody").html(response);
                 });
             });
 
@@ -440,6 +454,24 @@ if (isset($_SESSION['usuario'])) {
                     <h4 class="modal-title" id="ventanaAuditoriaEstadoTitle">Auditoria de estados</h4>
                 </div>
                 <div class="modal-body" id="ventanaAuditoriaEstadoBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--VENTANA FOTOS-->
+    <div class="modal fade" tabindex="1" role="dialog" id="ventanaFotosObra">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaFotosObraTitle">Fotos</h4>
+                </div>
+                <div class="modal-body" id="ventanaFotosObraBody"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>

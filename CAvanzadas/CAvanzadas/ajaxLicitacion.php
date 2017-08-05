@@ -5,6 +5,8 @@ require 'includes/ConsultasCliente.php';
 require 'includes/ConsultaZonas.php';
 require 'includes/ConsultasObra.php';
 require 'includes/ConsultasCuadrilla.php';
+require('includes/ConsultasImagen.php');
+
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -21,6 +23,47 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             break;
         case 'cambiarEstado' :
             cambiarEstado($_POST['idObra'],$_POST['estado']);
+            break;
+        case 'fotosObra' :
+            require('includes/config.php');
+            $idObra = $_POST['idObra'];
+            echo '<input id="archivos" name="imagenes[]" type="file" multiple=true class="file-loading" />';
+            echo '
+            <script>
+	$("#archivos").fileinput({
+	uploadUrl: "includes/ConsultasImagen.php",
+	uploadExtraData: {idObra:\''.$idObra.'\'},
+    uploadAsync: false,
+    fileTypeSettings: [\'image\', \'video\'],
+    allowedFileExtensions: [\'jpg\', \'gif\', \'png\', \'jpeg\', \'bmp\', \'avi\'],
+    minFileCount: 1,
+    maxFileCount: 20,
+	showUpload: false,
+	showRemove: false,
+	initialPreview: [';
+    $sqlImagenes = obtenerImagenes($idObra);
+    $rowcount = mysqli_num_rows($sqlImagenes);
+    if ($rowcount>0) {
+        while($rsImagenes=mysqli_fetch_array($sqlImagenes))
+        {
+            echo "\"<img src='".$directorioImagenes.$rsImagenes[nombreImagen]."' class='file-preview-image'>\",";
+        }
+        echo "], initialPreviewConfig: [";
+        mysqli_data_seek($sqlImagenes, 0 );
+        while($rsImagenes=mysqli_fetch_array($sqlImagenes))
+        {
+            echo '{caption: "'.$rsImagenes[nombreImagen].'",  url: "includes/ConsultasImagen.php", key:"'.$rsImagenes[idImagen].'"},';
+        }
+    }
+
+    echo ']
+	}).on("filebatchselected", function(event, files) {
+
+	$("#archivos").fileinput("upload");
+
+	});
+
+</script>';
             break;
         case 'auditoriaEstado' :
             $idObra = $_POST['idObra'];
@@ -134,7 +177,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 echo '
 
       <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target="#ventanaAuditoriaEstado"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="glyphicon-class">Estados</span></button></ul> </div> </span>
-      <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <span class="glyphicon-class">Fotos</span></button></ul> </div> </span>
+      <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target="#ventanaFotosObra"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <span class="glyphicon-class">Fotos</span></button></ul> </div> </span>
 ';
 
                 $estado = $rsObra[Estado];

@@ -118,12 +118,7 @@ if (isset($_SESSION['usuario'])) {?>
                           Presupuesto: presupuesto,
                       },
                 function (response, status) {
-                    if (response == '') {
-                        $('#ventanaAgregarLicitacion').modal('hide');
-                        $("#loading").show();
-                        window.location.reload();
-                    }
-                    else {
+                    if (response.indexOf('Error') >= 0) {
                         swal({
                             title: "Advertencia!",
                             text: response,
@@ -133,8 +128,11 @@ if (isset($_SESSION['usuario'])) {?>
                         $('#btnNuevaLicitacion').prop('disabled', false);
                         $('#Codigo').val('');
                         $('#Presupuesto').val('');
+                    } else {
+                        $('#ventanaAgregarLicitacion').modal('hide');
+                        $("#loading").show();
+                        window.location.reload();
                     }
-
                 });
             }
         });
@@ -201,21 +199,7 @@ if (isset($_SESSION['usuario'])) {?>
         });
 
         });
-        function desplegarLicitacion($idLicitacion) {
-            var idLicitacion = $idLicitacion;
-            idLicitacionActiva = $idLicitacion;
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "obtenerLicitacion",
-                          idLicitacion: idLicitacion
-                      },
-                function (response, status) { // Required Callback Function
-                    $("#contenido").hide();
-                    $("#subcontenido").show();
-                    $("#subcontenido").html(response);
-                });
 
-        }
         function mostrarocultar(action, id) {
             if (action == "mostrar") {
                 $("#" + id).show();
