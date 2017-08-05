@@ -103,10 +103,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="imagenes_\after.png" />
-    <Content Include="imagenes_\imagen1.png" />
-    <Content Include="imagenes_\imagen2.png" />
-    <Content Include="imagenes_\yootro2.png" />
     <Content Include="img\checkmark.png" />
     <Content Include="img\Loading.gif" />
     <Content Include="js\bootstrap-table-export.min.js" />

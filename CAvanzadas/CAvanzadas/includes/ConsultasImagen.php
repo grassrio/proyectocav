@@ -42,7 +42,7 @@ if(isset($_FILES['imagenes']['name']) && isset($_POST['idObra'])){
 
         // El nombre y nombre temporal del archivo que vamos para adjuntar
         $nombreArchivo=isset($_FILES['imagenes']['name'][$i])?$_FILES['imagenes']['name'][$i]:null;
-        $extension= end(explode(".", $nombreArchivo));
+        $extension= strtolower(end(explode(".", $nombreArchivo)));
         if ($extension=="jpeg" || $extension=="jpg" || $extension=="bmp" || $extension=="png" ||$extension=="gif" || $extension=="avi"){
             $nombreTemporal=isset($_FILES['imagenes']['tmp_name'][$i])?$_FILES['imagenes']['tmp_name'][$i]:null;
 
