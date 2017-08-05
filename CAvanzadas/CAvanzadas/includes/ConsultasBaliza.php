@@ -8,6 +8,7 @@ function DevolverBalizasProximoVencimiento(){
         mysqli_select_db($connect,$mysqldb);
         $baliza = new Baliza();
         $sql = $baliza->BalizasProximoVencimiento($connect);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -21,6 +22,7 @@ function devolverBaliza($id)
         mysqli_select_db($connect,$mysqldb);
         $baliza = new Baliza();
         $sql = $baliza->devolverBalizas($connect,$id);
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;

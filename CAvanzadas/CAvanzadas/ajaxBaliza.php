@@ -6,6 +6,11 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'devolverBaliza' :
             devolverBaliza($_POST['idBaliza']);
             break;
+        case 'consultaBalizasProximoVencimiento' :
+            $balizasProximoVencimiento=DevolverBalizasProximoVencimiento();
+            $rowcount = mysqli_num_rows($balizasProximoVencimiento);
+            echo $rowcount;
+            break;
     }
 }
 ?>

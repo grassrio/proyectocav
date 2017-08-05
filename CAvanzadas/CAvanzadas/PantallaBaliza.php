@@ -2,6 +2,7 @@
 require('includes/loginheader.php');
 session_start();
 require 'includes/ConsultasBaliza.php';
+require 'includes/ConsultasObra.php';
 $sql = DevolverBalizasProximoVencimiento();
 $rowcount = mysqli_num_rows($sql);
 if ($rowcount>0) {
@@ -20,7 +21,7 @@ if ($rowcount>0) {
        $(document).ready(function(){
            $("#ventanaDevolverBaliza").on("show.bs.modal", function (e) {
                 id = $(e.relatedTarget).data('target-id');
-                $("#DevolverBaliza").html("Desea devolver la baliza?");
+                $("#DevolverBaliza").html("¿Confirma que la baliza fue devuelta al proveedor?");
             });
 
        });
@@ -59,7 +60,7 @@ if ($rowcount>0) {
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Devolver Baliza</h4>
+                    <h4 class="modal-title">Confirmar</h4>
                 </div>
                 <div class="modal-body" id="DevolverBaliza">
                     <input name="DevolverBaliza" id="DevolverBaliza" class="form-control" aria-describedby="basic-addon2" />
@@ -67,7 +68,7 @@ if ($rowcount>0) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    <button id="btnDevolverBaliza" type="button" class="btn btn-danger">Devolver</button>
+                    <button id="btnDevolverBaliza" type="button" class="btn btn-danger">Aceptar</button>
                 </div>
             </div>
         </div>
@@ -82,20 +83,24 @@ if ($rowcount>0) {
         <!-- Table -->
         <table class="table">
             <tr>
+                <th>Obra</th>
                 <th>Proveedor</th>
                 <th>Cantidad</th>
-                <th>Fecha Fin</th>
-                <th>Devolver Baliza?</th>
+                <th>Fecha límite</th>
+                <th></th>
             </tr>
             <?php
-    while($rs=mysqli_fetch_array($sql))
+    while($rsBaliza=mysqli_fetch_array($sql))
     {
+        $sqlObra=obtenerObra($rsBaliza[idObra]);
+        $rsObra=mysqli_fetch_array($sqlObra);
         echo "<tr>"
-        ."<td>".$rs[2]."</td>"
-        ."<td>".$rs[3]."</td>"
-        ."<td>".$rs[5]."</td>"
-        ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaDevolverBaliza" data-toggle="modal">
-<span class="glyphicon glyphicon-send" aria-hidden="true"></span></button>'."</td>"
+        ."<td>".$rsObra[Nombre]."</td>"
+        ."<td>".$rsBaliza[Proveedor]."</td>"
+        ."<td>".$rsBaliza[Cantidad]."</td>"
+        ."<td>".$rsBaliza[fechaFin]."</td>"
+        ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rsBaliza[idBaliza].'" data-target="#ventanaDevolverBaliza" data-toggle="modal">
+<span class="glyphicon glyphicon-send" aria-hidden="true"></span> Baliza devuelta</button>'."</td>"
         ."</tr>";
     }
 
