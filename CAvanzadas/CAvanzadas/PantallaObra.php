@@ -138,6 +138,14 @@ if (isset($_SESSION['usuario'])) {
             $("#ventanaMostrarObra").on("show.bs.modal", function (e) {
             $("#ventanaMostrarObraBody").html("");
             var idObra = $(e.relatedTarget).data('target-id');
+            $('#reclamarObraForm').on('submit', function (e) {
+                if (e.isDefaultPrevented()) {
+                } else {
+                    e.preventDefault()
+                    // Si se cumple la validacion llama a la funcion de agregar
+                    cambiarEstado(idObraActiva, "Pendiente de cuadrilla");
+                }
+            })
             var nombreObra = $(e.relatedTarget).data('target-nombre');
             var estadoObra = $(e.relatedTarget).data('target-estado');
             $("#ventanaMostrarObraTitle").html('<span class="label label-info">' + nombreObra + '</span>');
@@ -174,7 +182,29 @@ if (isset($_SESSION['usuario'])) {
                 cargaMetrajesEstimados(idObraActiva);
             });
 
-            $('#ventanaMetrajesEstimados').on('hidden.bs.modal', function () {
+            $('#ventanaMetrajesRealizados').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+
+            $("#ventanaMetrajesRealizados").on("show.bs.modal", function (e) {
+                idObraActiva = $(e.relatedTarget).data('target-id');
+                var idCotizacion = $(e.relatedTarget).data('target-idcotizacion');
+                $(this).find('form').validator()
+
+                $('#agregarMetrajeRealizadoForm').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        // Si se cumple la validacion llama a la funcion de agregar
+                        agregarMetrajeRealizado(idObraActiva);
+                    }
+                })
+
+                cargaMetrajesRealizados(idObraActiva);
+
+            });
+
+            $('#ventanaMetrajesRealizados').on('hidden.bs.modal', function () {
                 $(this).find('form')[0].reset();
             });
 
@@ -308,8 +338,27 @@ if (isset($_SESSION['usuario'])) {
                           CantidadMetraje: CantidadMetraje
                       },
                 function (response, status) { // Required Callback Function
+                    $('#cantidadMetraje').val('');
                     cargaMetrajesEstimados(idObra);
 
+                });
+
+        }
+
+        function agregarMetrajeRealizado($idObra) {
+            var idObra = $idObra
+            var CantidadMetraje = $('#cantidadMetrajeRealizado').val();
+            var NombreRubro = document.getElementById("rubroComboRealizado").value;
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "agregarMetrajeRealizado",
+                          idObra: idObra,
+                          NombreRubro: NombreRubro,
+                          CantidadMetraje: CantidadMetraje
+                      },
+                function (response, status) { // Required Callback Function
+                    $('#cantidadMetrajeRealizado').val('');
+                    cargaMetrajesRealizados(idObra);
                 });
 
         }
@@ -367,6 +416,20 @@ if (isset($_SESSION['usuario'])) {
                 });
         }
 
+        function eliminarMetrajeRealizado($idMetrajeRealizado, $idObra) {
+            var idObra = $idObra;
+            var idMetrajeRealizado = $idMetrajeRealizado;
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "eliminarMetrajeRealizado",
+                          idMetrajeRealizado: idMetrajeRealizado
+                      },
+                function (response, status) { // Required Callback Function
+                    cargaMetrajesRealizados(idObra);
+
+                });
+        }
+
         function cargaMetrajesEstimados($idObra) {
             $("#ventanaMetrajesEstimadosBodyTabla").html("");
             var idObra = $idObra
@@ -377,6 +440,19 @@ if (isset($_SESSION['usuario'])) {
                   },
             function (response, status) { // Required Callback Function
                 $("#ventanaMetrajesEstimadosBodyTabla").html(response);
+            });
+        }
+
+        function cargaMetrajesRealizados($idObra) {
+            $("#ventanaMetrajesRealizadosBodyTabla").html("");
+            var idObra = $idObra
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "metrajesRealizados",
+                      idObra: idObra
+                  },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMetrajesRealizadosBodyTabla").html(response);
             });
         }
 
@@ -515,6 +591,59 @@ if (isset($_SESSION['usuario'])) {
 
                         </form>
                         <div id="ventanaMetrajesEstimadosBodyTabla"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--VENTANA METRAJES REALIZADOS-->
+    <div class="modal fade" tabindex="1" role="dialog" id="ventanaMetrajesRealizados">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaMetrajesRealizadosTitle">Metrajes realizados</h4>
+                </div>
+                <div class="modal-body" id="ventanaMetrajesRealizadosBody">
+                    <div class="panel">
+                        <br>
+                        <form role="form" data-toggle="validator" id="agregarMetrajeRealizadoForm" name="agregarMetrajeRealizadoForm">
+                            <div class="form-group row">
+                                <label for="Rubro" class="col-sm-2 col-form-label">
+                                    Rubro:
+                                </label>
+                                <div class="col-sm-8">
+                                    <select name='rubroComboRealizado' id='rubroComboRealizado'>
+                                        <?php 
+    $rubrosCotizacion = obtenerRubro($idCotizacion);
+    while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
+    {
+        echo "
+                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]."</option>";
+    }
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="cantidadMetrajeRealizados" class="col-sm-2 col-form-label">
+                                    Metraje realizado
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="number" min="1" id="cantidadMetrajeRealizado" data-error="Requerido" class="form-control" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                            </div>
+                            <span class="form-control-static pull-right"> <button id="btnAgregarMetraje" type="submit" class="btn btn-success success">Agregar metraje</button> </span>
+
+                        </form>
+                        <div id="ventanaMetrajesRealizadosBodyTabla"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
