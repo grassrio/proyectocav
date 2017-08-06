@@ -150,7 +150,6 @@ if (isset($_SESSION['usuario'])) {
                 cambiosActivos == "false";
                 $("#loading").show();
                 window.location.reload();
-                //desplegarLicitacion(idLicitacionActiva);
             }
 
 
@@ -172,12 +171,7 @@ if (isset($_SESSION['usuario'])) {
                         agregarMetraje(idObraActiva);
                     }
                 })
-
-
-
                 cargaMetrajesEstimados(idObraActiva);
-
-
             });
 
             $('#ventanaMetrajesEstimados').on('hidden.bs.modal', function () {
@@ -218,7 +212,14 @@ if (isset($_SESSION['usuario'])) {
                            RequiereBaliza: RequiereBaliza
                        },
                  function (response, status) {
-                     if (response > 0) {
+                     if (response.indexOf('Error') >= 0) {
+                         swal({
+                             title: "Error",
+                             text: response,
+                             type: "warning",
+                             confirmButtonText: "OK"
+                         });
+                     } else {
                          idObra = response;
                          if ($('#chReqBaliza').prop('checked')) {
                              var ProveedorBaliza = $('#proveedorBaliza').val();
@@ -235,29 +236,20 @@ if (isset($_SESSION['usuario'])) {
                                      FechaFinBaliza: FechaFinBaliza
                                  },
                              function (response, status) {
-                                 if (response != '') {
+                                 if (response.indexOf('Error') >= 0) {
                                      swal({
                                          title: "Error",
-                                         text: "Error al agregar baliza",
+                                         text: response,
                                          type: "warning",
                                          confirmButtonText: "OK"
                                      });
-                                 }
+                                 } 
                              });
                          }
                          $('#ventanaAgregarObra').modal('hide');
                          $("#loading").show();
                          window.location.reload();
                      }
-                     else {
-                         swal({
-                             title: "Error",
-                             text: "Error al agregar obra",
-                             type: "warning",
-                             confirmButtonText: "OK"
-                         });
-                     }
-
                  });
         };
 
@@ -332,16 +324,15 @@ if (isset($_SESSION['usuario'])) {
                           idCuadrilla: cmbCuadrilla
                       },
                 function (response, status) { // Required Callback Function
-                    if (response == '') {
-                        mostrarObra(idObra);
-                    }
-                    else {
+                    if (response.indexOf('Error') >= 0) {
                         swal({
                             title: "Advertencia!",
                             text: response,
                             type: "warning",
                             confirmButtonText: "OK"
                         });
+                    } else {
+                        mostrarObra(idObra);
                     }
                 });
 

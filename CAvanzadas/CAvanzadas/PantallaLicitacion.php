@@ -165,12 +165,7 @@ if (isset($_SESSION['usuario'])) {?>
                           idLicitacion: id,
                       },
                 function (response, status) { // Required Callback Function
-                    if (response == '') {
-                        $('#ventanaModificarLicitacion').modal('hide');
-                        $("#loading").show();
-                        window.location.reload();
-                    }
-                    else {
+                    if (response.indexOf('Error') >= 0) {
                         swal({
                             title: "Advertencia!",
                             text: response,
@@ -178,8 +173,11 @@ if (isset($_SESSION['usuario'])) {?>
                             confirmButtonText: "OK"
                         });
                         $('#btnModificarLicitacion').prop('disabled', false);
+                    } else {
+                        $('#ventanaModificarLicitacion').modal('hide');
+                        $("#loading").show();
+                        window.location.reload();
                     }
-
                 });
             }
         });
@@ -191,10 +189,19 @@ if (isset($_SESSION['usuario'])) {?>
                           idLicitacionDinamico: idLicitacionDinamico
                       },
                 function (response, status) { // Required Callback Function
-                    //$("#bingo").html(response);//"response" receives - whatever written in echo of above PHP script.
-                    $('#ventanaEliminarLicitacion').modal('hide');
-                    $("#loading").show();
-                    window.location.reload();
+                    if (response.indexOf('Error') >= 0) {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                        $('#btnEliminarLicitacion').prop('disabled', false);
+                    } else {
+                        $('#ventanaEliminarLicitacion').modal('hide');
+                        $("#loading").show();
+                        window.location.reload();
+                    }
                 });
         });
 
