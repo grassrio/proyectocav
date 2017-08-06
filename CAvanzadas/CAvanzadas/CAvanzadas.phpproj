@@ -33,11 +33,13 @@
     <Compile Include="Clases\Cliente.php" />
     <Compile Include="Clases\Cotizacion.php" />
     <Compile Include="Clases\Cuadrilla.php" />
+    <Compile Include="Clases\Imagen.php" />
     <Compile Include="Clases\Obra.php" />
     <Compile Include="Clases\Personal.php" />
     <Compile Include="Clases\Rubro.php" />
     <Compile Include="includes\ConsultasBaliza.php" />
     <Compile Include="includes\ConsultasCuadrilla.php" />
+    <Compile Include="includes\ConsultasImagen.php" />
     <Compile Include="includes\ConsultasLicitacion.php" />
     <Compile Include="includes\ConsultasCliente.php" />
     <Compile Include="includes\config.php" />
@@ -69,6 +71,7 @@
   <ItemGroup>
     <Folder Include="css\" />
     <Folder Include="fonts\" />
+    <Folder Include="imagenes_\" />
     <Folder Include="img\" />
     <Folder Include="js\" />
     <Folder Include="includes\" />
@@ -89,6 +92,7 @@
     <Content Include="css\bootstrap.css.map" />
     <Content Include="css\bootstrap.min.css" />
     <Content Include="css\bootstrap.min.css.map" />
+    <Content Include="css\fileinput.min.css" />
     <Content Include="css\sweetalert.css" />
     <Content Include="css\todc-bootstrap.css" />
     <Content Include="css\todc-bootstrap.css.map" />
@@ -107,6 +111,8 @@
     <Content Include="js\bootstrap-table.min.js" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\fileinput.min.js" />
+    <Content Include="js\fileinput_locale_es.js" />
     <Content Include="js\jquery.min.js" />
     <Content Include="js\md5.js" />
     <Content Include="js\npm.js" />

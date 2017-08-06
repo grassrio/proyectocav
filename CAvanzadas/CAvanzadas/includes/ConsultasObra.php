@@ -29,6 +29,20 @@ function agregarMetrajeEstimado($idObra,$nombreRubro,$unidadRubro,$cantidadMetra
     return $sql;
 }
 
+function agregarMetrajeRealizado($idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->agregarMetrajeRealizado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
 function eliminarMetrajeEstimado($idMetrajeEstimado){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -37,6 +51,20 @@ function eliminarMetrajeEstimado($idMetrajeEstimado){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->eliminarMetrajeEstimado($connect,$idMetrajeEstimado);
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
+function eliminarMetrajeRealizado($idMetrajeRealizado){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->eliminarMetrajeRealizado($connect,$idMetrajeRealizado);
         mysqli_close($connect);
         return $sql;
     }
@@ -108,6 +136,20 @@ function metrajesEstimados($idObra){
         mysqli_select_db($connect,$mysqldb);
         $obra = new Obra();
         $sql = $obra->MetrajesEstimados($connect,$idObra);
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
+function metrajesRealizados($idObra){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->MetrajesRealizados($connect,$idObra);
         mysqli_close($connect);
         return $sql;
     }

@@ -12,7 +12,13 @@ class Obra
     }
 
     public function agregarMetrajeEstimado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
-        $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','".$cantidadMetraje."',NULL,'".$unidadRubro."')")
+        $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','".$cantidadMetraje."','NULL','".$unidadRubro."')")
+            or die ("Error al agregar metraje");
+        return $sql;
+    }
+
+    public function agregarMetrajeRealizado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
+        $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','NULL','".$cantidadMetraje."','".$unidadRubro."')")
             or die ("Error al agregar metraje");
         return $sql;
     }
@@ -20,6 +26,12 @@ class Obra
     public function eliminarMetrajeEstimado($connect,$idMetrajeEstimado){
         $sql = mysqli_query($connect,"DELETE FROM MetrajeObra WHERE idMetrajeObra='".$idMetrajeEstimado."'")
             or die ("Error al eliminar metraje estimado");
+        return $sql;
+    }
+
+    public function eliminarMetrajeRealizado($connect,$idMetrajeRealizado){
+        $sql = mysqli_query($connect,"DELETE FROM MetrajeObra WHERE idMetrajeObra='".$idMetrajeRealizado."'")
+            or die ("Error al eliminar metraje realizado");
         return $sql;
     }
 
@@ -69,12 +81,24 @@ class Obra
                     $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
                 }
                 break;
+            case 'Informado':
+                if ($estadoPosterior=='Pendiente de cuadrilla'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
         }
         return $sql;
     }
 
     public function MetrajesEstimados($connect,$idObra){
-        $sql = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."'")
+        $sql = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."' AND MetrajeEstimado<>'NULL'")
+            or die ("Error al consultar estados de obra");
+        return $sql;
+    }
+
+    public function MetrajesRealizados($connect,$idObra){
+        $sql = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."' AND MetrajeReal<>'NULL'")
             or die ("Error al consultar estados de obra");
         return $sql;
     }

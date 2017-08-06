@@ -40,6 +40,7 @@ if (isset($_SESSION['usuario'])) {?>
 
         $(document).ready(function () {
             $("#loading").hide();
+            consultaBalizasProximoVencimiento();
             $(document).ajaxStart(function () {
                 $("#loading").show();
             }).ajaxStop(function () {
@@ -47,14 +48,25 @@ if (isset($_SESSION['usuario'])) {?>
             });
         });
 
-
+        function consultaBalizasProximoVencimiento() {
+            $("#loading").show();
+            $.ajax({
+                url: 'ajaxBaliza.php',
+                type: 'post',
+                data: { "action": "consultaBalizasProximoVencimiento" },
+                success: function (response) {
+                    $("#lblCantidadBalizaVencimiento").empty();
+                    $("#lblCantidadBalizaVencimiento").append(response);
+                }
+            });
+        }
 
         function carga(script) {
+            $("#loading").show();
             document.getElementById("iframeContenido").src = "";
             $("#contenido").show();
             $("#subcontenido").hide();
-            jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { jQuery('#main').animate({ opacity: 1 }, 200) }) });
-            ;
+            jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { consultaBalizasProximoVencimiento(); jQuery('#main').animate({ opacity: 1 }, 200) }) });           
         }
 
         function cargaIframe(script) {
@@ -197,19 +209,8 @@ if (isset($_SESSION['usuario'])) {?>
                     <li role="presentation">
                         <a href="JavaScript:carga('PantallaBaliza')">
                             Alertas
-                            <span class="badge">
-                                <?php
-                                require 'includes/ConsultasBaliza.php';
-                                $sql = DevolverBalizasProximoVencimiento();
-                                $rowcount = mysqli_num_rows($sql);
-                                if($rowcount>0){
-                                    echo $rowcount;
-                                }
-                                else
-                                {
-                                    echo '0';
-                                }
-                                ?>
+                            <span id="lblCantidadBalizaVencimiento" class="badge">
+                                
                             </span>
                         </a>
                     </li>

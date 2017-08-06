@@ -118,12 +118,7 @@ if (isset($_SESSION['usuario'])) {?>
                           Presupuesto: presupuesto,
                       },
                 function (response, status) {
-                    if (response == '') {
-                        $('#ventanaAgregarLicitacion').modal('hide');
-                        $("#loading").show();
-                        window.location.reload();
-                    }
-                    else {
+                    if (response.indexOf('Error') >= 0) {
                         swal({
                             title: "Advertencia!",
                             text: response,
@@ -133,8 +128,11 @@ if (isset($_SESSION['usuario'])) {?>
                         $('#btnNuevaLicitacion').prop('disabled', false);
                         $('#Codigo').val('');
                         $('#Presupuesto').val('');
+                    } else {
+                        $('#ventanaAgregarLicitacion').modal('hide');
+                        $("#loading").show();
+                        window.location.reload();
                     }
-
                 });
             }
         });
@@ -167,12 +165,7 @@ if (isset($_SESSION['usuario'])) {?>
                           idLicitacion: id,
                       },
                 function (response, status) { // Required Callback Function
-                    if (response == '') {
-                        $('#ventanaModificarLicitacion').modal('hide');
-                        $("#loading").show();
-                        window.location.reload();
-                    }
-                    else {
+                    if (response.indexOf('Error') >= 0) {
                         swal({
                             title: "Advertencia!",
                             text: response,
@@ -180,8 +173,11 @@ if (isset($_SESSION['usuario'])) {?>
                             confirmButtonText: "OK"
                         });
                         $('#btnModificarLicitacion').prop('disabled', false);
+                    } else {
+                        $('#ventanaModificarLicitacion').modal('hide');
+                        $("#loading").show();
+                        window.location.reload();
                     }
-
                 });
             }
         });
@@ -193,29 +189,24 @@ if (isset($_SESSION['usuario'])) {?>
                           idLicitacionDinamico: idLicitacionDinamico
                       },
                 function (response, status) { // Required Callback Function
-                    //$("#bingo").html(response);//"response" receives - whatever written in echo of above PHP script.
-                    $('#ventanaEliminarLicitacion').modal('hide');
-                    $("#loading").show();
-                    window.location.reload();
+                    if (response.indexOf('Error') >= 0) {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                        $('#btnEliminarLicitacion').prop('disabled', false);
+                    } else {
+                        $('#ventanaEliminarLicitacion').modal('hide');
+                        $("#loading").show();
+                        window.location.reload();
+                    }
                 });
         });
 
         });
-        function desplegarLicitacion($idLicitacion) {
-            var idLicitacion = $idLicitacion;
-            idLicitacionActiva = $idLicitacion;
-            $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "obtenerLicitacion",
-                          idLicitacion: idLicitacion
-                      },
-                function (response, status) { // Required Callback Function
-                    $("#contenido").hide();
-                    $("#subcontenido").show();
-                    $("#subcontenido").html(response);
-                });
 
-        }
         function mostrarocultar(action, id) {
             if (action == "mostrar") {
                 $("#" + id).show();

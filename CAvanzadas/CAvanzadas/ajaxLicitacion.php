@@ -5,6 +5,8 @@ require 'includes/ConsultasCliente.php';
 require 'includes/ConsultaZonas.php';
 require 'includes/ConsultasObra.php';
 require 'includes/ConsultasCuadrilla.php';
+require('includes/ConsultasImagen.php');
+
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -21,6 +23,47 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             break;
         case 'cambiarEstado' :
             cambiarEstado($_POST['idObra'],$_POST['estado']);
+            break;
+        case 'fotosObra' :
+            require('includes/config.php');
+            $idObra = $_POST['idObra'];
+            echo '<input id="archivos" name="imagenes[]" type="file" multiple=true class="file-loading" />';
+            echo '
+            <script>
+	$("#archivos").fileinput({
+	uploadUrl: "includes/ConsultasImagen.php",
+	uploadExtraData: {idObra:\''.$idObra.'\'},
+    uploadAsync: false,
+    fileTypeSettings: [\'image\', \'video\'],
+    allowedFileExtensions: [\'jpg\', \'gif\', \'png\', \'jpeg\', \'bmp\', \'avi\'],
+    minFileCount: 1,
+    maxFileCount: 20,
+	showUpload: false,
+	showRemove: false,
+	initialPreview: [';
+    $sqlImagenes = obtenerImagenes($idObra);
+    $rowcount = mysqli_num_rows($sqlImagenes);
+    if ($rowcount>0) {
+        while($rsImagenes=mysqli_fetch_array($sqlImagenes))
+        {
+            echo "\"<img src='".$directorioImagenes.$rsImagenes[nombreImagen]."' class='file-preview-image'>\",";
+        }
+        echo "], initialPreviewConfig: [";
+        mysqli_data_seek($sqlImagenes, 0 );
+        while($rsImagenes=mysqli_fetch_array($sqlImagenes))
+        {
+            echo '{caption: "'.$rsImagenes[nombreImagen].'",  url: "includes/ConsultasImagen.php", key:"'.$rsImagenes[idImagen].'"},';
+        }
+    }
+
+    echo ']
+	}).on("filebatchselected", function(event, files) {
+
+	$("#archivos").fileinput("upload");
+
+	});
+
+</script>';
             break;
         case 'auditoriaEstado' :
             $idObra = $_POST['idObra'];
@@ -60,6 +103,14 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 $cantidadMetraje=$_POST['CantidadMetraje'];
                 agregarMetrajeEstimado($idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
             break;
+        case 'agregarMetrajeRealizado' :
+            $idObra=$_POST['idObra'];
+            $nombreUnidadRubro_explode = explode('|', $_POST['NombreRubro']);
+            $nombreRubro = $nombreUnidadRubro_explode[0];
+            $unidadRubro = $nombreUnidadRubro_explode[1];
+            $cantidadMetraje=$_POST['CantidadMetraje'];
+            agregarMetrajeRealizado($idObra,$nombreRubro,$unidadRubro,$cantidadMetraje);
+            break;
         case 'asignarCuadrilla' :
                 $idObra=$_POST['idObra'];
                 $idCuadrilla=$_POST['idCuadrilla'];
@@ -68,6 +119,10 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'eliminarMetrajeEstimado' :
             $idMetrajeEstimado = $_POST['idMetrajeEstimado'];
             eliminarMetrajeEstimado($idMetrajeEstimado);
+            break;
+        case 'eliminarMetrajeRealizado' :
+            $idMetrajeRealizado = $_POST['idMetrajeRealizado'];
+            eliminarMetrajeRealizado($idMetrajeRealizado);
             break;
         case 'metrajesEstimados' :
             $idObra=$_POST['idObra'];
@@ -103,7 +158,44 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                       </div>
                 ';
             }else{
-                echo "<br> Sin metrajes";
+                echo "<br> Sin metrajes estimados";
+            }
+            break;
+        case 'metrajesRealizados' :
+            $idObra=$_POST['idObra'];
+            $metrajeObraSql = metrajesRealizados($idObra);
+            $rowcount = mysqli_num_rows($metrajeObraSql);
+            if ($rowcount>0){
+                echo '
+                <br>
+                <br>
+                <br>
+                <div class="panel panel-info" >
+                <!-- Tabla Metrajes Realizados -->
+                <table class="table">
+                <tr>
+                    <th>Rubro</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                </tr>
+                ';
+                while($rsMetrajeObra=mysqli_fetch_array($metrajeObraSql))
+                {
+                    echo "<tr>"
+                    ."<td>".$rsMetrajeObra[NombreRubro]."</td>"
+                    ."<td>".$rsMetrajeObra[MetrajeReal]." ".$rsMetrajeObra[Unidad]."</td>"
+                    .'<td><button onclick="eliminarMetrajeRealizado('.$rsMetrajeObra[idMetrajeObra].','.$idObra.')" type="button" class="btn btn-default">
+                              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button></td>'
+                    ."</tr>";
+                }
+
+
+
+                echo '</table>
+                      </div>
+                ';
+            }else{
+                echo "<br> Sin metrajes realizados";
             }
             break;
         case 'eliminarLicitacion' :
@@ -134,7 +226,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 echo '
 
       <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target="#ventanaAuditoriaEstado"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> <span class="glyphicon-class">Estados</span></button></ul> </div> </span>
-      <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <span class="glyphicon-class">Fotos</span></button></ul> </div> </span>
+      <span class="form-control-static pull-right"><div class="bs-glyphicons"> <ul class="bs-glyphicons-list"><button data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target="#ventanaFotosObra"><span class="glyphicon glyphicon-picture" aria-hidden="true"></span> <span class="glyphicon-class">Fotos</span></button></ul> </div> </span>
 ';
 
                 $estado = $rsObra[Estado];
@@ -145,12 +237,12 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                       Dirección: '.$rsObra[Direccion].'<br>
                       Esquina: '.$rsObra[Esquina1].'<br>
                       Esquina: '.$rsObra[Esquina2].'<br>'
-                .'<span class="form-control-static pull-right">
+                .'
                 <div class="form-group">
                     <label>Observaciones</label>
-                     <textarea onblur="guardarObservacion()" name="observacion" id="observacion" rows="4" class="form-control">'.$rsObra[Observacion].'</textarea>
+                     <textarea onblur="guardarObservacion()" name="observacion" id="observacion" rows="3" class="form-control">'.$rsObra[Observacion].'</textarea>
                      <label id="lblGuardarObservacion"></label>
-                </div> </span>
+                </div>
                 <div class="form-group">
                      <input type="hidden" name="idObraObservacion" id="idObraObservacion" value="'.$rsObra[idObra].'"/>
                 </div>
@@ -161,7 +253,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     echo '<form role="form" id="pendienteBalizaForm" name="pendienteBalizaForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
                                 <div class="form-group row">
-                                <label for="chPendBaliza" class="col-sm-1 col-form-label">
+                                <label for="chPendBaliza" class="col-sm-2 col-form-label">
                                     Baliza pendiente
                                 </label>
                                 <div class="col-sm-8">
@@ -179,7 +271,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     echo '<form role="form" id="pendienteBalizaForm" name="pendienteBalizaForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
                                 <div class="form-group row">
-                                <label for="chPendBaliza" class="col-sm-1 col-form-label">
+                                <label for="chPendBaliza" class="col-sm-2 col-form-label">
                                     Baliza pendiente
                                 </label>
                                 <div class="col-sm-8">
@@ -227,11 +319,12 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         $idCuadrilla = $rsObra[idCuadrilla];
                         $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
                         $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
-                        echo 'Cuadrilla: '.$rsCuadrillaAsignada[Nombre];
+                        echo 'Cuadrilla asignada: '.$rsCuadrillaAsignada[Nombre];
+                        echo '<br><button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
                         echo '<form role="form" id="pendienteAsfaltoForm" name="pendienteAsfaltoForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
                                 <div class="form-group row">
-                                <label for="chPendAsfalto" class="col-sm-1 col-form-label">
+                                <label for="chPendAsfalto" class="col-sm-2 col-form-label">
                                     Asfalto pendiente
                                 </label>
                                 <div class="col-sm-8">
@@ -244,6 +337,11 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 </div>
                                 </form><br>
                         ';
+
+                        break;
+                    case 'Informado':
+                        echo '<form role="form" data-toggle="validator" id="reclamarObraForm" name="reclamarObraForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'"><button type="submit" class="btn btn-success btn-xs">Reclamar obra</button></form>';
                         break;
                     case 'Pendiente de asfalto' :
                         $idCuadrilla = $rsObra[idCuadrilla];
