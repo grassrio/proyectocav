@@ -109,4 +109,20 @@ function ObrasFinalizadasEntreFecha($fechaInicio,$fechaFin)
     }
     return $sql;
 }
+//function MostrarProductividadPorObrero($nombreEmpleado)
+function MostrarProductividadPorObrero($nombreEmpleado,$fechaInicio,$fechaFin)
+    {
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $personal = new Personal();
+            $sql = mysqli_query($connect,"SELECT mo.MetrajeReal,mo.NombreRubro,mo.Unidad FROM PersonalCuadrilla pc, Obra o, MetrajeObra mo WHERE o.Estado='Ejecutado' AND mo.idObra=o.idObra AND o.idCuadrilla=pc.idCuadrilla AND pc.Nombre='".$nombreEmpleado."' AND  o.fechaFinalizado>='".$fechaInicio."' AND o.fechaFinalizado<='".$fechaFin."'")
+             or die ("Error al calcular la productividad");
+            return $sql;
+        }
+        return $sql;
+    }
+
 ?>
