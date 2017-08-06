@@ -35,6 +35,20 @@ function modificarLicitacion($id,$estado)
     return $sql;
 }
 
+function obtenerPresupuesto($idLicitacion)
+{
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $sql = mysqli_query($connect,"SELECT * FROM PresupuestoLicitacion WHERE idLicitacion='".$idLicitacion."'") or die ("Error al consultar presupuesto de licitación");
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
 function eliminarLicitacion($idLicitacionDinamico)
 {
     require('config.php');

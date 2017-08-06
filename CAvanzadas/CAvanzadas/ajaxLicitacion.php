@@ -320,7 +320,6 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
                         $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
                         echo 'Cuadrilla asignada: '.$rsCuadrillaAsignada[Nombre];
-                        echo '<br><button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
                         echo '<form role="form" id="pendienteAsfaltoForm" name="pendienteAsfaltoForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
                                 <div class="form-group row">
@@ -337,7 +336,23 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 </div>
                                 </form><br>
                         ';
-
+                        echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
+                        echo '<div class="panel panel-info" ><form role="form" data-toggle="validator" id="cambiarEstadoFinalForm" name="cambiarEstadoFinalForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="cmbEstadoFinal" class="col-sm-2 col-form-label">
+                                    Estado final:
+                                </label>
+                                <div class="col-sm-10">
+                                    <select name=\'cmbEstadoFinal\' id=\'cmbEstadoFinal\' required>
+                                    <option disabled selected value>Seleccione estado</option>
+                                    <option value=\'Facturar 0,3\'>Facturar 0,3</option>"
+                                    <option value=\'Ejecutado\'>Ejecutado</option>"
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-xs">Cambiar estado</button></form><br>
+                            </div>';
                         break;
                     case 'Informado':
                         echo '<form role="form" data-toggle="validator" id="reclamarObraForm" name="reclamarObraForm">
@@ -364,6 +379,9 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 </div>
                                 </form><br>
                         ';
+                        break;
+                    case 'Ejecutado' :
+                        echo '<br><button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
                         break;
                 }
 

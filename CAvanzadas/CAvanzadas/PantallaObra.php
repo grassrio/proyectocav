@@ -303,6 +303,17 @@ if (isset($_SESSION['usuario'])) {
                         asignarCuadrilla(idObra);
                     }
                 })
+
+                $('#cambiarEstadoFinalForm').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        cambiosActivos = "true";
+                        var estadoFinal = document.getElementById("cmbEstadoFinal").value;
+                        cambiarEstado(idObra, estadoFinal);
+                    }
+                })
+
                 $("#pendienteBalizaForm").on("change", "input:checkbox", function () {
                     if ($('#chPendBaliza').prop('checked')) {
                         cambiosActivos = "true";
@@ -828,7 +839,16 @@ if (isset($_SESSION['usuario'])) {
     </div><!-- /.modal -->
 
         <span class="label label-info">Licitación <?php echo $rsLicitacion[codigo]; ?></span>
+<?php
+        $idLicitacion =  $rsLicitacion[idLicitacion];
+
+        $sqlPresupuestoLicitacion=obtenerPresupuesto($idLicitacion);
+        $rsPresupuestoLicitacion=mysqli_fetch_array($sqlPresupuestoLicitacion);
+        $presupuestoActual=$rsPresupuestoLicitacion[Debe] - $rsPresupuestoLicitacion[Haber];
+?>
         Estado: <?php echo $rsLicitacion[estado]; ?>
+        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: <?php echo $rsPresupuestoLicitacion[PresupuestoTotal]; ?>&nbsp;]
+        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto disponible: <?php echo $presupuestoActual; ?>&nbsp;]
 
     <div class="panel panel-default">
         <!-- Default panel contents -->

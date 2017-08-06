@@ -74,6 +74,14 @@ class Obra
                     $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
                     $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
                 }
+                if ($estadoPosterior=='Facturar 0,3'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                if ($estadoPosterior=='Ejecutado'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
                 break;
             case 'Pendiente de asfalto':
                 if ($estadoPosterior=='Asignado'){

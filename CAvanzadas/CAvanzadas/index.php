@@ -69,6 +69,7 @@ if (isset($_SESSION['usuario'])) {?>
             jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { consultaBalizasProximoVencimiento(); jQuery('#main').animate({ opacity: 1 }, 200) }) });           
         }
 
+
         function cargaIframe(script) {
             $("#loading").show();
             $("#contenido").hide();
@@ -111,6 +112,8 @@ if (isset($_SESSION['usuario'])) {?>
                       FechaFin: fechaFin,
                   },
             function (response, status) { // Required Callback Function
+                document.getElementById("iframeContenido").src = "";
+                $('#btnConsulta').prop('disabled', false);
                 $("#contenido").hide();
                 $('#ventanaSeleccionaFecha').modal('hide');
                 $("#subcontenido").show();
