@@ -22,7 +22,7 @@ if (isset($_SESSION['usuario'])) {
 
 
     <form method="POST" action="" onsubmit="pwd_encrypt(this);">
-        <div class="panel panel-info">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Construcciones Avanzadas SRL</h3>
             </div>

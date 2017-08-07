@@ -1,6 +1,7 @@
 <?php
 require('includes/loginheader.php');
 session_start();
+$tipoUsuario = $_SESSION['tipoUsuario'];
 require 'includes/ConsultasUsuarios.php';
 $sql = DevolverUsuarios() ;
 $rowcount = mysqli_num_rows($sql);
@@ -119,7 +120,6 @@ if ($rowcount>0) {
             </div>
         </div>
     </div>
-
     <!--VENTANA PARA MODIFICAR EL USUARIO-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaModificarUsuario">
         <div class="modal-dialog" role="document">
@@ -172,19 +172,27 @@ if ($rowcount>0) {
             <?php
     while($rs=mysqli_fetch_array($sql))
     {
-
-            if($rs[3]==2)
-            {
-                $tipo = 'Obrero';
-            }
-            elseif($rs[3]==3)
-            {
-                $tipo = 'Administrativo';
-            }
-            else
-            {
-                $tipo = 'Director';
-            }
+        if($rs[3]==2)
+        {
+            $tipo = 'Obrero';
+        }
+        elseif($rs[3]==3)
+        {
+            $tipo = 'Administrativo';
+        }
+        else//el tipo de usuario es 1
+        {
+            $tipo = 'Director';
+        }
+        if ($tipoUsuario<>1)
+        {
+            echo "<tr>"
+            ."<td>".$rs[1]."</td>"
+            ."<td>".$tipo."</td>"
+            ."</tr>";
+        }
+        else
+        {
             echo "<tr>"
             ."<td>".$rs[1]."</td>"
             ."<td>".$tipo."</td>"
@@ -193,7 +201,7 @@ if ($rowcount>0) {
             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
             ."</td>"
             ."</tr>";
-
+            }
     }
             ?>
         </table>

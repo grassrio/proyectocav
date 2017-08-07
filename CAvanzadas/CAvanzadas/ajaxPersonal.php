@@ -46,15 +46,20 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                  <th>Rubro</th>
                  <th>Unidad</th>
                  <th>Metrajes Realizados</th>
+                 <th>Ganancia por rubro $</th>
                 </tr>';
                     if ($rowcount>0)
                     {
+                        $total = 0;
                         while($obraSql=mysqli_fetch_array($sqlPorObrero))
                         {
+                            $ganancia = ($obraSql[3]*$obraSql[0])*($obraSql[4]/100);
+                            $total = $ganancia+$total;
                             echo "<tr>"
                             ."<td>".$obraSql[1]."</td>"
                             ."<td>".$obraSql[2]."</td>"
                             ."<td>".$obraSql[0]."</td>"
+                            ."<td>".$ganancia."</td>"
                             ."</tr>";
                         }
                     }else
@@ -62,6 +67,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         echo 'sin datos';
                     }
                     '</table>';
+
+                echo 'Ganancia total: $'.$total.'<br>';
             break;
         case 'ProductividadEmpleado' :
             $fechaInicio = $_POST['FechaInicio'];
@@ -71,7 +78,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         <!-- Default panel contents -->
         <div class="panel panel-info">
             <div class="panel-heading">
-                <h3 class="panel-title">Empleados</h3>
+                <h3 class="panel-title">Metrajes realizados por los empleados entre '.$fechaInicio.' y '.$fechaFin.' </h3>
             </div>
         </div>
         <!-- Table -->
@@ -114,7 +121,6 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                           },
                                     function (response, status) { // Required Callback Function
                                         $("#ventanaMostrarProductividadPorObreroBody").html(response);
-                                        $(this).find(form).validator()
 
                                     });
                                 }
@@ -126,8 +132,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 var fechas = $(e.relatedTarget).data(\'target-id\');
                                 var fecha = fechas.split("|");
                                 $("#ventanaMostrarProductividadPorObreroTitle").html(\'<span class="label label-info">\' + nombreEmpleado +\'</span>\');
-                           //  MostrarProductividadPorObrero(nombreEmpleado);
-                             MostrarProductividadPorObrero(nombreEmpleado,fecha[0],fecha[1]);
+                                 MostrarProductividadPorObrero(nombreEmpleado,fecha[0],fecha[1]);
                                 });
                             </script>
 
