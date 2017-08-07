@@ -1,9 +1,9 @@
 <?php
 class Licitacion
 {
-    public function InsertarLicitacion($connect,$idCliente,$idCotizacion,$estado,$codigo)
+    public function InsertarLicitacion($connect,$idCliente,$idCotizacion,$idZona,$estado,$codigo)
     {
-        $sql = mysqli_query($connect,"INSERT INTO Licitacion (idCliente,idCotizacion,estado,codigo,fecha) VALUES ('".$idCliente."','".$idCotizacion."','".$estado."','".$codigo."',now())")
+        $sql = mysqli_query($connect,"INSERT INTO Licitacion (idCliente,idCotizacion,idZona,estado,codigo,fecha) VALUES ('".$idCliente."','".$idCotizacion."','".$idZona."','".$estado."','".$codigo."',now())")
            or die ("Error al insertar licitacion");
         return $sql;
     }

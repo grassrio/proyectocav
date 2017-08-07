@@ -1,7 +1,7 @@
 <?php
 require 'Clases/Licitacion.php';
 
-function insertarLicitacion($idCliente,$idCotizacion,$estado,$codigo,$presupuesto)
+function insertarLicitacion($idCliente,$idCotizacion,$idZona,$estado,$codigo,$presupuesto)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -9,7 +9,7 @@ function insertarLicitacion($idCliente,$idCotizacion,$estado,$codigo,$presupuest
     {
         mysqli_select_db($connect,$mysqldb);
         $lic = new Licitacion();
-        $sql = $lic->InsertarLicitacion($connect,$idCliente,$idCotizacion,$estado,$codigo);
+        $sql = $lic->InsertarLicitacion($connect,$idCliente,$idCotizacion,$idZona,$estado,$codigo);
         $sql = $lic->ObtenerIdLicitacion($connect,$codigo);
         $rs=mysqli_fetch_array($sql);
         $sql = mysqli_query($connect,"INSERT INTO PresupuestoLicitacion (PresupuestoTotal,Debe,Haber,idLicitacion) VALUES ('".$presupuesto."','".$presupuesto."','".'0'."','".$rs[0]."')")

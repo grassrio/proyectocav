@@ -10,6 +10,21 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'eliminarCliente' :
             eliminarCliente($_POST['Nombre']);
             break;
+        case 'obtenerZonas' :
+            $idCliente=$_POST['idCliente'];
+            $idZonasSql = obtenerZonas($idCliente);
+            $rowcount = mysqli_num_rows($idZonasSql);
+            echo '<option disabled selected>Seleccione zona</option>';
+            if ($rowcount>0) {
+                while($rs=mysqli_fetch_array($idZonasSql))
+                {
+                    $idZona=$rs[idZona];
+                    $zona=devolverZona($idZona);
+                    $rsZona=mysqli_fetch_array($zona);
+                    echo "<option value='".$rsZona[idZona]."'>".$rsZona[Nombre]."</option>";
+                }
+            }
+            break;
         case 'modificarCliente' :
             modificarCliente($_POST['idCliente'],$_POST['Nombre']);
             break;
@@ -21,7 +36,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 echo '<table class="table"><tr><th>Zonas</th><th></th></tr>';
                 while($rs=mysqli_fetch_array($idZonasSql))
                 {
-                    $idZona=$rs[0];
+                    $idZona=$rs[idZona];
                     $zona=devolverZona($idZona);
                     $rsZona=mysqli_fetch_array($zona);
                     echo '<tr><td>'.$rsZona[Nombre].'</td>

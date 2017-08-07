@@ -71,17 +71,57 @@ if (isset($_SESSION['usuario'])) {?>
 
 
         $(document).ready(function () {
+            $('#ventanaAgregarLicitacion').on('shown.bs.modal', function (e) {
+
+                $(this).find('form').validator()
+
+                $('#NuevaLicitacion').on('submit', function (e) {
+                    if (e.isDefaultPrevented()) {
+                    } else {
+                        e.preventDefault()
+                        nuevaLicitacion();
+                    }
+                })
+
+            });
+            $('#ventanaAgregarLicitacion').on('hidden.bs.modal', function () {
+                $(this).find('form')[0].reset();
+            });
+
+
             $("#ventanaModificarLicitacion").on("show.bs.modal", function (e) {
                 id = $(e.relatedTarget).data('target-id');
             });
+
+            $("#clienteCombo").change(function () {
+                var idCliente = document.getElementById("clienteCombo").value;
+                $.post("ajaxCliente.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "obtenerZonas",
+                          idCliente: idCliente
+                      },
+                function (response, status) { // Required Callback Function
+                    if (response.indexOf('Error') >= 0) {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                    } else {
+                        $("#cmbZonaLicitacion").html(response);
+                        $("#collapseZonaLicitacion").collapse();
+                    }
+                });
+            });
         });
 
-        $(document).ready(function () {
-        $("#btnNuevaLicitacion").click(function () {
-            $('#btnNuevaLicitacion').prop('disabled', true);
+
+        function nuevaLicitacion() {
             var codigo = $('#Codigo').val();
             var idCliente = document.getElementById("clienteCombo").value;
             var idCotizacion = document.getElementById("cotizacionCombo").value;
+            var idZona = document.getElementById("cmbZonaLicitacion").value;
             var estado = document.getElementById("estadoCombo").value;
             if (estado == 1) {
                 estado = 'Aprobada';
@@ -90,29 +130,12 @@ if (isset($_SESSION['usuario'])) {?>
                 estado = 'Rechazada';
             }
             var presupuesto = $('#Presupuesto').val();
-            if (codigo == '') {
-                swal({
-                    title: "Advertencia!",
-                    text: "Ingresar numero de compra directa para continuar!",
-                    type: "warning",
-                    confirmButtonText: "OK"
-                });
-                $('#btnNuevaLicitacion').prop('disabled', false);
-            } else if (presupuesto == '') {
-                swal({
-                    title: "Advertencia!",
-                    text: "Ingresar numero de compra directa para continuar!",
-                    type: "warning",
-                    confirmButtonText: "OK"
-                });
-                $('#btnNuevaLicitacion').prop('disabled', false);
-            }
-            else {
-                $.post("ajaxLicitacion.php", //Required URL of the page on server
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
                       { // Data Sending With Request To Server
                           action: "nuevaLicitacion",
                           idCliente: idCliente,
                           idCotizacion: idCotizacion,
+                          idZona: idZona,
                           Estado: estado,
                           Codigo: codigo,
                           Presupuesto: presupuesto,
@@ -125,17 +148,18 @@ if (isset($_SESSION['usuario'])) {?>
                             type: "warning",
                             confirmButtonText: "OK"
                         });
-                        $('#btnNuevaLicitacion').prop('disabled', false);
-                        $('#Codigo').val('');
-                        $('#Presupuesto').val('');
                     } else {
                         $('#ventanaAgregarLicitacion').modal('hide');
                         $("#loading").show();
                         window.location.reload();
                     }
                 });
-            }
-        });
+                
+        }
+
+
+            
+ 
         
 
         $("#btnModificarLicitacion").click(function () {
@@ -181,6 +205,8 @@ if (isset($_SESSION['usuario'])) {?>
                 });
             }
         });
+
+        $(document).ready(function () {
         $("#btnEliminarLicitacion").click(function () {
             $('#btnEliminarLicitacion').prop('disabled', true);
             $.post("ajaxLicitacion.php", //Required URL of the page on server
@@ -252,7 +278,7 @@ if (isset($_SESSION['usuario'])) {?>
         <img src="img/Loading.gif" />
     </div>
 
-    <!--VENTANA PARA INGRESAR UN NUEVO LICITACION-->
+    <!--VENTANA PARA INGRESAR UNA NUEVA LICITACION-->
     <div class="modal fade" tabindex="-1" role="dialog" id="ventanaAgregarLicitacion">
         <div class="modal-dialog" style="overflow-y: scroll; overflow: inherit;" role="document">
             <div class="modal-content">
@@ -263,13 +289,14 @@ if (isset($_SESSION['usuario'])) {?>
                     <h4 class="modal-title">Agregar licitacion</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="NuevaLicitacion" method="POST" action="NuevaLicitacion">
+                    <form role="form" data-toggle="validator" name="NuevaLicitacion" id="NuevaLicitacion">
                         <div class="form-group row">
                             <label for="Compra" class="col-sm-2 col-form-label">
-                                Codigo compra:
+                                Nº Licitación:
                             </label>
                             <div class="col-sm-8">
-                                <input name="Codigo" id="Codigo" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                <input name="Codigo" id="Codigo" type="text" class="form-control" data-error="Requerido" placeholder="Nº compra directa" aria-describedby="basic-addon2" required/>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -277,53 +304,75 @@ if (isset($_SESSION['usuario'])) {?>
                                 Presupuesto:
                             </label>
                             <div class="col-sm-8">
-                                <input name="Presupuesto" id="Presupuesto" type="text" class="form-control" aria-describedby="basic-addon2" />
+                                <input type="number" min="1" id="Presupuesto" data-error="Requerido" class="form-control" required>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="cliente" class="col-sm-2 col-form-label">
-                                Selecione el cliente:
+                                Cliente:
                             </label>
                             <div class="col-sm-8">
-                                <select name='clienteCombo' id='clienteCombo'><?php
+                                <select name='clienteCombo' id='clienteCombo' data-error="Requerido" required>
+                                <option disabled selected>Seleccione cliente</option>
+                                <?php
                                 $sql = devolverClientes();
                                 while ($rs=mysqli_fetch_array($sql))
                                 {
-                                    echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
+                                    echo "<option value='".$rs[0]."'>".$rs[1]."</option>";
                                 }
-                                                                          ?>
+                                ?>
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
+                        </div>
+                        <div class="collapse" id="collapseZonaLicitacion">
+                                <br>
+                                <div class="form-group row">
+                                    <label for="zonaLicitacion" class="col-sm-2 col-form-label">
+                                        Zona:
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select name='cmbZonaLicitacion' id='cmbZonaLicitacion' data-error="Requerido" required>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
                         </div>
                         <div class="form-group row">
                             <label for="cotizacion" class="col-sm-2 col-form-label">
-                                Selecione una cotizacion:
+                                Cotización:
                             </label>
                             <div class="col-sm-8">
-                                <select name='cotizacionCombo' id='cotizacionCombo'><?php
+                                <select name='cotizacionCombo' id='cotizacionCombo' data-error="Requerido" required>
+                                    <option disabled selected>Seleccione cotización</option>
+                                    <?php
                                     $sql = listaCotizacion();
                                     while ($rs=mysqli_fetch_array($sql))
                                     {
-                                        echo "<option value='".$rs[0]."' selected>".$rs[1]."</option>";
+                                        echo "<option value='".$rs[0]."'>".$rs[1]."</option>";
                                     }
-                                                                                    ?>
+                                    ?>
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="Estado" class="col-sm-2 col-form-label">
-                                Selecione el Estado:
+                                Estado:
                             </label>
                             <div class="col-sm-8">
-                                <select name='estadoCombo' id='estadoCombo'>
-                                    <option value='1' selected>Aprobada</option>
-                                    <option value='2' selected>Rechazada</option>
+                                <select name='estadoCombo' id='estadoCombo' data-error="Requerido" required>
+                                    <option disabled selected>Seleccione estado</option>
+                                    <option value='1'>Aprobada</option>
+                                    <option value='2'>Rechazada</option>
                                 </select>
+                                <div class="help-block with-errors"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                            <button id="btnNuevaLicitacion" type="button" class="btn btn-success success">Agregar</button>
+                            <button id="btnNuevaLicitacion" type="submit" class="btn btn-success success">Agregar</button>
                         </div>
                     </form>
                 </div>

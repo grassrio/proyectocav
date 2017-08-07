@@ -12,7 +12,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
     switch($action) {
         case 'nuevaLicitacion' :
-            insertarLicitacion($_POST['idCliente'],$_POST['idCotizacion'],$_POST['Estado'],$_POST['Codigo'],$_POST['Presupuesto']);
+            insertarLicitacion($_POST['idCliente'],$_POST['idCotizacion'],$_POST['idZona'],$_POST['Estado'],$_POST['Codigo'],$_POST['Presupuesto']);
             break;
         case 'nuevaObra' :
             $idObra = insertarObra($_POST['NombreObra'],$_POST['idCotizacionObra'],$_POST['DireccionObra'],$_POST['NumeroPuertaObra'],$_POST['idZonaObra'],$_POST['ObservacionObra'],$_POST['FechaRecibidoObra'],$_POST['idLicitacion'],$_POST['Esquina1'],$_POST['Esquina2'],$_POST['RequiereBaliza']);

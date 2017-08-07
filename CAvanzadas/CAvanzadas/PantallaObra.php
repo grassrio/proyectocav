@@ -707,7 +707,18 @@ if (isset($_SESSION['usuario'])) {
                             <div class="col-sm-8">
                                 <fieldset disabled>
                                     <select id="dSolicitudCotizacion" class="form-control">
-                                        <option value='<?php echo $rsCotizacion[idCotizacion]?>'><?php echo $rsCotizacion[Nombre]; ?></option>
+                                        <?php
+                                        $idCotizacionLicitacionActiva=$rsCotizacion[idCotizacion];
+                                        $sqlCotizaciones = listaCotizacion();
+                                        while($rsCotizaciones = mysqli_fetch_array($sqlCotizaciones)){
+                                            if ($rsCotizaciones[idCotizacion]==$idCotizacionLicitacionActiva){
+                                                echo "<option value='".$idCotizacionLicitacionActiva."' selected>".$rsCotizacion[Nombre]."</option>";
+                                            }else{
+                                                echo "<option value='".$rsCotizaciones[idCotizacion]."'>".$rsCotizaciones[Nombre]."</option>";
+                                            }
+                                        }
+                                        ?>
+                                        
                                     </select>
                                 </fieldset>
                             </div>
@@ -865,10 +876,12 @@ if (isset($_SESSION['usuario'])) {
 			 data-click-to-select="true">
 	<thead>
 		<tr>
+            
 			<th data-field="obra" data-formatter="identifierFormatter" data-filter-control="input" data-sortable="true">Nombre</th>
 			<th data-field="direccion" data-filter-control="input" data-sortable="true">Dirección</th>
             <th data-field="estado" data-filter-control="select" data-sortable="true">Estado</th>
             <th data-field="fecharecibido" data-filter-control="input" data-sortable="true">Fecha recibido</th>
+            <th data-field="informar"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -882,8 +895,13 @@ if (isset($_SESSION['usuario'])) {
             .'<td data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target-nombre="'.$rsObra[Nombre].'" data-target-estado="'.$rsObra[Estado].'" data-target="#ventanaMostrarObra">'.$rsObra[Nombre].'</td>'
             ."<td>".$rsObra[Direccion]."</td>"
             ."<td>".$rsObra[Estado]."</td>"
-            ."<td>".$rsObra[fechaRecibido]."</td>"
-            ."</tr>";
+            ."<td>".$rsObra[fechaRecibido]."</td>";
+            if ($rsObra[Estado]=='Facturar 0,3' || $rsObra[Estado]=='Ejecutado'){
+                echo '<td class="bs-checkbox "><input data-index="'.$rsObra[idObra].'" name="btSelectItem" type="checkbox" style="outline: 1px solid #1e850e;"></td>';
+            }else{
+                echo '<td></td>';
+            }
+            echo "</tr>";
         }
     }?>
 	</tbody>
