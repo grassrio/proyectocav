@@ -60,6 +60,7 @@ if (isset($_SESSION['usuario'])) {
         var idObraActiva;
         var idLicitacionActiva;
         var cambiosActivos = false;
+        var idZonaLicitacion = "<?php echo $rsLicitacion[idZona]; ?>";
         $(document).ready(function () {
             $("#loading").hide();
             $(document).ajaxStart(function () {
@@ -105,6 +106,34 @@ if (isset($_SESSION['usuario'])) {
             });
             $('#ventanaAgregarObra').on('hidden.bs.modal', function () {
                 $(this).find('form')[0].reset();
+                $('#dSolicitudCotizacion').prop('disabled', 'disabled');
+            });
+
+
+            $("#zonaObra").change(function () {
+                var zonaObraSel = document.getElementById("zonaObra").value;
+                if (zonaObraSel != idZonaLicitacion) {
+                    swal({
+                      title: "La zona de trabajo es distinta a la licitación",
+                      text: "¿Desea utilizar otra cotización para la obra?",
+                      type: "warning",
+                      showCancelButton: true,
+                      confirmButtonColor: "#18a113",
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: "Si",
+                      cancelButtonText: "No",
+                      confirmButtonClass: 'btn btn-success',
+                      cancelButtonClass: 'btn btn-danger',
+                      closeOnConfirm: true,
+                      closeOnCancel: true
+                    },
+                    function(isConfirm){
+                      if (isConfirm) {
+                          $('#dSolicitudCotizacion').prop('disabled', false);
+                      }
+                    });
+
+                }
             });
 
 
@@ -273,7 +302,7 @@ if (isset($_SESSION['usuario'])) {
                                          type: "warning",
                                          confirmButtonText: "OK"
                                      });
-                                 } 
+                                 }
                              });
                          }
                          $('#ventanaAgregarObra').modal('hide');
@@ -705,8 +734,7 @@ if (isset($_SESSION['usuario'])) {
                                 Solicitud de cotización
                             </label>
                             <div class="col-sm-8">
-                                <fieldset disabled>
-                                    <select id="dSolicitudCotizacion" class="form-control">
+                                    <select id="dSolicitudCotizacion" class="form-control" disabled required>
                                         <?php
                                         $idCotizacionLicitacionActiva=$rsCotizacion[idCotizacion];
                                         $sqlCotizaciones = listaCotizacion();
@@ -720,7 +748,6 @@ if (isset($_SESSION['usuario'])) {
                                         ?>
                                         
                                     </select>
-                                </fieldset>
                             </div>
                         </div>
 

@@ -86,6 +86,8 @@ if (isset($_SESSION['usuario'])) {?>
             });
             $('#ventanaAgregarLicitacion').on('hidden.bs.modal', function () {
                 $(this).find('form')[0].reset();
+                $("#cmbZonaLicitacion").html("");
+                $("#collapseZonaLicitacion").collapse('hide');
             });
 
 
@@ -110,7 +112,7 @@ if (isset($_SESSION['usuario'])) {?>
                         });
                     } else {
                         $("#cmbZonaLicitacion").html(response);
-                        $("#collapseZonaLicitacion").collapse();
+                        $("#collapseZonaLicitacion").collapse('show');
                     }
                 });
             });
@@ -292,7 +294,7 @@ if (isset($_SESSION['usuario'])) {?>
                     <form role="form" data-toggle="validator" name="NuevaLicitacion" id="NuevaLicitacion">
                         <div class="form-group row">
                             <label for="Compra" class="col-sm-2 col-form-label">
-                                Nº Licitación:
+                                Nombre:
                             </label>
                             <div class="col-sm-8">
                                 <input name="Codigo" id="Codigo" type="text" class="form-control" data-error="Requerido" placeholder="Nº compra directa" aria-describedby="basic-addon2" required/>
