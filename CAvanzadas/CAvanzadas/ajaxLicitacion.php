@@ -337,7 +337,18 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 </form><br>
                         ';
                         echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
-                        echo '<br><div class="panel panel-info" ><form role="form" data-toggle="validator" id="cambiarEstadoFinalForm" name="cambiarEstadoFinalForm">
+                        $idRubrosql = obtenerRubro($idCotizacion);
+                        $rowcount = mysqli_num_rows($idRubrosql);
+                        $permitirFacturarMinimo=false;
+                        if ($rowcount>0) {
+                            while($rsRubro=mysqli_fetch_array($idRubrosql)){
+                                if ($rsRubro[nombreRubro]=='Vereda'){
+                                    $permitirFacturarMinimo = true;
+                                }
+                            }
+                        }
+                        if ($permitirFacturarMinimo){
+                            echo '<br><div class="panel panel-info" ><form role="form" data-toggle="validator" id="cambiarEstadoFinalForm" name="cambiarEstadoFinalForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
                                 <div class="form-group row">
                                 <label for="cmbEstadoFinal" class="col-sm-2 col-form-label">
@@ -353,6 +364,24 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                             </div>
                             <button type="submit" class="btn btn-success btn-xs">Cambiar estado</button></form><br>
                             </div>';
+                        }else{
+                            echo '<br><div class="panel panel-info" ><form role="form" data-toggle="validator" id="cambiarEstadoFinalForm" name="cambiarEstadoFinalForm">
+                                <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
+                                <div class="form-group row">
+                                <label for="cmbEstadoFinal" class="col-sm-2 col-form-label">
+                                    Estado final:
+                                </label>
+                                <div class="col-sm-10">
+                                    <select name=\'cmbEstadoFinal\' id=\'cmbEstadoFinal\' required>
+                                    <option disabled selected value>Seleccione estado</option>
+                                    <option value=\'Ejecutado\'>Ejecutado</option>"
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-xs">Cambiar estado</button></form><br>
+                            </div>';
+                        }
+
                         break;
                     case 'Informado':
                         echo '<form role="form" data-toggle="validator" id="reclamarObraForm" name="reclamarObraForm">
