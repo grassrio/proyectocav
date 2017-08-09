@@ -91,6 +91,9 @@ class Obra
                     $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
                 }
                 if ($estadoPosterior=='Facturar 0,3'){
+                    mysqli_query($connect,"DELETE FROM MetrajeObra WHERE idObra='".$idObra."' AND MetrajeReal is not NULL") or die ("Error al eliminar metrajes realizados");
+                    mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','Vereda',NULL,'0.3','m2')")
+            or die ("Error al agregar metraje minimo");
                     $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
                     $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
                 }

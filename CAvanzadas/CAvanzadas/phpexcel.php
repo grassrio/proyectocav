@@ -10,7 +10,7 @@ $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto"
 $mes = $meses[date('n')-1];
 
 
-$idObrasInformar = '27,28,30';
+$idObrasInformar = '26,27,28,30';
 $idObrasInformarArray = explode(',',$idObrasInformar);
 
 
@@ -116,21 +116,24 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
     $rubrosDinamicosArray = array();
     $metrajesRealizadosArray = array();
 
+    //Se carga el array con los rubros a mostrar dinamicamente
     foreach($obrasPorCotizacion as $obra){
         $idObra = $obra[idObra];
-        $metrajesRealizadosObra = metrajesRealizados($idObra);
-        while($rsMetrajesRealizadosObra=mysqli_fetch_array($metrajesRealizadosObra)){
-            //Verifica si el rubro ya esta en el array
-            $colocar = true;
-            foreach($rubrosDinamicosArray as $llave => $rubroDinamico){
-                if ($rubroDinamico[NombreRubro]==$rsMetrajesRealizadosObra[NombreRubro]){
-                    $colocar=false;
+        if ($obra[Estado]=="Ejecutado" || $obra[Estado]=="Facturar 0,3"){
+            $metrajesRealizadosObra = metrajesRealizados($idObra);
+            while($rsMetrajesRealizadosObra=mysqli_fetch_array($metrajesRealizadosObra)){
+                //Verifica si el rubro ya esta en el array
+                $colocar = true;
+                foreach($rubrosDinamicosArray as $llave => $rubroDinamico){
+                    if ($rubroDinamico[NombreRubro]==$rsMetrajesRealizadosObra[NombreRubro]){
+                        $colocar=false;
+                    }
                 }
+                if ($colocar==true){
+                    array_push($rubrosDinamicosArray,array('NombreRubro' =>$rsMetrajesRealizadosObra[NombreRubro],'Unidad' =>$rsMetrajesRealizadosObra[Unidad]));
+                }
+                array_push($metrajesRealizadosArray,array('idObra' => $rsMetrajesRealizadosObra[idObra],'NombreRubro' => $rsMetrajesRealizadosObra[NombreRubro],'MetrajeReal' => $rsMetrajesRealizadosObra[MetrajeReal],'Unidad' => $rsMetrajesRealizadosObra[Unidad]));
             }
-            if ($colocar==true){
-                array_push($rubrosDinamicosArray,array('NombreRubro' =>$rsMetrajesRealizadosObra[NombreRubro],'Unidad' =>$rsMetrajesRealizadosObra[Unidad]));
-            }
-            array_push($metrajesRealizadosArray,array('idObra' => $rsMetrajesRealizadosObra[idObra],'NombreRubro' => $rsMetrajesRealizadosObra[NombreRubro],'MetrajeReal' => $rsMetrajesRealizadosObra[MetrajeReal],'Unidad' => $rsMetrajesRealizadosObra[Unidad]));
         }
     }
 
@@ -183,51 +186,54 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
         $filasJuntasCantidades=$colLetraCantidades.($filaHeaderObra-2).':'.$colLetraFinalCantidades.($filaHeaderObra-2);
         $objPHPExcel->getActiveSheet()->mergeCells($filasJuntasCantidades);
         $objPHPExcel->getActiveSheet()->getStyle($filasJuntasCantidades)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        $objPHPExcel->getActiveSheet()->getStyle($filasJuntasCantidades)->applyFromArray($styleBordersArray, True);
         //
 
 
 
-
+        //Va a procesar las obras
         $numeroColumnaObservacion = $cantidadHeadersPreviosDinamico + $cantidadRubrosDinamicos;
         for($i=0;$i<count($obrasPorCotizacion);$i++){
 
             $obra = $obrasPorCotizacion[$i];
-            $idZonaObra = $obra[idZona];
-            $sqlZona = devolverZona($idZonaObra);
-            $rsZona=mysqli_fetch_array($sqlZona);
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0,($filaHeaderObra+$i),utf8_encode($obra[Nombre]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1,($filaHeaderObra+$i),utf8_encode($obra[fechaRecibido]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2,($filaHeaderObra+$i),utf8_encode($obra[Direccion]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3,($filaHeaderObra+$i),utf8_encode($obra[numeroPuerta]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4,($filaHeaderObra+$i),utf8_encode($obra[Esquina1]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5,($filaHeaderObra+$i),utf8_encode($obra[Esquina2]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6,($filaHeaderObra+$i),utf8_encode($rsZona[Nombre]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaHeaderObra+$i),utf8_encode($obra[Estado]));
-            for($h=0;$h<$cantidadHeadersPreviosDinamico;$h++){
-                bordear($h,($filaHeaderObra+$i));
-            }
-
-            //Imprimimos los metrajes realizados de la obra
-            foreach($metrajesRealizadosArray as $llave => $metrajeRealizado){
-                if ($metrajeRealizado[idObra]==$obra[idObra]){
-                    $key=-1;
-                    foreach($rubrosDinamicosArray as $llave => $rubroDinamico){
-                        if ($rubroDinamico[NombreRubro]==$metrajeRealizado[NombreRubro]){
-                            $key=$llave;
-                        }
-                    }
-                    $columnaImprimir = $cantidadHeadersPreviosDinamico+$key;
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnaImprimir,($filaHeaderObra+$i),utf8_encode($metrajeRealizado[MetrajeReal]));
-                    bordear($columnaImprimir,($filaHeaderObra+$i));
+            //Solo procesa las obras si estan en su correcto estado
+            if ($obra[Estado]=="Ejecutado" || $obra[Estado]=="Facturar 0,3"){
+                $idZonaObra = $obra[idZona];
+                $sqlZona = devolverZona($idZonaObra);
+                $rsZona=mysqli_fetch_array($sqlZona);
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0,($filaHeaderObra+$i),utf8_encode($obra[Nombre]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1,($filaHeaderObra+$i),utf8_encode($obra[fechaRecibido]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2,($filaHeaderObra+$i),utf8_encode($obra[Direccion]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3,($filaHeaderObra+$i),utf8_encode($obra[numeroPuerta]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4,($filaHeaderObra+$i),utf8_encode($obra[Esquina1]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5,($filaHeaderObra+$i),utf8_encode($obra[Esquina2]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6,($filaHeaderObra+$i),utf8_encode($rsZona[Nombre]));
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaHeaderObra+$i),utf8_encode($obra[Estado]));
+                for($h=0;$h<$cantidadHeadersPreviosDinamico;$h++){
+                    bordear($h,($filaHeaderObra+$i));
                 }
+
+                //Imprimimos los metrajes realizados de la obra
+                foreach($metrajesRealizadosArray as $llave => $metrajeRealizado){
+                    if ($metrajeRealizado[idObra]==$obra[idObra]){
+                        $key=-1;
+                        foreach($rubrosDinamicosArray as $llave => $rubroDinamico){
+                            if ($rubroDinamico[NombreRubro]==$metrajeRealizado[NombreRubro]){
+                                $key=$llave;
+                            }
+                        }
+                        $columnaImprimir = $cantidadHeadersPreviosDinamico+$key;
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnaImprimir,($filaHeaderObra+$i),utf8_encode($metrajeRealizado[MetrajeReal]));
+                        bordear($columnaImprimir,($filaHeaderObra+$i));
+                    }
+                }
+
+
+
+                //-------
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numeroColumnaObservacion,($filaHeaderObra+$i),utf8_encode($obra[Observacion]));
+                bordear($numeroColumnaObservacion,($filaHeaderObra+$i));
             }
-
-
-
-            //-------
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numeroColumnaObservacion,($filaHeaderObra+$i),utf8_encode($obra[Observacion]));
-            bordear($numeroColumnaObservacion,($filaHeaderObra+$i));
-
         }//Termina de imprimir las obras y metrajes ejecutados
 
         //Se imprimen los totales
@@ -271,10 +277,13 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
                             $key=$llave;
                         }
                     }
-                    $columnaImprimir = $cantidadHeadersPreviosDinamico+$key;
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnaImprimir,($filaParaTotales+1),$rsRubro[Precio]);
-                    pintar($columnaImprimir,($filaParaTotales+1),'79d6ae');
-                    bordear($columnaImprimir,($filaParaTotales+1));
+                    if ($key!=-1){
+                        $columnaImprimir = $cantidadHeadersPreviosDinamico+$key;
+                        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnaImprimir,($filaParaTotales+1),$rsRubro[Precio]);
+                        pintar($columnaImprimir,($filaParaTotales+1),'79d6ae');
+                        bordear($columnaImprimir,($filaParaTotales+1));
+                    }
+
                 }
             }
 
