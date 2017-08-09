@@ -403,6 +403,8 @@ if (isset($_SESSION['usuario'])) {
 
         }
 
+
+
         function asignarCuadrilla($idObra) {
             var idObra = $idObra
             var cmbCuadrilla = $('#cmbCuadrilla').val();
@@ -468,6 +470,24 @@ if (isset($_SESSION['usuario'])) {
                     cargaMetrajesRealizados(idObra);
 
                 });
+        }
+
+        function informar() {
+            var obrasInformarArray = new Array();
+            $('input[name="btSelectItem"]:checked').each(function () {
+                obrasInformarArray.push($(this).data('index'));
+            });
+            var obrasInformar = "";
+            for (var i = 0; i < obrasInformarArray.length; i++) {
+                if (i==0){
+                    obrasInformar = obrasInformarArray[i];
+                } else if (i > 0){
+                    obrasInformar = obrasInformar + "," + obrasInformarArray[i];
+                }
+            }
+            if (obrasInformar!=""){
+                alert(obrasInformar);
+            }
         }
 
         function cargaMetrajesEstimados($idObra) {
@@ -933,6 +953,13 @@ if (isset($_SESSION['usuario'])) {
     }?>
 	</tbody>
 </table>
+        <span class="form-control-static pull-right">
+        <div class="bs-glyphicons"> <ul class="bs-glyphicons-list">
+            <button onclick="informar()" class="btn btn-success btn-xs">
+            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <span class="glyphicon-class">Informar cliente</span>
+            </button>
+            </ul> </div> 
+        </span>
     </div>
 </body>
 </html>
