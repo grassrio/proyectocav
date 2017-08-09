@@ -1,19 +1,6 @@
 <?php
 require 'Clases/Zona.php';
 
-/*function devolverZona(){
-    require('config.php');
-    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
-    if ($connect)
-    {
-        mysqli_select_db($connect,$mysqldb);
-        $zona = new Zona();
-        $sql = $zona->ListaZona($connect);
-        return $sql;
-    }
-    return $sql;
-}*/
-
 function devolverZona($idZona){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
@@ -22,9 +9,9 @@ function devolverZona($idZona){
         mysqli_select_db($connect,$mysqldb);
         $zona = new Zona();
         $sql = $zona->DevolverZona($connect,$idZona);
+        mysqli_close($connect);
         return $sql;
     }
-    mysqli_close($connect);
     return $sql;
 }
 

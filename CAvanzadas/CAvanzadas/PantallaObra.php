@@ -632,7 +632,7 @@ if (isset($_SESSION['usuario'])) {
                                         while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
                                         {
                                         echo "
-                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]."</option>";
+                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]." ".$rsRubrosCotizacion[Unidad]."</option>";
                                         }
                                         ?>
                                     </select>
@@ -643,7 +643,7 @@ if (isset($_SESSION['usuario'])) {
                                     Metraje
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="number" min="1" id="cantidadMetraje" data-error="Requerido" class="form-control" required>
+                                    <input type="number" min="1" step="0.01" id="cantidadMetraje" data-error="Requerido" class="form-control" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -685,7 +685,7 @@ if (isset($_SESSION['usuario'])) {
     while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
     {
         echo "
-                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]."</option>";
+                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]." ".$rsRubrosCotizacion[Unidad]."</option>";
     }
                                         ?>
                                     </select>
@@ -696,7 +696,7 @@ if (isset($_SESSION['usuario'])) {
                                     Metraje realizado
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="number" min="1" id="cantidadMetrajeRealizado" data-error="Requerido" class="form-control" required>
+                                    <input type="number" min="1" step="0.01" id="cantidadMetrajeRealizado" data-error="Requerido" class="form-control" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                             </div>
@@ -905,8 +905,8 @@ if (isset($_SESSION['usuario'])) {
         $presupuestoActual=$rsPresupuestoLicitacion[Debe] - $rsPresupuestoLicitacion[Haber];
 ?>
         Estado: <?php echo $rsLicitacion[estado]; ?>
-        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: <?php echo $rsPresupuestoLicitacion[PresupuestoTotal]; ?>&nbsp;]
-        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto disponible: <?php echo $presupuestoActual; ?>&nbsp;]
+        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $<?php echo $rsPresupuestoLicitacion[PresupuestoTotal]; ?>&nbsp;]
+        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto disponible: $<?php echo $presupuestoActual; ?>&nbsp;]
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -956,7 +956,7 @@ if (isset($_SESSION['usuario'])) {
         <span class="form-control-static pull-right">
         <div class="bs-glyphicons"> <ul class="bs-glyphicons-list">
             <button onclick="informar()" class="btn btn-success btn-xs">
-            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <span class="glyphicon-class">Informar cliente</span>
+            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <span class="glyphicon-class">Elaborar informe</span>
             </button>
             </ul> </div> 
         </span>

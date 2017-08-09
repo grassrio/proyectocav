@@ -1,15 +1,13 @@
 <?php
-/** Incluir la libreria PHPExcel */
 require_once 'includes/PHPExcel.php';
 require 'includes/ConsultasObra.php';
+require 'includes/ConsultasCotizacion.php';
+require 'includes/ConsultaZonas.php';
 
-$nombreLicitacion = 'SC 1000';
 $nombreInforme = 'VE 075';
 $fecha = date("d/m/Y");
 $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 $mes = $meses[date('n')-1];
-$zona = 'ZONA1';
-
 
 
 $idObrasInformar = '27,28,30';
@@ -27,8 +25,12 @@ function pintar($columna,$fila,$color){
 
 function bordear($columna,$fila){
     global $objPHPExcel;
-
-    $objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($columna,$fila)->getBorders()->getBottom()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+    $styleBordersArray = array(
+    'borders' => array(
+    'allborders' => array(
+    'style' => PHPExcel_Style_Border::BORDER_THIN))
+    );
+    $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($columna,$fila)->getStyle()->applyFromArray($styleBordersArray, True);
 }
 
 // Renombrar Hoja
@@ -47,33 +49,26 @@ $objDrawing->setOffsetX(5);
 $objDrawing->setOffsetY(5);
 $objDrawing->setWorksheet($objPHPExcel->getActiveSheet());
 
-
-//Imprime la primera tabla
+//Imprime el titulo y subtitulo
 $objPHPExcel->setActiveSheetIndex(0)
 ->setCellValueByColumnAndRow(5,2, 'COMUNICADO DE CUMPLIDOS')
-->setCellValueByColumnAndRow(5,4, 'Veredas')
-->setCellValueByColumnAndRow(0,8, utf8_encode('CD Nº'))
-->setCellValueByColumnAndRow(1,8, 'Listado')
-->setCellValueByColumnAndRow(2,8, 'Mes')
-->setCellValueByColumnAndRow(3,8, 'Fecha')
-->setCellValueByColumnAndRow(0,9, $nombreLicitacion)
-->setCellValueByColumnAndRow(1,9, $nombreInforme)
-->setCellValueByColumnAndRow(2,9, $mes)
-->setCellValueByColumnAndRow(3,9, $fecha)
+->setCellValueByColumnAndRow(5,3, 'Veredas')
 ;
-pintar(0,8,'74CEA7');
-pintar(1,8,'74CEA7');
-pintar(2,8,'74CEA7');
-pintar(3,8,'74CEA7');
 
 
 
+$styleBordersArray = array(
+'borders' => array(
+'allborders' => array(
+'style' => PHPExcel_Style_Border::BORDER_THIN))
+);
 
 
 //Array de idCotizaciones distintas con obras a procesar
 $obrasInformarArray = array();
 //Comienzo de donde imprime el header
-$filaHeaderObra = 11;
+$filaHeaderInforme = 7;
+$filaHeaderObra = 10;
 
 
 foreach($idObrasInformarArray as $llave => $idObra)
@@ -89,6 +84,33 @@ foreach($idObrasInformarArray as $llave => $idObra)
 
 //obrasInformarArray[idCotizacion] ==> array con obras de esa cotizacion
 foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
+    //Para las obras de cada cotizacion distinta
+    $sqlCotizacion = devolverCotizacion($idCotizacion);
+    $rsCotizacion=mysqli_fetch_array($sqlCotizacion);
+    $nombreLicitacion = $rsCotizacion[Nombre];
+    //Imprime la primer tabla
+    $objPHPExcel->setActiveSheetIndex(0)
+    ->setCellValueByColumnAndRow(0,$filaHeaderInforme, utf8_encode('CD Nº'))
+    ->setCellValueByColumnAndRow(1,$filaHeaderInforme, 'Listado')
+    ->setCellValueByColumnAndRow(2,$filaHeaderInforme, 'Mes')
+    ->setCellValueByColumnAndRow(3,$filaHeaderInforme, 'Fecha')
+    ->setCellValueByColumnAndRow(0,($filaHeaderInforme+1), $nombreLicitacion)
+    ->setCellValueByColumnAndRow(1,($filaHeaderInforme+1), $nombreInforme)
+    ->setCellValueByColumnAndRow(2,($filaHeaderInforme+1), $mes)
+    ->setCellValueByColumnAndRow(3,($filaHeaderInforme+1), $fecha)
+    ;
+    bordear(0,$filaHeaderInforme);
+    bordear(1,$filaHeaderInforme);
+    bordear(2,$filaHeaderInforme);
+    bordear(3,$filaHeaderInforme);
+    pintar(0,$filaHeaderInforme,'74CEA7');
+    pintar(1,$filaHeaderInforme,'74CEA7');
+    pintar(2,$filaHeaderInforme,'74CEA7');
+    pintar(3,$filaHeaderInforme,'74CEA7');
+    bordear(0,($filaHeaderInforme+1));
+    bordear(1,($filaHeaderInforme+1));
+    bordear(2,($filaHeaderInforme+1));
+    bordear(3,($filaHeaderInforme+1));
     //vamos a procesar todas las obras de cada cotizacion
 
     $rubrosDinamicosArray = array();
@@ -126,11 +148,17 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
 
         //Coloco los headers del array dinamico
         foreach($rubrosDinamicosArray as $llave => $rubroDinamico){
-            array_push($headerObras,array('Header' => $rubroDinamico[NombreRubro],'Unidad' => $rubroDinamico[Unidad]));
+            if ($rubroDinamico[Unidad]==""){
+                array_push($headerObras,array('Header' => $rubroDinamico[NombreRubro],'Unidad' => "/u"));
+            }else{
+                array_push($headerObras,array('Header' => $rubroDinamico[NombreRubro],'Unidad' => $rubroDinamico[Unidad]));
+            }
+
         }
         //-------------------------------------
         array_push($headerObras,array('Header' => "Observaciones",'Unidad' => ""));
 
+        //Imprimo los headsrsObra con rubros dinamicos
         $i=0;
         foreach($headerObras as $llave => $header){
             $columna = $i;
@@ -138,6 +166,7 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
             $unidad=$header[Unidad];
             if ($unidad!=""){
                 $titulo = $titulo." ".$unidad ;
+                $objPHPExcel->getActiveSheet()->getStyleByColumnAndRow($columna,($filaHeaderObra-1))->getAlignment()->setTextRotation(90);
             }
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columna,($filaHeaderObra-1),utf8_encode($titulo));
             $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn($columna)->setAutoSize(true);
@@ -145,21 +174,39 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
             bordear($columna,($filaHeaderObra-1));
             $i++;
         }
-
-
+        //Imprimo etiqueta cantidades
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($cantidadHeadersPreviosDinamico,($filaHeaderObra-2), 'Cantidades');
         $cantidadRubrosDinamicos = count($rubrosDinamicosArray);
+        $colLetraCantidades=chr(64 + ($cantidadHeadersPreviosDinamico+1));
+        $colLetraFinalCantidades=chr(64 + ($cantidadHeadersPreviosDinamico+$cantidadRubrosDinamicos));
+        pintar($cantidadHeadersPreviosDinamico,($filaHeaderObra-2),'74CEA7');
+        $filasJuntasCantidades=$colLetraCantidades.($filaHeaderObra-2).':'.$colLetraFinalCantidades.($filaHeaderObra-2);
+        $objPHPExcel->getActiveSheet()->mergeCells($filasJuntasCantidades);
+        $objPHPExcel->getActiveSheet()->getStyle($filasJuntasCantidades)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+        //
+
+
+
+
         $numeroColumnaObservacion = $cantidadHeadersPreviosDinamico + $cantidadRubrosDinamicos;
         for($i=0;$i<count($obrasPorCotizacion);$i++){
 
             $obra = $obrasPorCotizacion[$i];
+            $idZonaObra = $obra[idZona];
+            $sqlZona = devolverZona($idZonaObra);
+            $rsZona=mysqli_fetch_array($sqlZona);
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0,($filaHeaderObra+$i),utf8_encode($obra[Nombre]));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1,($filaHeaderObra+$i),utf8_encode($obra[fechaRecibido]));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2,($filaHeaderObra+$i),utf8_encode($obra[Direccion]));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3,($filaHeaderObra+$i),utf8_encode($obra[numeroPuerta]));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4,($filaHeaderObra+$i),utf8_encode($obra[Esquina1]));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5,($filaHeaderObra+$i),utf8_encode($obra[Esquina2]));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6,($filaHeaderObra+$i),utf8_encode("zonita"));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6,($filaHeaderObra+$i),utf8_encode($rsZona[Nombre]));
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaHeaderObra+$i),utf8_encode($obra[Estado]));
+            for($h=0;$h<$cantidadHeadersPreviosDinamico;$h++){
+                bordear($h,($filaHeaderObra+$i));
+            }
+
             //Imprimimos los metrajes realizados de la obra
             foreach($metrajesRealizadosArray as $llave => $metrajeRealizado){
                 if ($metrajeRealizado[idObra]==$obra[idObra]){
@@ -171,6 +218,7 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
                     }
                     $columnaImprimir = $cantidadHeadersPreviosDinamico+$key;
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnaImprimir,($filaHeaderObra+$i),utf8_encode($metrajeRealizado[MetrajeReal]));
+                    bordear($columnaImprimir,($filaHeaderObra+$i));
                 }
             }
 
@@ -178,26 +226,83 @@ foreach($obrasInformarArray as $idCotizacion=>$obrasPorCotizacion){
 
             //-------
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($numeroColumnaObservacion,($filaHeaderObra+$i),utf8_encode($obra[Observacion]));
+            bordear($numeroColumnaObservacion,($filaHeaderObra+$i));
 
         }//Termina de imprimir las obras y metrajes ejecutados
 
-        $filaParaTotales = $filaHeaderObra + count($obrasPorCotizacion) + 2;
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaParaTotales), 'Subtotal');
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaParaTotales+1), 'Precio unitario');
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaParaTotales+2), 'Importe');
-        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7,($filaParaTotales+3), 'Total');
+        //Se imprimen los totales
+        $filaParaTotales = $filaHeaderObra + count($obrasPorCotizacion) + 1;
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(($cantidadHeadersPreviosDinamico-1),($filaParaTotales), 'Subtotal $');
+        pintar(($cantidadHeadersPreviosDinamico-1),$filaParaTotales,'CEA774');
+        bordear(($cantidadHeadersPreviosDinamico-1),$filaParaTotales);
 
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+1), 'Precio unitario $/u');
+        pintar(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+1),'79d6ae');
+        bordear(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+1));
+
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+2), 'Importe $');
+        pintar(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+2),'CEA774');
+        bordear(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+2));
+
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+3), 'Total $');
+        pintar(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+3),'47b283');
+        bordear(($cantidadHeadersPreviosDinamico-1),($filaParaTotales+3));
+        //Imprime la formula para sumar los subtotales
         for($i=($cantidadHeadersPreviosDinamico+1);$i<=($cantidadHeadersPreviosDinamico+$cantidadRubrosDinamicos);$i++){
             $colLetra=chr(64 + $i);
             $expresionSuma='=sum('.$colLetra.$filaHeaderObra.':'.$colLetra.($filaHeaderObra + count($obrasPorCotizacion) - 1).')';
 
             $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(($i-1),$filaParaTotales, $expresionSuma);
             pintar(($i-1),$filaParaTotales,'CEA774');
+            bordear(($i-1),$filaParaTotales);
         }
+
+        //Imprime los precios unitarios del rubro segun la cotizacion de estas obras
+            $idRubrosql = obtenerRubro($idCotizacion);
+            $rowcount = mysqli_num_rows($idRubrosql);
+            if ($rowcount>0) {
+                while($rsRubro=mysqli_fetch_array($idRubrosql))
+                {
+                    //Aca se tiene cada Rubro cotizado para estas obras
+                    //Busco el numero de columna dinamico donde se importa el rubro
+                    $key=-1;
+                    foreach($rubrosDinamicosArray as $llave => $rubroDinamico){
+                        if ($rubroDinamico[NombreRubro]==$rsRubro[nombreRubro]){
+                            $key=$llave;
+                        }
+                    }
+                    $columnaImprimir = $cantidadHeadersPreviosDinamico+$key;
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($columnaImprimir,($filaParaTotales+1),$rsRubro[Precio]);
+                    pintar($columnaImprimir,($filaParaTotales+1),'79d6ae');
+                    bordear($columnaImprimir,($filaParaTotales+1));
+                }
+            }
+
+        //Imprime la formula para calcular el importe
+            for($i=($cantidadHeadersPreviosDinamico+1);$i<=($cantidadHeadersPreviosDinamico+$cantidadRubrosDinamicos);$i++){
+                $colLetra=chr(64 + $i);
+                $expresionMultiplicacion='=('.$colLetra.$filaParaTotales.'*'.$colLetra.($filaParaTotales+1).')';
+                $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(($i-1),($filaParaTotales+2), $expresionMultiplicacion);
+                pintar(($i-1),($filaParaTotales+2),'CEA774');
+                bordear(($i-1),($filaParaTotales+2));
+            }
+
+        //Imprime el resultado total
+            pintar($cantidadHeadersPreviosDinamico,($filaParaTotales+3),'47b283');
+            $colLetra=chr(64 + ($cantidadHeadersPreviosDinamico+1));
+            $colLetraFinal=chr(64 + ($cantidadHeadersPreviosDinamico+$cantidadRubrosDinamicos));
+            $expresionSumaTotal='=sum('.$colLetra.($filaParaTotales+2).':'.$colLetraFinal.($filaParaTotales+2).')';
+            $filasJuntasTotal=$colLetra.($filaParaTotales+3).':'.$colLetraFinal.($filaParaTotales+3);
+            $objPHPExcel->getActiveSheet()->mergeCells($filasJuntasTotal);
+            $objPHPExcel->getActiveSheet()->getStyle($filasJuntasTotal)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($cantidadHeadersPreviosDinamico,($filaParaTotales+3), $expresionSumaTotal);
+
+            $objPHPExcel->getActiveSheet()->getStyle($filasJuntasTotal)->applyFromArray($styleBordersArray, True);
 
 
         //Terminan las obras de este idCotizacion y modifica el comienzo del header para otras cotizaciones
-        $filaHeaderObra = 25;
+            $filaHeaderInforme = ($filaParaTotales+5);
+            $filaHeaderObra = ($filaHeaderInforme+3);
 
 }
 

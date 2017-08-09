@@ -12,15 +12,31 @@ class Obra
     }
 
     public function agregarMetrajeEstimado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
-        $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','".$cantidadMetraje."','NULL','".$unidadRubro."')")
+        $existeMetraje = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."' AND NombreRubro='".$nombreRubro."' AND MetrajeEstimado is not null")
+            or die ("Error al consultar metraje");
+        $rowcount = mysqli_num_rows($existeMetraje);
+        if ($rowcount==0){
+            $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','".$cantidadMetraje."',NULL,'".$unidadRubro."')")
             or die ("Error al agregar metraje");
-        return $sql;
+            return $sql;
+        }else{
+            return "Error, el metraje ya existe";
+        }
+
     }
 
     public function agregarMetrajeRealizado($connect,$idObra,$nombreRubro,$unidadRubro,$cantidadMetraje){
-        $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."','NULL','".$cantidadMetraje."','".$unidadRubro."')")
+        $existeMetraje = mysqli_query($connect,"SELECT * FROM MetrajeObra WHERE idObra='".$idObra."' AND NombreRubro='".$nombreRubro."' AND MetrajeReal is not null")
+            or die ("Error al consultar metraje");
+        $rowcount = mysqli_num_rows($existeMetraje);
+        if ($rowcount==0){
+            $sql = mysqli_query($connect,"INSERT INTO MetrajeObra (idObra,NombreRubro,MetrajeEstimado,MetrajeReal,Unidad) VALUES ('".$idObra."','".$nombreRubro."',NULL,'".$cantidadMetraje."','".$unidadRubro."')")
             or die ("Error al agregar metraje");
-        return $sql;
+            return $sql;
+        }else{
+            return "Error, el metraje ya existe";
+        }
+
     }
 
     public function eliminarMetrajeEstimado($connect,$idMetrajeEstimado){

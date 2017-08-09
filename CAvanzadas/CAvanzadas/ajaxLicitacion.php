@@ -337,7 +337,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                                 </form><br>
                         ';
                         echo '<button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
-                        echo '<div class="panel panel-info" ><form role="form" data-toggle="validator" id="cambiarEstadoFinalForm" name="cambiarEstadoFinalForm">
+                        echo '<br><div class="panel panel-info" ><form role="form" data-toggle="validator" id="cambiarEstadoFinalForm" name="cambiarEstadoFinalForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
                                 <div class="form-group row">
                                 <label for="cmbEstadoFinal" class="col-sm-2 col-form-label">
