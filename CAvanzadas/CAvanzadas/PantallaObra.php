@@ -1,7 +1,7 @@
 <?php
 require('includes/loginheader.php');
 session_start();
-if (isset($_SESSION['usuario'])) {
+if (isset($_SESSION['usuario'])&&($_SESSION['usuario'] <> 2)) {
     require 'includes/ConsultasLicitacion.php';
     require 'includes/ConsultasCotizacion.php';
     require 'includes/ConsultasCliente.php';

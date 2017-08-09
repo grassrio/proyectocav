@@ -3,6 +3,7 @@ require('includes/loginheader.php');
 session_start();
 require 'includes/ConsultasBaliza.php';
 require 'includes/ConsultasObra.php';
+if (isset($_SESSION['usuario'])&&($_SESSION['usuario'] <> 2)) {
 $sql = DevolverBalizasProximoVencimiento();
 $rowcount = mysqli_num_rows($sql);
 if ($rowcount>0) {
@@ -110,5 +111,6 @@ if ($rowcount>0) {
     </div>
 </body>
 </html>
-<?php  }?>
+<?php }
+}?>
 

@@ -1,8 +1,7 @@
 <?php
 require('includes/loginheader.php');
 session_start();
-$tipoUsuario = $_SESSION['tipoUsuario'];
-if (isset($_SESSION['usuario'])) {?>
+if (isset($_SESSION['usuario'])&&($_SESSION['usuario'] <> 2)) {?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -343,12 +342,8 @@ if (isset($_SESSION['usuario'])) {?>
                 <h3 class="panel-title">Rubros</h3>
             </div>
         </div>
-        <?php
-    if($tipoUsuario == 1){
-        echo'<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarRubro" data-toggle="modal">
-                            <span class="glyphicon glyphicon-plus"></span>Agregar Rubro</button>';
-    }
-        ?>
+<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarRubro" data-toggle="modal">
+                            <span class="glyphicon glyphicon-plus"></span>Agregar Rubro</button>
         <!-- Table -->
         <table class="table">
             <tr>
@@ -365,8 +360,7 @@ if (isset($_SESSION['usuario'])) {?>
             if ($rowcount>0) {
                 while($rs=mysqli_fetch_array($sql))
                 {
-                    if ($tipoUsuario == 1)
-                    {
+
                         echo "<tr>"
                         ."<td>".$rs[1]."</td>"
                         ."<td>".$rs[2]."</td>"
@@ -376,14 +370,7 @@ if (isset($_SESSION['usuario'])) {?>
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 </button>'."</td>"
                         ."</tr>";
-                    }else
-                    {
-                        echo "<tr>"
-                        ."<td>".$rs[1]."</td>"
-                        ."<td>".$rs[2]."</td>"
-                        ."<td>".$rs[3]."</td>"
-                        ."</tr>";
-                    }
+
 
                 }
             }

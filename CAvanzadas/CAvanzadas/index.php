@@ -2,7 +2,10 @@
 require('includes/loginheader.php');
 $fechaActual=date("Y-m-d");
 session_start();
-if (isset($_SESSION['usuario'])) {?>
+$tipoUsuario = $_SESSION['tipoUsuario'];
+if (isset($_SESSION['usuario'])) {
+    if ($tipoUsuario<>2){
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -266,5 +269,7 @@ if (isset($_SESSION['usuario'])) {?>
 
 </body>
 </html>
-<?php } ?>
+<?php 
+    }
+    } ?>
 

@@ -3,7 +3,6 @@ require('includes/loginheader.php');
 require 'includes/ConsultasCuadrilla.php';
 require 'includes/ConsultasPersonal.php';
 session_start();
-$tipoUsuario = $_SESSION['tipoUsuario'];
 if (isset($_SESSION['usuario'])) {?>
     <!DOCTYPE html>
     <html lang="en">
@@ -433,12 +432,9 @@ if (isset($_SESSION['usuario'])) {?>
                     <h3 class="panel-title">Cuadrillas</h3>
                 </div>
             </div>
-            <?php
-                if($tipoUsuario == 1){
-                    echo'<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCuadrilla" data-toggle="modal">
-                                                    <span class="glyphicon glyphicon-plus"></span>Agregar Cuadrilla</button>';
-                }
-            ?>
+
+                    <button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCuadrilla" data-toggle="modal">
+                                                    <span class="glyphicon glyphicon-plus"></span>Agregar Cuadrilla</button>
             <!-- Table -->
             <table class="table">
                 <tr>
@@ -452,8 +448,7 @@ if (isset($_SESSION['usuario'])) {?>
         if ($rowcount>0) {
             while($rs=mysqli_fetch_array($sql))
             {
-                if($tipoUsuario == 1)
-                {
+
                     echo "<tr>"
                     ."<td>".'<a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCuadrilla">'.$rs[1].'</a>'."</td>"
                     ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCuadrilla" data-toggle="modal">
@@ -462,13 +457,8 @@ if (isset($_SESSION['usuario'])) {?>
     </button>'
                     ."</td>"
                     ."</tr>";
-                }
-                else
-                {
-                    echo "<tr>"
-                    ."<td>".$rs[1]."</td>"
-                    ."</tr>";
-                }
+                
+
 
             }
         }
