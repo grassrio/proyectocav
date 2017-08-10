@@ -24,6 +24,11 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'cambiarEstado' :
             cambiarEstado($_POST['idObra'],$_POST['estado']);
             break;
+        case 'asignarAmpliacion' :
+            $idLicitacion = $_POST['idLicitacion'];
+            $idLicitacionAsignar = $_POST['idLicitacionAsignar'];
+            asignarAmpliacion($idLicitacion,$idLicitacionAsignar);
+            break;
         case 'fotosObra' :
             require('includes/config.php');
             $idObra = $_POST['idObra'];
@@ -384,6 +389,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 
                         break;
                     case 'Informado':
+                        echo 'Nº Informe: '.$rsObra[nombreInforme].'<br>';
+                        echo 'Fecha informado: '.$rsObra[fechaInformado];
                         echo '<form role="form" data-toggle="validator" id="reclamarObraForm" name="reclamarObraForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'"><button type="submit" class="btn btn-success btn-xs">Reclamar obra</button></form>';
                         break;

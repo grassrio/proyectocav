@@ -359,6 +359,7 @@
     <None Include="Properties\PublishProfiles\Bythe.pubxml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="img\imgPrincipal.jpg" />
     <Content Include="includes\PHPExcel\Calculation\functionlist.txt" />
     <Content Include="includes\PHPExcel\Chart\Renderer\PHP Charting Libraries.txt" />
     <Content Include="includes\PHPExcel\locale\bg\config" />

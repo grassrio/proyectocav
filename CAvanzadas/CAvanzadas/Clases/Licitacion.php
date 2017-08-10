@@ -43,7 +43,13 @@ class Licitacion
     public function ObtenerLicitacion($connect,$idLicitacion)
     {
         $sql = mysqli_query($connect,"SELECT * FROM Licitacion WHERE idLicitacion='".$idLicitacion."'")
-         or die ("Error al obtener la Licitacion");
+         or die ("Error al obtener Licitacion");
+        return $sql;
+    }
+
+    public function obtenerLicitacionCliente($connect,$idCliente){
+        $sql = mysqli_query($connect,"SELECT * FROM Licitacion WHERE idCliente='".$idCliente."'")
+         or die ("Error al obtener licitaciones");
         return $sql;
     }
 }

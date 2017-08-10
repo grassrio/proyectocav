@@ -44,12 +44,17 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
             $('input[type="text"][placeholder="Search"]').attr('placeholder', 'Búsqueda rápida');
         });
 
+        function resizeIframe(obj) {
+            obj.style.height = (obj.contentWindow.document.body.scrollHeight*1.3) + 'px';
+        }
+
         function cargaIframe(idLicitacion) {
             $("#loading").show();
             mostrarocultar('ocultar', 'divLicitaciones');
             mostrarocultar('mostrar', 'btnAtras');
             document.getElementById("iframeObras").src = "PantallaObra.php?idLicitacion=" + idLicitacion;
             document.getElementById("iframeObras").style.visibility = "visible";
+            iframeObras.style.height = '0px';
         }
 
         function onMyFrameLoad(iframe) {
@@ -156,13 +161,13 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                         window.location.reload();
                     }
                 });
-                
+
         }
 
 
-            
- 
-        
+
+
+
 
         $("#btnModificarLicitacion").click(function () {
             $('#btnModificarLicitacion').prop('disabled', true);
@@ -449,10 +454,10 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
 <br>
 <button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarLicitacion" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar licitación</button>
 
-<table id="table" 
+<table id="table"
 			 data-toggle="table"
 			 data-search="true"
-			 data-filter-control="true" 
+			 data-filter-control="true"
 			 data-show-export="true"
 			 data-click-to-select="true">
 	<thead>
@@ -487,12 +492,17 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
 </table>
 </div>
 </div>
+    <br>
     <button id="btnAtras" type="button" class="btn-xs btn-default" onclick="mostrarocultar('ocultar', 'iframeObras'); mostrarocultar('ocultar', 'btnAtras'); mostrarocultar('mostrar', 'divLicitaciones');">
                             <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-                        </button>
-    <iframe id="iframeObras" onload="onMyFrameLoad(this), this.style.height = ((this.contentDocument.body.scrollHeight)*1.5) + 'px';" style="width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
+                        </button><br>
+    <iframe id="iframeObras" onload="onMyFrameLoad(this), resizeIframe(this)" style="width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
+    <br>
+    <br>
+    <br>
+    <br>
     </body>
 
 </html>

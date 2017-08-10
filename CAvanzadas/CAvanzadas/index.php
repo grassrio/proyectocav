@@ -8,36 +8,50 @@ if (isset($_SESSION['usuario'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CAvanzadas</title>
-    <link href="css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
-    <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
+    
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>CAvanzadas</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+        <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 
 
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/sweetalert.min.js"></script>
-    <script src="js/validator.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/sweetalert.min.js"></script>
+        <script src="js/validator.min.js"></script>
 
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/editable/bootstrap-table-editable.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/export/bootstrap-table-export.js"></script>
-    <script src="http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/editable/bootstrap-table-editable.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/export/bootstrap-table-export.js"></script>
+        <script src="http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
 
 
-    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css" />
-    <link rel="stylesheet" type="text/css" href="http://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css" />
+        <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css" />
+        <link rel="stylesheet" type="text/css" href="http://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css" />
 
+    <style>
+        body {
+            background-image: url(img/imgPrincipal.jpg);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            -moz-background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+        }
+    </style>
 
 </head>
 <body>
-    
+
 
     <script type="text/javascript">
 
@@ -69,7 +83,7 @@ if (isset($_SESSION['usuario'])) {
             document.getElementById("iframeContenido").src = "";
             $("#contenido").show();
             $("#subcontenido").hide();
-            jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { consultaBalizasProximoVencimiento(); jQuery('#main').animate({ opacity: 1 }, 200) }) });           
+            jQuery('#main').animate({ opacity: 0 }, 200, function () { jQuery('#contenido').load(script + ".php", function () { consultaBalizasProximoVencimiento(); jQuery('#main').animate({ opacity: 1 }, 200) }) });
         }
 
 
@@ -80,6 +94,7 @@ if (isset($_SESSION['usuario'])) {
             document.getElementById("iframeContenido").src = script + ".php";
             document.getElementById("iframeContenido").style.visibility = "visible";
         }
+
 
         function onMyFrameLoad(iframe) {
             $("#loading").hide();
@@ -168,103 +183,101 @@ if (isset($_SESSION['usuario'])) {
     <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
         <img src="img/Loading.gif" />
     </div>
-    
+
 
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">Construcciones Avanzadas SRL  -  Pavimentación y veredas</h3>
         </div>
-     </div>
+    </div>
 
-        <nav class="navbar navbar-toolbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
+    <nav class="navbar navbar-toolbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
 
-                    <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">
-                        <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="JavaScript:cargaIframe('PantallaLicitacion')">Licitaciones</a>
+                    </li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <a href="JavaScript:carga('PantallaCliente')">Clientes</a>
+                    </li>
+
+                    <li>
+                        <a href="JavaScript:carga('PantallaRubro')">Rubros</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:carga('PantallaCotizacion')">Cotización</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:carga('PantallaPersonal')">Personal</a>
+                    </li>
+                    <li>
+                        <a href="JavaScript:carga('PantallaCuadrilla')">Cuadrilla</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+
+
+            <ul class="nav navbar-nav">
+                <li role="presentation">
+                    <a href="JavaScript:carga('PantallaBaliza')">
+                        Alertas
+                        <span id="lblCantidadBalizaVencimiento" class="badge"></span>
+                    </a>
+                </li>
+            </ul>
+
+            <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
+                <div class="btn-group pull-right">
+                    <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="glyphicon glyphicon-cog"></i>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li>
-                            <a href="JavaScript:cargaIframe('PantallaLicitacion')">Licitaciones</a>
+                        <li class="dropdown-header">
+                            <?php echo $_SESSION['usuario']; ?>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="JavaScript:carga('PantallaCliente')">Clientes</a>
+                            <a href="JavaScript:carga('PantallaUsuario')">
+                                <i class="glyphicon glyphicon-user"></i>Usuarios
+                            </a>
                         </li>
-
+                        <li role="separator" class="divider"></li>
                         <li>
-                            <a href="JavaScript:carga('PantallaRubro')">Rubros</a>
+                            <a href="#" data-toggle="modal" data-target-id="1" data-target-nombre="1" data-target="#ventanaSeleccionaFecha">Productividad</a>
                         </li>
+                        <li role="separator" class="divider"></li>
                         <li>
-                            <a href="JavaScript:carga('PantallaCotizacion')">Cotización</a>
-                        </li>
-                        <li>
-                            <a href="JavaScript:carga('PantallaPersonal')">Personal</a>
-                        </li>
-                        <li>
-                            <a href="JavaScript:carga('PantallaCuadrilla')">Cuadrilla</a>
+                            <a href="includes/logout.php">
+                                <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
+                            </a>
                         </li>
                     </ul>
                 </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-
-
-                <ul class="nav navbar-nav">
-                    <li role="presentation">
-                        <a href="JavaScript:carga('PantallaBaliza')">
-                            Alertas
-                            <span id="lblCantidadBalizaVencimiento" class="badge">
-                                
-                            </span>
-                        </a>
-                    </li>
-                </ul>
- 
-                    <div class="collapse navbar-collapse bs-example-toolbar-collapse-1">
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="glyphicon glyphicon-cog"></i>
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-header">
-                                    <?php echo $_SESSION['usuario']; ?>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="JavaScript:carga('PantallaUsuario')">
-                                        <i class="glyphicon glyphicon-user"></i>Usuarios
-                                    </a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="#" data-toggle="modal" data-target-id="1" data-target-nombre="1" data-target="#ventanaSeleccionaFecha">Productividad</a>
-                                </li>
-                                <li role="separator" class="divider"></li>
-                                <li>
-                                    <a href="includes/logout.php">
-                                        <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>   
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
 
 
-        <div id="main">
-                <div id="contenido"></div>
-            
-                <div id="subcontenido"></div>
-</div>
+    <div id="main">
+        <div id="contenido"></div>
+
+        <div id="subcontenido"></div>
+    </div>
     <iframe id="iframeContenido" onload="onMyFrameLoad(this), this.style.height = (this.contentDocument.body.scrollHeight) + 'px';" style="width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden; z-index:999999;">
         Your browser doesn't support iframes
     </iframe>
 
-        
+
 
 
 </body>

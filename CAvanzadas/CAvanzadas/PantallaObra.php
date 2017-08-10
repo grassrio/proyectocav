@@ -90,6 +90,14 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
 
 
         $(document).ready(function () {
+            $("#cmbAsignarAmpliacion").change(function () {
+                var idLicitacionAmpliar = document.getElementById("cmbAsignarAmpliacion").value;
+                asignarAmpliacion(idLicitacionActiva, idLicitacionAmpliar);
+                $("#loading").show();
+                window.location.reload();
+            });
+
+
             $('#ventanaAgregarObra').on('shown.bs.modal', function (e) {
 
                 $(this).find('form').validator()
@@ -346,6 +354,9 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                     }
                 })
 
+
+
+
                 $("#pendienteBalizaForm").on("change", "input:checkbox", function () {
                     if ($('#chPendBaliza').prop('checked')) {
                         cambiosActivos = "true";
@@ -384,6 +395,30 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                     $('#cantidadMetraje').val('');
                     cargaMetrajesEstimados(idObra);
 
+                });
+        }
+
+        function asignarAmpliacion($idLicitacion,$idLicitacionAsignar) {
+            var idLicitacion = $idLicitacion
+            var idLicitacionAsignar = $idLicitacionAsignar
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                      { // Data Sending With Request To Server
+                          action: "asignarAmpliacion",
+                          idLicitacion: idLicitacion,
+                          idLicitacionAsignar: idLicitacionAsignar
+                      },
+                function (response, status) { // Required Callback Function
+                    if (response.indexOf('Error') >= 0) {
+                        swal({
+                            title: "Advertencia!",
+                            text: response,
+                            type: "warning",
+                            confirmButtonText: "OK"
+                        });
+                    } else {
+                        $("#loading").show();
+                        window.location.reload();
+                    }
                 });
 
         }
@@ -946,24 +981,75 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
     $sqlPresupuestoLicitacion=obtenerPresupuesto($idLicitacion);
     $rsPresupuestoLicitacion=mysqli_fetch_array($sqlPresupuestoLicitacion);
     $presupuestoActual=$rsPresupuestoLicitacion[Debe] - $rsPresupuestoLicitacion[Haber];
-    if ($presupuestoActual<=0){
+    if ($presupuestoActual<0){
         echo '&nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $&nbsp;'.$rsPresupuestoLicitacion[PresupuestoTotal].'&nbsp;]';
         echo '&nbsp;&nbsp;&nbsp; [&nbsp;Disponible: $&nbsp;0&nbsp;]';
-        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Ampliación: $&nbsp;'.$presupuestoActual.'&nbsp;]';
+        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Ampliación: $&nbsp;'.$presupuestoActual.'&nbsp;]&nbsp;&nbsp;&nbsp;';
+        echo 'Asignar ampliación:&nbsp;';
+        echo '<select name=\'cmbAsignarAmpliacion\' id=\'cmbAsignarAmpliacion\' required>
+              <option disabled selected value>Seleccione licitación</option>';
+        $licitacionesCliente = obtenerLicitacionCliente($idCliente);
+        while ($rsLicitacionesCliente=mysqli_fetch_array($licitacionesCliente)){
+            if ($rsLicitacionesCliente[estado]=='Aprobada' && $rsLicitacionesCliente[idLicitacion]!=$idLicitacion){
+                $presupuestoLicitacionAux=obtenerPresupuesto($rsLicitacionesCliente[idLicitacion]);
+                $rsPresupuestoLicitacionAux=mysqli_fetch_array($presupuestoLicitacionAux);
+                $presupuestoDisponibleLicitacionAux=($rsPresupuestoLicitacionAux[Debe]-$rsPresupuestoLicitacionAux[Haber]);
+                $presupuestoActualAbsoluto=abs($presupuestoActual);
+                if (($presupuestoDisponibleLicitacionAux>0)&&($presupuestoDisponibleLicitacionAux>=$presupuestoActualAbsoluto)){
+                    echo "<option value='".$rsLicitacionesCliente[idLicitacion]."'>".$rsLicitacionesCliente[codigo]."</option>";
+                }
+            }
+            
+        }                                  
+        echo '</select>';
     }else{
         echo '&nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $&nbsp;'.$rsPresupuestoLicitacion[PresupuestoTotal].'&nbsp;]';
         echo '&nbsp;&nbsp;&nbsp; [&nbsp;Disponible: $&nbsp;'.$presupuestoActual.'&nbsp;]';
     }
     ?>
 
-    <div class="panel panel-default">
+
+        <div class="panel panel-info">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+            <h3 class="panel-title">Informes</h3>
+        </div>
+    <?php
+        $informesArray = array();
+        $obrasArray = array();
+
+        $sqlObras = ListarObras($idLicitacion);
+        $rowcount = mysqli_num_rows($sqlObras);
+        if ($rowcount>0) {
+            //Cargo las obras en un array
+            while($rsObra=mysqli_fetch_array($sqlObras)){
+                if ($rsObra[nombreInforme]!=NULL){
+                    if(array_search($rsObra[nombreInforme],$informesArray)==false){
+                        array_push($informesArray,$rsObra[nombreInforme]);
+                    }
+                }
+                array_push($obrasArray,$rsObra);
+            }
+        }
+        //Imprime los informes a los que refieren las obras
+        foreach($informesArray as $nombreInforme){
+            $nombreInformeExt=$nombreInforme.'.xls';
+            echo '&nbsp;';
+            echo '<a href="/informes/'.$nombreInformeExt.'" download>'.$nombreInforme.'</a>';
+            echo '&nbsp;&nbsp;';
+        }
+    ?>
+    </div>
+
+
+    <div class="panel panel-info">
         <!-- Default panel contents -->
         <div class="panel-heading">
             <h3 class="panel-title">Obras</h3>
         </div>
     <?php
-    if ($presupuestoActual>=0){
-        echo '<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarObra" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar obra</button>';
+    if ($presupuestoActual>0){
+        echo '<br><button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarObra" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar obra</button>';
     }
     ?>
         
@@ -984,11 +1070,8 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
 		</tr>
 	</thead>
 	<tbody>
-        <?php
-    $sqlObras = ListarObras($idLicitacion);
-    $rowcount = mysqli_num_rows($sqlObras);
-    if ($rowcount>0) {
-        while($rsObra=mysqli_fetch_array($sqlObras))
+    <?php
+        foreach($obrasArray as $rsObra)
         {
             echo "<tr>"
             .'<td data-toggle="modal" data-target-id="'.$rsObra[idObra].'" data-target-nombre="'.$rsObra[Nombre].'" data-target-estado="'.$rsObra[Estado].'" data-target="#ventanaMostrarObra">'.$rsObra[Nombre].'</td>'
@@ -1002,7 +1085,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
             }
             echo "</tr>";
         }
-    }?>
+    ?>
 
 	</tbody>
 </table>
@@ -1014,6 +1097,8 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
             </ul> </div> 
         </span>
     </div>
+
 </body>
 </html>
 <?php } ?>
+
