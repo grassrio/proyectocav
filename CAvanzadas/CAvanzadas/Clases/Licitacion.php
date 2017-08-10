@@ -34,6 +34,12 @@ class Licitacion
         return $sql;
     }
 
+    public function descontarLicitacion($connect,$idLicitacion,$monto){
+        mysqli_query($connect,"UPDATE PresupuestoLicitacion SET Haber=Haber + ".$monto." WHERE idLicitacion='".$idLicitacion."'")
+         or die ("Error al actualizar cuenta de Licitacion");
+        return 1;
+    }
+
     public function ObtenerLicitacion($connect,$idLicitacion)
     {
         $sql = mysqli_query($connect,"SELECT * FROM Licitacion WHERE idLicitacion='".$idLicitacion."'")

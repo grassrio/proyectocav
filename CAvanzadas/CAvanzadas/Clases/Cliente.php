@@ -56,6 +56,17 @@ class Cliente
         return $sql;
     }
 
+    public function obtenerNumeroInforme($connect,$idCliente){
+        $sqlNumeroInforme = mysqli_query($connect,"Select ultimoInforme FROM Cliente WHERE idCliente='".$idCliente."'")
+         or die ("Error al consultar número de informe");
+        $rsNumeroInforme=mysqli_fetch_array($sqlNumeroInforme);
+        $numeroInforme = $rsNumeroInforme[ultimoInforme];
+        $nuevoNumeroInforme = ($numeroInforme + 1);
+        mysqli_query($connect,"UPDATE Cliente set ultimoInforme='".$nuevoNumeroInforme."' WHERE idCliente='".$idCliente."'")
+         or die ("Error al incrementar número de informe");
+        return $numeroInforme;
+    }
+
     public function ModificarCliente($connect,$id,$nombre)
     {
         $sql = mysqli_query($connect,"UPDATE Cliente SET Nombre='".$nombre."' WHERE idCliente='".$id."'")

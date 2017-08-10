@@ -20,6 +20,20 @@ function insertarLicitacion($idCliente,$idCotizacion,$idZona,$estado,$codigo,$pr
     return $sql;
 }
 
+function descontarLicitacion($idLicitacion,$monto){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $lic = new Licitacion();
+        $sql = $lic->descontarLicitacion($connect,$idLicitacion,$monto);
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
 function modificarLicitacion($id,$estado)
 {
     require('config.php');

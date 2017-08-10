@@ -65,6 +65,13 @@ class Obra
         return $sql;
     }
 
+    public function informarObra($connect,$idObra,$nombreInforme){
+        $sqlInformarObra = mysqli_query($connect,"UPDATE Obra SET nombreInforme='".$nombreInforme."',fechaInformado=now() WHERE idObra='".$idObra."'")
+            or die ("Error al informar obra");
+        $this->cambiarEstado($connect,$idObra,"Informado");
+        return $sqlInformarObra;
+    }
+
     public function cambiarEstado($connect,$idObra,$estado){
         $sql = null;
         $sqlEstadoAnterior = mysqli_query($connect,"SELECT Estado FROM Obra WHERE idObra='".$idObra."'")
@@ -104,6 +111,18 @@ class Obra
                 break;
             case 'Pendiente de asfalto':
                 if ($estadoPosterior=='Asignado'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
+            case 'Ejecutado':
+                if ($estadoPosterior=='Informado'){
+                    $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
+                    $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
+                }
+                break;
+            case 'Facturar 0,3':
+                if ($estadoPosterior=='Informado'){
                     $sql = mysqli_query($connect,"UPDATE Obra SET Estado='".$estadoPosterior."' WHERE idObra='".$idObra."'") or die ("Error al cambiar estado");
                     $this->AuditarEstado($connect,$idObra,$estadoAnterior,$estadoPosterior);
                 }

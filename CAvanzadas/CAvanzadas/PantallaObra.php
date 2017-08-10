@@ -58,7 +58,8 @@ if (isset($_SESSION['usuario'])) {
         var idLicitacionDinamico;
         var id;
         var idObraActiva;
-        var idLicitacionActiva;
+        var idClienteLicitacion = "<?php echo $idCliente; ?>";
+        var idLicitacionActiva = "<?php echo $idLicitacion; ?>";
         var cambiosActivos = false;
         var idZonaLicitacion = "<?php echo $rsLicitacion[idZona]; ?>";
         $(document).ready(function () {
@@ -167,14 +168,6 @@ if (isset($_SESSION['usuario'])) {
             $("#ventanaMostrarObra").on("show.bs.modal", function (e) {
             $("#ventanaMostrarObraBody").html("");
             var idObra = $(e.relatedTarget).data('target-id');
-            $('#reclamarObraForm').on('submit', function (e) {
-                if (e.isDefaultPrevented()) {
-                } else {
-                    e.preventDefault()
-                    // Si se cumple la validacion llama a la funcion de agregar
-                    cambiarEstado(idObraActiva, "Pendiente de cuadrilla");
-                }
-            })
             var nombreObra = $(e.relatedTarget).data('target-nombre');
             var estadoObra = $(e.relatedTarget).data('target-estado');
             $("#ventanaMostrarObraTitle").html('<span class="label label-info">' + nombreObra + '</span>');
@@ -333,6 +326,16 @@ if (isset($_SESSION['usuario'])) {
                     }
                 })
 
+                $('#reclamarObraForm').on('submit', function (e) {
+                        if (e.isDefaultPrevented()) {
+                        } else {
+                            e.preventDefault()
+                            // Si se cumple la validacion llama a la funcion de agregar
+                            cambiosActivos = "true";
+                            cambiarEstado(idObra, "Pendiente de cuadrilla");
+                        }
+                })
+
                 $('#cambiarEstadoFinalForm').on('submit', function (e) {
                     if (e.isDefaultPrevented()) {
                     } else {
@@ -485,8 +488,46 @@ if (isset($_SESSION['usuario'])) {
                     obrasInformar = obrasInformar + "," + obrasInformarArray[i];
                 }
             }
-            if (obrasInformar!=""){
-                alert(obrasInformar);
+            if (obrasInformar != "") {
+                $.post("ajaxCliente.php", //Required URL of the page on server
+                          { // Data Sending With Request To Server
+                              action: "obtenerNumeroInforme",
+                              idCliente: idClienteLicitacion
+                          },
+                    function (response, status) { // Required Callback Function
+                        if (response.indexOf('Error') >= 0) {
+                            swal({
+                                title: "Advertencia!",
+                                text: response,
+                                type: "warning",
+                                confirmButtonText: "OK"
+                            });
+                        } else {
+                            nombreInforme = "VE 0" + response;
+                            $.ajax({
+                                type: 'POST',
+                                url: "informe.php",
+                                data: {
+                                    idLicitacion: idLicitacionActiva,
+                                    obrasInformar: obrasInformar,
+                                    nombreInforme: nombreInforme
+                                },
+                                dataType: 'json'
+                                }).done(function (data) {
+                                var $a = $("<a>");
+                                $a.attr("href", data.file);
+                                $("body").append($a);
+                                nombreInformeBajar = nombreInforme + ".xls";
+                                $a.attr("download", nombreInformeBajar);
+                                $a[0].click();
+                                $a.remove();
+                                $("#loading").show();
+                                window.location.reload();
+                            });
+                        }
+                    });
+
+
             }
         }
 
@@ -550,7 +591,7 @@ if (isset($_SESSION['usuario'])) {
     <div id="loading" style="position: absolute; top:50%; left:50%; z-index: 100000;">
         <img src="img/Loading.gif" />
     </div>
-
+    <div id="informeDiv" name="informeDiv"></div>
 
     <!--VENTANA MUESTRA DETALLE OBRA-->
     <div class="modal fade" tabindex="0" role="dialog" id="ventanaMostrarObra">
@@ -905,8 +946,8 @@ if (isset($_SESSION['usuario'])) {
         $presupuestoActual=$rsPresupuestoLicitacion[Debe] - $rsPresupuestoLicitacion[Haber];
 ?>
         Estado: <?php echo $rsLicitacion[estado]; ?>
-        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $<?php echo $rsPresupuestoLicitacion[PresupuestoTotal]; ?>&nbsp;]
-        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto disponible: $<?php echo $presupuestoActual; ?>&nbsp;]
+        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $&nbsp<?php echo $rsPresupuestoLicitacion[PresupuestoTotal]; ?>&nbsp;]
+        &nbsp;&nbsp;&nbsp; [&nbsp;Disponible: $&nbsp<?php echo $presupuestoActual; ?>&nbsp;]
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
@@ -956,7 +997,7 @@ if (isset($_SESSION['usuario'])) {
         <span class="form-control-static pull-right">
         <div class="bs-glyphicons"> <ul class="bs-glyphicons-list">
             <button onclick="informar()" class="btn btn-success btn-xs">
-            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <span class="glyphicon-class">Elaborar informe</span>
+            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <span class="glyphicon-class">Informar obras</span>
             </button>
             </ul> </div> 
         </span>

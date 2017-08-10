@@ -10,6 +10,11 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
         case 'eliminarCliente' :
             eliminarCliente($_POST['Nombre']);
             break;
+        case 'obtenerNumeroInforme':
+            $idCliente=$_POST['idCliente'];
+            $numeroInforme = obtenerNumeroInforme($idCliente);
+            echo $numeroInforme;
+            break;
         case 'obtenerZonas' :
             $idCliente=$_POST['idCliente'];
             $idZonasSql = obtenerZonas($idCliente);

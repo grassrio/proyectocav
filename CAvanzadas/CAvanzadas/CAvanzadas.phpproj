@@ -264,7 +264,6 @@
     <Compile Include="includes\ConsultasRubro.php" />
     <Compile Include="includes\ConsultasUsuarios.php" />
     <Compile Include="includes\ConsultaZonas.php" />
-    <Compile Include="includes\informe.php" />
     <Compile Include="includes\loginheader.php" />
     <Compile Include="includes\logout.php" />
     <Compile Include="index.php" />
@@ -283,7 +282,7 @@
     <Compile Include="PantallaRubro.php" />
     <Compile Include="Clases\Zona.php" />
     <Compile Include="PantallaUsuario.php" />
-    <Compile Include="phpexcel.php" />
+    <Compile Include="informe.php" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="includes\PHPExcel\" />
@@ -352,6 +351,7 @@
     <Folder Include="js\" />
     <Folder Include="includes\" />
     <Folder Include="Clases\" />
+    <Folder Include="informes\" />
     <Folder Include="Properties\" />
     <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>

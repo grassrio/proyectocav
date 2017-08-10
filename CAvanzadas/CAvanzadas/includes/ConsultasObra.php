@@ -197,4 +197,19 @@ function ListarObras($idLicitacion){
     }
     return $sql;
 }
+
+function informarObra($idObra,$nombreInforme){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $obra = new Obra();
+        $sql = $obra->informarObra($connect,$idObra,$nombreInforme);
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
 ?>
