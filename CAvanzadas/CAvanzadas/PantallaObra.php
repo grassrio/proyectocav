@@ -938,33 +938,44 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
     </div><!-- /.modal -->
 
         <span class="label label-info">Licitación <?php echo $rsLicitacion[codigo]; ?></span>
-<?php
-        $idLicitacion =  $rsLicitacion[idLicitacion];
-
-        $sqlPresupuestoLicitacion=obtenerPresupuesto($idLicitacion);
-        $rsPresupuestoLicitacion=mysqli_fetch_array($sqlPresupuestoLicitacion);
-        $presupuestoActual=$rsPresupuestoLicitacion[Debe] - $rsPresupuestoLicitacion[Haber];
-?>
+    
         Estado: <?php echo $rsLicitacion[estado]; ?>
-        &nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $&nbsp<?php echo $rsPresupuestoLicitacion[PresupuestoTotal]; ?>&nbsp;]
-        &nbsp;&nbsp;&nbsp; [&nbsp;Disponible: $&nbsp<?php echo $presupuestoActual; ?>&nbsp;]
+    <?php
+    $idLicitacion =  $rsLicitacion[idLicitacion];
+
+    $sqlPresupuestoLicitacion=obtenerPresupuesto($idLicitacion);
+    $rsPresupuestoLicitacion=mysqli_fetch_array($sqlPresupuestoLicitacion);
+    $presupuestoActual=$rsPresupuestoLicitacion[Debe] - $rsPresupuestoLicitacion[Haber];
+    if ($presupuestoActual<=0){
+        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $&nbsp;'.$rsPresupuestoLicitacion[PresupuestoTotal].'&nbsp;]';
+        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Disponible: $&nbsp;0&nbsp;]';
+        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Ampliación: $&nbsp;'.$presupuestoActual.'&nbsp;]';
+    }else{
+        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Presupuesto inicial: $&nbsp;'.$rsPresupuestoLicitacion[PresupuestoTotal].'&nbsp;]';
+        echo '&nbsp;&nbsp;&nbsp; [&nbsp;Disponible: $&nbsp;'.$presupuestoActual.'&nbsp;]';
+    }
+    ?>
 
     <div class="panel panel-default">
         <!-- Default panel contents -->
         <div class="panel-heading">
             <h3 class="panel-title">Obras</h3>
         </div>
-        <button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarObra" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar obra</button>
+    <?php
+    if ($presupuestoActual>=0){
+        echo '<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarObra" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar obra</button>';
+    }
+    ?>
+        
         <!-- Tabla Obras -->
-        <table id="table" 
+        <table id="table"
 			 data-toggle="table"
 			 data-search="true"
-			 data-filter-control="true" 
+			 data-filter-control="true"
 			 data-show-export="true"
 			 data-click-to-select="true">
 	<thead>
 		<tr>
-            
 			<th data-field="obra" data-formatter="identifierFormatter" data-filter-control="input" data-sortable="true">Nombre</th>
 			<th data-field="direccion" data-filter-control="input" data-sortable="true">Dirección</th>
             <th data-field="estado" data-filter-control="select" data-sortable="true">Estado</th>
@@ -992,6 +1003,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
             echo "</tr>";
         }
     }?>
+
 	</tbody>
 </table>
         <span class="form-control-static pull-right">
