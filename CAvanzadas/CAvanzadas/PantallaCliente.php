@@ -1,7 +1,6 @@
 <?php
 require('includes/loginheader.php');
 session_start();
-$tipoUsuario = $_SESSION['tipoUsuario'];
 require 'includes/ConsultasCliente.php';
 require 'includes/ConsultaZonas.php';
 $sql = devolverClientes();
@@ -391,12 +390,8 @@ if ($rowcount>0) {?>
                 <h3 class="panel-title">Clientes</h3>
             </div>
             <br />
-            <?php
-            if($tipoUsuario == 1){
-                echo'<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCliente" data-toggle="modal">
-                            <span class="glyphicon glyphicon-plus"></span>Agregar Cliente</button>';
-                }
-            ?>
+<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCliente" data-toggle="modal">
+                            <span class="glyphicon glyphicon-plus"></span>Agregar Cliente</button>
             <!-- Table -->
             <table class="table">
                 <tr>
@@ -406,7 +401,6 @@ if ($rowcount>0) {?>
                 <?php
     while($rs=mysqli_fetch_array($sql))
     {
-        if($tipoUsuario == 1){
             echo "<tr>"
             ."<td>".'<a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCliente">'.$rs[1].'</a>'."</td>"
             ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCliente" data-toggle="modal">
@@ -414,13 +408,7 @@ if ($rowcount>0) {?>
 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
             ."</td>"
             ."</tr>";
-        }
-        else
-        {
-            echo "<tr>"
-            ."<td>".$rs[1]."</td>"
-            ."</tr>";
-        }
+
     }
 
                 ?>

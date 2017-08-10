@@ -3,8 +3,7 @@ require 'includes/ConsultasCotizacion.php';
 require 'includes/ConsultasRubro.php';
 require('includes/loginheader.php');
 session_start();
-$tipoUsuario = $_SESSION['tipoUsuario'];
-if (isset($_SESSION['usuario'])) {?>
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -374,12 +373,8 @@ if (isset($_SESSION['usuario'])) {?>
                 <h3 class="panel-title">Cotizaciones</h3>
             </div>
         </div>
-        <?php
-            if($tipoUsuario == 1){
-                echo'<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCotizacion" data-toggle="modal">
-                                                            <span class="glyphicon glyphicon-plus"></span>Agregar Cotizacion</button>';
-            }
-        ?>
+<button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCotizacion" data-toggle="modal">
+                                                            <span class="glyphicon glyphicon-plus"></span>Agregar Cotizacion</button>
         <!-- Table -->
         <table class="table">
             <tr>
@@ -392,8 +387,6 @@ if (isset($_SESSION['usuario'])) {?>
             if ($rowcount>0) {
                 while($rs=mysqli_fetch_array($sql))
                 {
-                    if($tipoUsuario == 1)
-                    {
                         echo "<tr>"
                         ."<td>".'</button><a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCotizacion">'.$rs[1].'</a>'."</td>"
                         ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCotizacion" data-toggle="modal">
@@ -402,14 +395,8 @@ if (isset($_SESSION['usuario'])) {?>
                         ."</td>"
                         ."</tr>";
                     }
-                    else
-                    {
-                        echo "<tr>"
-                        ."<td>".$rs[1]."</td>"
-                        ."</tr>";
-                     }
                 }
-            }
+            
             ?>
         </table>
     </div>

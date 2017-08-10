@@ -1,8 +1,8 @@
 <?php
 require('includes/loginheader.php');
 session_start();
-$tipoUsuario = $_SESSION['tipoUsuario'];
 require 'includes/ConsultasUsuarios.php';
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
 $sql = DevolverUsuarios() ;
 $rowcount = mysqli_num_rows($sql);
 if ($rowcount>0) {
@@ -184,15 +184,6 @@ if ($rowcount>0) {
         {
             $tipo = 'Director';
         }
-        if ($tipoUsuario<>1)
-        {
-            echo "<tr>"
-            ."<td>".$rs[1]."</td>"
-            ."<td>".$tipo."</td>"
-            ."</tr>";
-        }
-        else
-        {
             echo "<tr>"
             ."<td>".$rs[1]."</td>"
             ."<td>".$tipo."</td>"
@@ -201,12 +192,15 @@ if ($rowcount>0) {
             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
             ."</td>"
             ."</tr>";
-            }
+            
     }
             ?>
         </table>
     </div>
 </body>
 </html>
-<?php  }?>
+<?php 
+}
+
+}   ?>
 
