@@ -3,7 +3,7 @@ require 'includes/ConsultasCotizacion.php';
 require 'includes/ConsultasRubro.php';
 require('includes/loginheader.php');
 session_start();
-if (isset($_SESSION['usuario'])) {?>
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -374,7 +374,7 @@ if (isset($_SESSION['usuario'])) {?>
             </div>
         </div>
 <button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCotizacion" data-toggle="modal">
-                                                            <span class="glyphicon glyphicon-plus"></span>Agregar Cotizacion</button>'
+                                                            <span class="glyphicon glyphicon-plus"></span>Agregar Cotizacion</button>
         <!-- Table -->
         <table class="table">
             <tr>
@@ -396,7 +396,7 @@ if (isset($_SESSION['usuario'])) {?>
                         ."</tr>";
                     }
                 }
-            }
+            
             ?>
         </table>
     </div>

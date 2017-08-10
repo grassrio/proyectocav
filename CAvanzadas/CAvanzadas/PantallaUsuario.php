@@ -2,7 +2,7 @@
 require('includes/loginheader.php');
 session_start();
 require 'includes/ConsultasUsuarios.php';
-if (isset($_SESSION['usuario'])&&($_SESSION['usuario'] <> 2)) {
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
 $sql = DevolverUsuarios() ;
 $rowcount = mysqli_num_rows($sql);
 if ($rowcount>0) {

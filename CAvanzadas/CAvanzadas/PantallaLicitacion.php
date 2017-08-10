@@ -4,7 +4,7 @@ require 'includes/ConsultasCotizacion.php';
 require 'includes/ConsultasLicitacion.php';
 require 'includes/ConsultasCliente.php';
 session_start();
-if (isset($_SESSION['usuario'])&&($_SESSION['usuario'] <> 2)) {?>
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

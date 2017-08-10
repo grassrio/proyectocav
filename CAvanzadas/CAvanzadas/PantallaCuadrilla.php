@@ -3,7 +3,7 @@ require('includes/loginheader.php');
 require 'includes/ConsultasCuadrilla.php';
 require 'includes/ConsultasPersonal.php';
 session_start();
-if (isset($_SESSION['usuario'])) {?>
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) { ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
