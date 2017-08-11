@@ -1084,7 +1084,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
             <h3 class="panel-title">Obras</h3>
         </div>
     <?php
-    if ($presupuestoActual>0){
+    if ($presupuestoActual>0 && $rsLicitacion[estado]=='Aprobada'){
         echo '<br><button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarObra" data-toggle="modal"><span class="glyphicon glyphicon-plus"></span>Agregar obra</button>';
     }
     ?>
