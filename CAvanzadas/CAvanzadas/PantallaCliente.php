@@ -3,9 +3,9 @@ require('includes/loginheader.php');
 session_start();
 require 'includes/ConsultasCliente.php';
 require 'includes/ConsultaZonas.php';
+if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2))  {
 $sql = devolverClientes();
-$rowcount = mysqli_num_rows($sql);
-if ($rowcount>0) {?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -399,16 +399,19 @@ if ($rowcount>0) {?>
                     <th></th>
                 </tr>
                 <?php
-    while($rs=mysqli_fetch_array($sql))
-    {
-            echo "<tr>"
-            ."<td>".'<a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCliente">'.$rs[1].'</a>'."</td>"
-            ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCliente" data-toggle="modal">
-<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button><button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarCliente" data-toggle="modal">
-<span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
-            ."</td>"
-            ."</tr>";
+    $rowcount = mysqli_num_rows($sql);
+    if ($rowcount>0) {
+        while($rs=mysqli_fetch_array($sql))
+        {
+                echo "<tr>"
+                ."<td>".'<a href="#" data-toggle="modal" data-target-id="'.$rs[0].'" data-target-nombre="'.$rs[1].'" data-target="#ventanaMostrarCliente">'.$rs[1].'</a>'."</td>"
+                ."<td>".'<button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[0].'" data-target="#ventanaModificarCliente" data-toggle="modal">
+    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></button><button type="button" class="btn btn-default" data-toggle="modal" data-target-id="'.$rs[1].'" data-target="#ventanaEliminarCliente" data-toggle="modal">
+    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>'
+                ."</td>"
+                ."</tr>";
 
+        }
     }
 
                 ?>
