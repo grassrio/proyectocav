@@ -165,55 +165,52 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
         }
 
 
-
-
-
-
-        $("#btnModificarLicitacion").click(function () {
-            $('#btnModificarLicitacion').prop('disabled', true);
-            var estado = document.getElementById("estadoCombo1").value;
-
-            if (estado == 1) {
-                estado = 'Aprobada';
-            }
-            else {
-                estado = 'Rechazada';
-            }
-            if (estado == '') {
-                swal({
-                    title: "Advertencia!",
-                    text: "Debe ingresar el estado!",
-                    type: "warning",
-                    confirmButtonText: "OK"
-                });
-                $('#btnModificarLicitacion').prop('disabled', false);
-            }
-            else {
-                $.post("ajaxLicitacion.php", //Required URL of the page on server
-                      { // Data Sending With Request To Server
-                          action: "modificarLicitacion",
-                          Estado: estado,
-                          idLicitacion: id,
-                      },
-                function (response, status) { // Required Callback Function
-                    if (response.indexOf('Error') >= 0) {
-                        swal({
-                            title: "Advertencia!",
-                            text: response,
-                            type: "warning",
-                            confirmButtonText: "OK"
-                        });
-                        $('#btnModificarLicitacion').prop('disabled', false);
-                    } else {
-                        $('#ventanaModificarLicitacion').modal('hide');
-                        $("#loading").show();
-                        window.location.reload();
-                    }
-                });
-            }
-        });
-
         $(document).ready(function () {
+
+            $("#btnModificarLicitacion").click(function () {
+                $('#btnModificarLicitacion').prop('disabled', true);
+                var estado = document.getElementById("estadoCombo1").value;
+
+                if (estado == 1) {
+                    estado = 'Aprobada';
+                }
+                else {
+                    estado = 'Rechazada';
+                }
+                if (estado == '') {
+                    swal({
+                        title: "Advertencia!",
+                        text: "Debe ingresar el estado!",
+                        type: "warning",
+                        confirmButtonText: "OK"
+                    });
+                    $('#btnModificarLicitacion').prop('disabled', false);
+                }
+                else {
+                    $.post("ajaxLicitacion.php", //Required URL of the page on server
+                          { // Data Sending With Request To Server
+                              action: "modificarLicitacion",
+                              Estado: estado,
+                              idLicitacion: id,
+                          },
+                    function (response, status) { // Required Callback Function
+                        if (response.indexOf('Error') >= 0) {
+                            swal({
+                                title: "Advertencia!",
+                                text: response,
+                                type: "warning",
+                                confirmButtonText: "OK"
+                            });
+                            $('#btnModificarLicitacion').prop('disabled', false);
+                        } else {
+                            $('#ventanaModificarLicitacion').modal('hide');
+                            $("#loading").show();
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+
         $("#btnEliminarLicitacion").click(function () {
             $('#btnEliminarLicitacion').prop('disabled', true);
             $.post("ajaxLicitacion.php", //Required URL of the page on server
