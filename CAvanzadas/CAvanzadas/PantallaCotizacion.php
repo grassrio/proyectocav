@@ -297,7 +297,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                                     Precio:
                                 </label>
                                 <div class="col-sm-8">
-                                    <input name="Precio" data-error="Completa este campo" id="Precio" type="number" class="form-control" aria-describedby="basic-addon2" required />
+                                    <input name="Precio" data-error="Requerido" id="Precio" step="0.01" type="number" class="form-control" aria-describedby="basic-addon2" required />
                                     <div class="help-block with-errors"></div>
                                  </div>
                             </div>
