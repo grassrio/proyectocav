@@ -228,9 +228,6 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) { ?>
                 $('#btnNuevoObrero').prop('disabled', true);
                 var porcentaje = $('#Porcentaje').val();
                 var NombreCompleto = document.getElementById("ObreroCombo").value;
-                alert(porcentaje);
-                alert(NombreCompleto);
-                alert(id);
                 if (porcentaje < 0 || porcentaje > 100) {
                     swal({
                         title: "Advertencia!",
@@ -268,7 +265,12 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) { ?>
                         }
                         else
                         {
-                            alert(response);
+                            swal({
+                                title: "Advertencia!",
+                                text: response,
+                                type: "warning",
+                                confirmButtonText: "OK"
+                            });
                         }
 
                     });

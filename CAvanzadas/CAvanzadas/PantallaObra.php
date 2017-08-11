@@ -209,6 +209,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                         agregarMetraje(idObraActiva);
                     }
                 })
+                cargaSelectMetrajesEstimados(idObraActiva);
                 cargaMetrajesEstimados(idObraActiva);
             });
 
@@ -230,6 +231,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                     }
                 })
 
+                cargaSelectMetrajesRealizados(idObraActiva);
                 cargaMetrajesRealizados(idObraActiva);
 
             });
@@ -566,6 +568,50 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
             }
         }
 
+        function cargaSelectMetrajesRealizados($idObra) {
+            $("#rubroComboRealizado").html("");
+            var idObra = $idObra
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "selectMetrajes",
+                      idObra: idObra
+                  },
+            function (response, status) { // Required Callback Function
+                if (response.indexOf('Error') >= 0) {
+                    swal({
+                        title: "Advertencia!",
+                        text: response,
+                        type: "warning",
+                        confirmButtonText: "OK"
+                    });
+                } else {
+                    $("#rubroComboRealizado").html(response);
+                }
+            });
+        }
+
+        function cargaSelectMetrajesEstimados($idObra) {
+            $("#rubroCombo").html("");
+            var idObra = $idObra
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "selectMetrajes",
+                      idObra: idObra
+                  },
+            function (response, status) { // Required Callback Function
+                if (response.indexOf('Error') >= 0) {
+                    swal({
+                        title: "Advertencia!",
+                        text: response,
+                        type: "warning",
+                        confirmButtonText: "OK"
+                    });
+                } else {
+                    $("#rubroCombo").html(response);
+                }
+            });
+        }
+
         function cargaMetrajesEstimados($idObra) {
             $("#ventanaMetrajesEstimadosBodyTabla").html("");
             var idObra = $idObra
@@ -703,14 +749,6 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                                 </label>
                                 <div class="col-sm-8">
                                     <select name='rubroCombo' id='rubroCombo'>
-                                        <?php 
-                                        $rubrosCotizacion = obtenerRubro($idCotizacion);
-                                        while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
-                                        {
-                                        echo "
-                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]." ".$rsRubrosCotizacion[Unidad]."</option>";
-                                        }
-                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -756,14 +794,6 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                                 </label>
                                 <div class="col-sm-8">
                                     <select name='rubroComboRealizado' id='rubroComboRealizado'>
-                                        <?php 
-    $rubrosCotizacion = obtenerRubro($idCotizacion);
-    while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
-    {
-        echo "
-                                        <option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."' selected>".$rsRubrosCotizacion[nombreRubro]." ".$rsRubrosCotizacion[Unidad]."</option>";
-    }
-                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -1024,7 +1054,13 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
             //Cargo las obras en un array
             while($rsObra=mysqli_fetch_array($sqlObras)){
                 if ($rsObra[nombreInforme]!=NULL){
-                    if(array_search($rsObra[nombreInforme],$informesArray)==false){
+                    $colocar=true;
+                    foreach($informesArray as $llave => $nombreInforme){
+                        if ($nombreInforme==$rsObra[nombreInforme]){
+                            $colocar=false;
+                        }
+                    }
+                    if($colocar){
                         array_push($informesArray,$rsObra[nombreInforme]);
                     }
                 }

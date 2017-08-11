@@ -129,6 +129,16 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             $idMetrajeRealizado = $_POST['idMetrajeRealizado'];
             eliminarMetrajeRealizado($idMetrajeRealizado);
             break;
+        case 'selectMetrajes' :
+            $idObra = $_POST['idObra'];
+            $sqlObra = obtenerObra($idObra);
+            $rsObra = mysqli_fetch_array($sqlObra);
+            $rubrosCotizacion = obtenerRubro($rsObra[idCotizacion]);
+            while ($rsRubrosCotizacion=mysqli_fetch_array($rubrosCotizacion))
+            {
+                echo "<option value='".$rsRubrosCotizacion[nombreRubro]."|".$rsRubrosCotizacion[Unidad]."'>".$rsRubrosCotizacion[nombreRubro]." ".$rsRubrosCotizacion[Unidad]."</option>";
+            }
+            break;
         case 'metrajesEstimados' :
             $idObra=$_POST['idObra'];
             $metrajeObraSql = metrajesEstimados($idObra);
