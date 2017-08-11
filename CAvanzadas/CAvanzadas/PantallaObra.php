@@ -1070,9 +1070,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
         //Imprime los informes a los que refieren las obras
         foreach($informesArray as $nombreInforme){
             $nombreInformeExt=$nombreInforme.'.xls';
-            echo '&nbsp;';
-            echo '<a href="/informes/'.$nombreInformeExt.'" download>'.$nombreInforme.'</a>';
-            echo '&nbsp;&nbsp;';
+            echo '&nbsp;[&nbsp;<a href="/informes/'.$nombreInformeExt.'" download>'.$nombreInforme.'</a>&nbsp;]&nbsp;';
         }
     ?>
     </div>
