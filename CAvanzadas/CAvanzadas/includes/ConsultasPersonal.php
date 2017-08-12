@@ -117,7 +117,7 @@ function MostrarProductividadPorObrero($nombreEmpleado,$fechaInicio,$fechaFin)
     {
         mysqli_select_db($connect,$mysqldb);
         $personal = new Personal();
-        $sql = mysqli_query($connect,"SELECT SUM(mo.MetrajeReal),mo.NombreRubro,mo.Unidad,rc.Precio,pc.Porcentaje, FROM RubroCotizacion rc,PersonalCuadrilla pc, Obra o, MetrajeObra mo WHERE mo.idObra=o.idObra AND o.idCuadrilla=pc.idCuadrilla AND pc.Nombre='".$nombreEmpleado."' AND  o.fechaFinalizado>='".$fechaInicio."' AND o.fechaFinalizado<='".$fechaFin."'AND rc.nombreRubro=mo.NombreRubro AND mo.MetrajeReal>0 and rc.idCotizacion=o.idCotizacion group by mo.NombreRubro")
+        $sql = mysqli_query($connect,"SELECT mo.MetrajeReal,mo.NombreRubro,mo.Unidad,rc.Precio,pc.Porcentaje FROM RubroCotizacion rc,PersonalCuadrilla pc, Obra o, MetrajeObra mo WHERE mo.idObra=o.idObra AND o.idCuadrilla=pc.idCuadrilla AND pc.Nombre='".$nombreEmpleado."' AND  o.fechaFinalizado>='".$fechaInicio."' AND o.fechaFinalizado<='".$fechaFin."'AND rc.nombreRubro=mo.NombreRubro AND mo.MetrajeReal>0 and rc.idCotizacion=o.idCotizacion")
          or die ("Error al calcular la productividad");
         return $sql;
     }

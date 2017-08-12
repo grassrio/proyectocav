@@ -51,22 +51,44 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                     if ($rowcount>0)
                     {
                         $total = 0;
+                        $gananciaArray = array();
                         while($obraSql=mysqli_fetch_array($sqlPorObrero))
                         {
-                            $gananciaArray = array();
-                            $ganancia = ($obraSql[3]*$obraSql[0])*($obraSql[4]/100);
-                            $total = $ganancia+$total;
+
+                            $estaFila = false;
+                            foreach($gananciaArray as $llave => $gananciaFila){
+                                if ($gananciaFila[NombreRubro]==$obraSql[NombreRubro]){
+                                    $estaFila = true;
+                                    $metrajeRealActual=$gananciaFila[MetrajeReal];
+                                    $metrajeRealSumado=$metrajeRealActual + $obraSql[MetrajeReal];
+                                    $gananciaActual=$gananciaFila[Ganancia];
+                                    $ganancia = ($obraSql[Precio]*$obraSql[MetrajeReal])*($obraSql[Porcentaje]/100);
+                                    $gananciaSumada=$gananciaActual + $ganancia;
+                                    $gananciaArray[$llave]=array('NombreRubro' =>$obraSql[NombreRubro],'Unidad' =>$obraSql[Unidad],'MetrajeReal' =>$metrajeRealSumado,'Ganancia' =>$gananciaSumada);
+                                }
+                            }
+                            if (!$estaFila){
+                                $ganancia = ($obraSql[Precio]*$obraSql[MetrajeReal])*($obraSql[Porcentaje]/100);
+                                array_push($gananciaArray,array('NombreRubro' =>$obraSql[NombreRubro],'Unidad' =>$obraSql[Unidad],'MetrajeReal' =>$obraSql[MetrajeReal],'Ganancia' =>$ganancia));
+                            }
+                        }
+                        foreach($gananciaArray as $llave => $gananciaFila){
+                            $total = $gananciaFila[Ganancia]+$total;
                             echo "<tr>"
-                            ."<td>".$obraSql[1]."</td>"
-                            ."<td>".$obraSql[2]."</td>"
-                            ."<td>".$obraSql[0]."</td>"
-                            ."<td>".$ganancia."</td>"
+                            ."<td>".$gananciaFila[NombreRubro]."</td>"
+                            ."<td>".$gananciaFila[Unidad]."</td>"
+                            ."<td>".$gananciaFila[MetrajeReal]."</td>"
+                            ."<td>".$gananciaFila[Ganancia]."</td>"
                             ."</tr>";
                         }
+
+
                     }else
                     {
                         echo 'sin datos';
                     }
+
+
                     '</table>';
 
                 echo 'Ganancia total: $'.$total.'<br>';
