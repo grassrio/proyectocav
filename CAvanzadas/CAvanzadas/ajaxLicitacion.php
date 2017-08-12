@@ -399,6 +399,10 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
 
                         break;
                     case 'Informado':
+                        $idCuadrilla = $rsObra[idCuadrilla];
+                        $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
+                        $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
+                        echo 'Cuadrilla: '.$rsCuadrillaAsignada[Nombre].'<br>';
                         echo 'Nº Informe: '.$rsObra[nombreInforme].'<br>';
                         echo 'Fecha informado: '.$rsObra[fechaInformado];
                         echo '<form role="form" data-toggle="validator" id="reclamarObraForm" name="reclamarObraForm">
@@ -428,6 +432,10 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         break;
                     case 'Ejecutado' :
                         echo '<br><button type="button" data-target-id="'.$rsObra[idObra].'" data-target-idCotizacion="'.$rsObra[idCotizacion].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesRealizados" data-toggle="modal">Metrajes realizados</button><br>';
+                        $idCuadrilla = $rsObra[idCuadrilla];
+                        $cuadrillaAsignada = obtenerCuadrilla($idCuadrilla);
+                        $rsCuadrillaAsignada=mysqli_fetch_array($cuadrillaAsignada);
+                        echo 'Cuadrilla: '.$rsCuadrillaAsignada[Nombre];
                         break;
                 }
 
