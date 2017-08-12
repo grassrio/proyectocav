@@ -53,6 +53,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                         $total = 0;
                         while($obraSql=mysqli_fetch_array($sqlPorObrero))
                         {
+                            $gananciaArray = array();
                             $ganancia = ($obraSql[3]*$obraSql[0])*($obraSql[4]/100);
                             $total = $ganancia+$total;
                             echo "<tr>"
