@@ -263,7 +263,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Modificar Cliente</h4>
+                    <h4 class="modal-title">Modificar rubro</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" data-toggle="validator" id="modificarRubro" name="modificarRubro">
