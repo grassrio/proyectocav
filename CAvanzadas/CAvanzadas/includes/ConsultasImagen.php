@@ -24,7 +24,8 @@ if($_SERVER['REQUEST_METHOD']=="DELETE"){
         $sqlNombreImagen=mysqli_query($connect,"Select nombreImagen FROM Imagen WHERE idImagen='".$idImagen."'") or die ("Error al obtener imagen");
         $nombreImagen=mysqli_fetch_array($sqlNombreImagen);
         $sql = mysqli_query($connect,"DELETE FROM Imagen WHERE idImagen='".$idImagen."'") or die ("Error al eliminar imagen");
-        unlink($directorioImagenes.$nombreImagen[nombreImagen]);
+        $rutaFoto="../".$directorioImagenes.$nombreImagen[nombreImagen];
+        unlink($rutaFoto);
         mysqli_close($connect);
         echo 0;
         return;
