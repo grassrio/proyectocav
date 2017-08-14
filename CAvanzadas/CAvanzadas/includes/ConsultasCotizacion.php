@@ -1,5 +1,4 @@
 <?php
-require 'Clases/Cotizacion.php';
 
 function devolverCotizacion($idCotizacion){
     require('config.php');
@@ -7,8 +6,8 @@ function devolverCotizacion($idCotizacion){
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->DevolverCotizacion($connect,$idCotizacion);
+        $sql = mysqli_query($connect,"SELECT * FROM Cotizacion WHERE idCotizacion='".$idCotizacion."'") or die ("Error al obtener cotización");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -21,17 +20,10 @@ function InsertarCotizacion($nombre)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->InsertarCotizacion($connect,$nombre);
-//        $sql = $cotizacion->ObtenerIdCotizacion($connect,$nombre);
-//        $rs=mysqli_fetch_array($sql);
-//        $sql = mysqli_query($connect,"INSERT INTO RubroCotizacion (idCotizacion,idRubro,Precio) VALUES ('".$rs[0]."','".$idRubro."','".$precio."')")
-//                 or die ("Error al insertar cotizacion");
-
-
-//       return $sql;
+        $sql = mysqli_query($connect,"INSERT INTO Cotizacion (Nombre) VALUES ('".$nombre."')") or die ("Error al insertar cotización");
+        mysqli_close($connect);
+        return $sql;
     }
-    mysqli_close($connect);
     return $sql;
 }
 
@@ -42,8 +34,8 @@ function modificarCotizacion($id,$nombre)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->ModificarCotización($connect,$id,$nombre);
+        $sql = mysqli_query($connect,"UPDATE Cotizacion SET Nombre='".$nombre."' WHERE idCotizacion='".$id."'") or die ("Error al modificar cotización");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -56,9 +48,8 @@ function eliminarCotizacion($nombre)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->EliminarCotizacion($connect,$nombre);
-
+        $sql = mysqli_query($connect,"DELETE FROM Cotizacion WHERE Nombre='".$nombre."'") or die ("Error al eliminar cotización");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -71,9 +62,8 @@ function eliminarRubroPrecio($nombreRubro,$idCotizacion)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->EliminarRubroPrecio($connect,$nombreRubro,$idCotizacion);
-
+        $sql = mysqli_query($connect,"DELETE FROM RubroCotizacion WHERE nombreRubro='".$nombreRubro."' and idCotizacion='".$idCotizacion."'") or die ("Error al eliminar datos de cotización");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -86,9 +76,8 @@ function listaCotizacion()
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->ListaCotizacion($connect);
-
+        $sql = mysqli_query($connect,"SELECT * FROM Cotizacion") or die ("Error al consultar cotizaciones");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -100,8 +89,8 @@ function obtenerRubro($idCotizacion){
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->ObtenerRubro($connect,$idCotizacion);
+        $sql = mysqli_query($connect,"SELECT * FROM RubroCotizacion WHERE idCotizacion='".$idCotizacion."'") or die ("Error al obtener datos de cotización");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
@@ -113,8 +102,9 @@ function InsertarRubroCotizacion($idCotizacion,$nombreRubro,$unidadRubro,$Precio
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $cotizacion = new Cotizacion();
-        $sql = $cotizacion->InsertarRubroCotizacion($connect,$idCotizacion,$nombreRubro,$unidadRubro,$Precio);
+        $sql = mysqli_query($connect,"INSERT INTO RubroCotizacion (nombreRubro,Unidad,idCotizacion,Precio) VALUES ('".$nombreRubro."','".$unidadRubro."','".$idCotizacion."','".$Precio."')")
+         or die ("Error al obtener las cotización");
+        mysqli_close($connect);
         return $sql;
     }
     return $sql;
