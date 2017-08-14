@@ -10,7 +10,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             eliminarRubro($_POST['Nombre']);
             break;
         case 'modificarRubro' :
-            modificarCliente($_POST['idRubro'],$_POST['Nombre'],$_POST['Unidad'],$_POST['cantidadStock']);
+            modificarRubro($_POST['idRubro'],$_POST['Nombre'],$_POST['Unidad'],$_POST['cantidadStock']);
             break;
     }
 }

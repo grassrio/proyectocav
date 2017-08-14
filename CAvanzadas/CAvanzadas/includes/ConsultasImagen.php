@@ -27,8 +27,10 @@ if($_SERVER['REQUEST_METHOD']=="DELETE"){
         unlink($directorioImagenes.$nombreImagen[nombreImagen]);
         mysqli_close($connect);
         echo 0;
+        return;
     }
     echo 0;
+    return;
 }
 
 if(isset($_FILES['imagenes']['name']) && isset($_POST['idObra'])){
