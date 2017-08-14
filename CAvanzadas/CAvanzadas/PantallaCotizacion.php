@@ -73,7 +73,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
    $(document).ready(function(){
         $("#ventanaEliminarCotizacion").on("show.bs.modal", function(e) {
             nombreDinamico = $(e.relatedTarget).data('target-id');
-            $("#eliminarDinamico").html("Desea eliminar el cliente " + nombreDinamico + "?");
+            $("#eliminarDinamico").html("Desea eliminar el rubro " + nombreDinamico + "?");
         });
    });
    $(document).ready(function () {
