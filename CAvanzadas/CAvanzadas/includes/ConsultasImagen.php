@@ -1,14 +1,12 @@
 <?php
 function obtenerImagenes($idObra)
 {
-    require 'Clases/Imagen.php';
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $imagen = new Imagen();
-        $sql = $imagen->obtenerImagenes($connect,$idObra);
+        $sql = mysqli_query($connect,"SELECT * FROM Imagen WHERE idObra='".$idObra."'") or die ("Error al obtener imágenes");
         mysqli_close($connect);
         return $sql;
     }
@@ -17,24 +15,24 @@ function obtenerImagenes($idObra)
 
 if($_SERVER['REQUEST_METHOD']=="DELETE"){
     require('config.php');
-    require '../Clases/Imagen.php';
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
     if ($connect)
     {
         parse_str(file_get_contents("php://input"),$datosDELETE);
         $idImagen= $datosDELETE['key'];
         mysqli_select_db($connect,$mysqldb);
-        $imagen = new Imagen();
-        $sql = $imagen->borrarImagen($connect,$idImagen);
+        $sqlNombreImagen=mysqli_query($connect,"Select nombreImagen FROM Imagen WHERE idImagen='".$idImagen."'") or die ("Error al obtener imagen");
+        $nombreImagen=mysqli_fetch_array($sqlNombreImagen);
+        $sql = mysqli_query($connect,"DELETE FROM Imagen WHERE idImagen='".$idImagen."'") or die ("Error al eliminar imagen");
+        unlink($directorioImagenes.$nombreImagen[nombreImagen]);
         mysqli_close($connect);
-        return $sql;
+        echo 0;
     }
     echo 0;
 }
 
 if(isset($_FILES['imagenes']['name']) && isset($_POST['idObra'])){
     require('config.php');
-    require '../Clases/Imagen.php';
     $idObra=$_POST['idObra'];
     $Imagenes =count(isset($_FILES['imagenes']['name'])?$_FILES['imagenes']['name']:0);
     $infoImagenesSubidas = array();
@@ -45,17 +43,22 @@ if(isset($_FILES['imagenes']['name']) && isset($_POST['idObra'])){
         $extension= strtolower(end(explode(".", $nombreArchivo)));
         if ($extension=="jpeg" || $extension=="jpg" || $extension=="bmp" || $extension=="png" ||$extension=="gif" || $extension=="avi"){
             $nombreTemporal=isset($_FILES['imagenes']['tmp_name'][$i])?$_FILES['imagenes']['tmp_name'][$i]:null;
-
             $nombreArchivo=$idObra.$nombreArchivo;
-
             $rutaArchivo=$directorioImagenes.$nombreArchivo;
             $idImagen='0';
             $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
             if ($connect)
             {
                 mysqli_select_db($connect,$mysqldb);
-                $imagen = new Imagen();
-                $idImagen = $imagen->insertarImagen($connect,$idObra,$nombreArchivo);
+                $sqlExisteImagen=mysqli_query($connect,"Select * FROM Imagen WHERE idObra='".$idObra."' and nombreImagen='".$nombreArchivo."'");
+                $rowcount = mysqli_num_rows($sqlExisteImagen);
+                if ($rowcount>0){
+                    $existeImagen=mysqli_fetch_array($sqlExisteImagen);
+                    $idImagen=$existeImagen[idImagen];
+                }else{
+                    mysqli_query($connect,"INSERT INTO Imagen (idObra,nombreImagen) VALUES ('".$idObra."','".$nombreArchivo."')") or die ("Error al insertar imagen");
+                    $idImagen = $connect->insert_id;
+                }
                 mysqli_close($connect);
             }
             $rutaArchivoTemp="../".$rutaArchivo;
