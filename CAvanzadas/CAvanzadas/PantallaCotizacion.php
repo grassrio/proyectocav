@@ -241,7 +241,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Agregar Cotizacion</h4>
+                    <h4 class="modal-title">Agregar Cotización</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" data-toggle="validator" id="nuevaCotizacion" name="nuevaCotizacion">
@@ -319,7 +319,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Modificar Cotizaci�n</h4>
+                    <h4 class="modal-title">Modificar Cotización</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" data-toggle="validator" id="modificarCotizacion" name="modificarCotizacion">
@@ -353,7 +353,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Eliminar Cotizaci�n</h4>
+                    <h4 class="modal-title">Eliminar Cotización</h4>
                 </div>
                 <div class="modal-body" id="eliminarDinamico">
                     <input name="NombreEliminar" id="NombreEliminar" class="form-control" aria-describedby="basic-addon2" />
@@ -374,7 +374,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
             </div>
         </div>
 <button type="button" class="btn btn-default btn-xs " data-target="#ventanaAgregarCotizacion" data-toggle="modal">
-                                                            <span class="glyphicon glyphicon-plus"></span>Agregar Cotizacion</button>
+                                                            <span class="glyphicon glyphicon-plus"></span>Agregar Cotización</button>
         <!-- Table -->
         <table class="table">
             <tr>
