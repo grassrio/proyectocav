@@ -29,7 +29,6 @@
     <Compile Include="ajaxPersonal.php" />
     <Compile Include="ajaxRubro.php" />
     <Compile Include="ajaxZona.php" />
-    <Compile Include="Clases\Cuadrilla.php" />
     <Compile Include="Clases\Imagen.php" />
     <Compile Include="Clases\Obra.php" />
     <Compile Include="Clases\Personal.php" />
