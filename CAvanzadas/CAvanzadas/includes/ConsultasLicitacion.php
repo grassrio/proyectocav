@@ -1,5 +1,4 @@
 <?php
-require 'Clases/Licitacion.php';
 
 function insertarLicitacion($idCliente,$idCotizacion,$idZona,$estado,$codigo,$presupuesto)
 {
@@ -9,11 +8,12 @@ function insertarLicitacion($idCliente,$idCotizacion,$idZona,$estado,$codigo,$pr
     {
         mysqli_select_db($connect,$mysqldb);
         $lic = new Licitacion();
-        $sql = $lic->InsertarLicitacion($connect,$idCliente,$idCotizacion,$idZona,$estado,$codigo);
-        $sql = $lic->ObtenerIdLicitacion($connect,$codigo);
+        mysqli_query($connect,"INSERT INTO Licitacion (idCliente,idCotizacion,idZona,estado,codigo,fecha) VALUES ('".$idCliente."','".$idCotizacion."','".$idZona."','".$estado."','".$codigo."',now())")
+           or die ("Error al insertar licitación");
+        $sql = mysqli_query($connect,"SELECT idLicitacion FROM Licitacion WHERE Codigo='".$codigo."'") or die ("Error al obtener licitación");
         $rs=mysqli_fetch_array($sql);
         $sql = mysqli_query($connect,"INSERT INTO PresupuestoLicitacion (PresupuestoTotal,Debe,Haber,idLicitacion) VALUES ('".$presupuesto."','".$presupuesto."','".'0'."','".$rs[0]."')")
-                 or die ("Error al insertar PresupuestoLicitacion");
+                 or die ("Error al insertar presupuesto de licitación");
         mysqli_close($connect);
         return $sql;
     }
@@ -26,10 +26,9 @@ function descontarLicitacion($idLicitacion,$monto){
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
-        $sql = $lic->descontarLicitacion($connect,$idLicitacion,$monto);
+        mysqli_query($connect,"UPDATE PresupuestoLicitacion SET Haber=Haber + ".$monto." WHERE idLicitacion='".$idLicitacion."'") or die ("Error al actualizar cuenta de Licitación");
         mysqli_close($connect);
-        return $sql;
+        return 1;
     }
     return $sql;
 }
@@ -60,16 +59,9 @@ function asignarAmpliacion($idLicitacion,$idLicitacionAsignar){
                 mysqli_query($connect,"UPDATE PresupuestoLicitacion SET Haber=Debe WHERE idLicitacion='".$idLicitacion."'")
          or die ("Error al actualizar cuenta de Licitacion");
             }else{
-                return 'Error, no es posible asignar la ampliación';
+                return 'Error, no es posible asignar ampliación';
             }
         }
-
-
-
-
-
-
-
         mysqli_close($connect);
         return $sql;
     }
@@ -83,8 +75,7 @@ function modificarLicitacion($id,$estado)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
-        $sql = $lic->ModificarLicitacion($connect,$id,$estado);
+        $sql = mysqli_query($connect,"UPDATE Licitacion SET estado='".$estado."' WHERE idLicitacion='".$id."'") or die ("Error al modificar licitación");
         mysqli_close($connect);
         return $sql;
     }
@@ -105,15 +96,14 @@ function obtenerPresupuesto($idLicitacion)
     return $sql;
 }
 
-function eliminarLicitacion($idLicitacionDinamico)
+function eliminarLicitacion($idLicitacion)
 {
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
-        $sql = $lic->EliminarLicitacion($connect,$idLicitacionDinamico);
+        $sql = mysqli_query($connect,"DELETE FROM Licitacion WHERE idLicitacion='".$idLicitacion."'") or die ("Error al eliminar licitación");
         mysqli_close($connect);
         return $sql;
     }
@@ -127,8 +117,7 @@ function obtenerLicitacion($idLicitacion)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
-        $sql = $lic->ObtenerLicitacion($connect,$idLicitacion);
+        $sql = mysqli_query($connect,"SELECT * FROM Licitacion WHERE idLicitacion='".$idLicitacion."'") or die ("Error al obtener licitación");
         mysqli_close($connect);
         return $sql;
     }
@@ -142,8 +131,7 @@ function obtenerLicitacionCliente($idCliente)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
-        $sql = $lic->obtenerLicitacionCliente($connect,$idCliente);
+        $sql = mysqli_query($connect,"SELECT * FROM Licitacion WHERE idCliente='".$idCliente."'") or die ("Error al obtener licitaciones de cliente");
         mysqli_close($connect);
         return $sql;
     }
@@ -157,8 +145,7 @@ function ListarLicitaciones()
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
-        $sql = $lic->ListarLicitacion($connect);
+        $sql = mysqli_query($connect,"SELECT * FROM Licitacion ORDER BY FECHA DESC") or die ("Error al listar las licitaciones");
         mysqli_close($connect);
         return $sql;
     }

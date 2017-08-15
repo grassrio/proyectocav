@@ -261,7 +261,6 @@
     <Compile Include="includes\logout.php" />
     <Compile Include="index.php" />
     <Compile Include="includes\login_usuario.php" />
-    <Compile Include="Clases\Licitacion.php" />
     <Compile Include="PantallaBaliza.php" />
     <Compile Include="PantallaCliente.php" />
     <Compile Include="PantallaCotizacion.php" />
