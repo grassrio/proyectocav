@@ -7,7 +7,6 @@ function insertarLicitacion($idCliente,$idCotizacion,$idZona,$estado,$codigo,$pr
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $lic = new Licitacion();
         mysqli_query($connect,"INSERT INTO Licitacion (idCliente,idCotizacion,idZona,estado,codigo,fecha) VALUES ('".$idCliente."','".$idCotizacion."','".$idZona."','".$estado."','".$codigo."',now())")
            or die ("Error al insertar licitación");
         $sql = mysqli_query($connect,"SELECT idLicitacion FROM Licitacion WHERE Codigo='".$codigo."'") or die ("Error al obtener licitación");
