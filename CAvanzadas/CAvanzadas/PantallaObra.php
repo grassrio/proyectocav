@@ -525,7 +525,9 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
                     obrasInformar = obrasInformar + "," + obrasInformarArray[i];
                 }
             }
+
             if (obrasInformar != "") {
+                document.getElementById("btnInformarObras").disabled = true;
                 $.post("ajaxCliente.php", //Required URL of the page on server
                           { // Data Sending With Request To Server
                               action: "obtenerNumeroInforme",
@@ -1125,7 +1127,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {
 </table>
         <span class="form-control-static pull-right">
         <div class="bs-glyphicons"> <ul class="bs-glyphicons-list">
-            <button onclick="informar()" class="btn btn-success btn-xs">
+            <button id="btnInformarObras" onclick="informar()" class="btn btn-success btn-xs">
             <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span> <span class="glyphicon-class">Informar obras</span>
             </button>
             </ul> </div> 
