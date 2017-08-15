@@ -290,7 +290,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Agregar licitacion</h4>
+                    <h4 class="modal-title">Agregar Licitación</h4>
                 </div>
                 <div class="modal-body">
                     <form role="form" data-toggle="validator" name="NuevaLicitacion" id="NuevaLicitacion">
@@ -391,7 +391,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Modificar Licitacion</h4>
+                    <h4 class="modal-title">Modificar Licitación</h4>
                 </div>
                 <div class="modal-body">
                     <form name="modificarRubro" method="POST" action="modificarRubro">
@@ -406,7 +406,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                             <div class="col-sm-8">
                                 <select name='estadoCombo1' id='estadoCombo1'>
                                     <option value='1' selected>Aprobada</option>
-                                    <option value='2' selected>Rechazada</option>
+                                    <option value='2'>Rechazada</option>
                                 </select>
                             </div>
                         </div>
@@ -428,7 +428,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title">Eliminar licitacion</h4>
+                    <h4 class="modal-title">Eliminar Licitación</h4>
                 </div>
                 <div class="modal-body" id="eliminarDinamico">
                     <input name="NombreEliminar" id="NombreEliminar" type="hidden" class="form-control" aria-describedby="basic-addon2" />
