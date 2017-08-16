@@ -6,7 +6,9 @@ require 'includes/ConsultaZonas.php';
 require 'includes/ConsultasObra.php';
 require 'includes/ConsultasCuadrilla.php';
 require('includes/ConsultasImagen.php');
-
+session_start();
+$tipoUsuario = $_SESSION['tipoUsuario'];
+if (isset($_SESSION['usuario'])) {
 
 if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
@@ -305,7 +307,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 switch($estado){
                     case 'Pendiente de cuadrilla' :
 
-                        if ($_SESSION['tipoUsuario']==1){
+                        if ($tipoUsuario==1){
                             echo '<form role="form" data-toggle="validator" id="asignarCuadrillaForm" name="asignarCuadrillaForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
 
@@ -911,5 +913,6 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             ';
             break;
     }
+}
 }
 ?>
