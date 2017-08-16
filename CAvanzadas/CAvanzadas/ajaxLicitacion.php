@@ -305,7 +305,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 switch($estado){
                     case 'Pendiente de cuadrilla' :
 
-                        if ($_SESSION['tipoUsuario']=1){
+                        if ($_SESSION['tipoUsuario']==1){
                             echo '<form role="form" data-toggle="validator" id="asignarCuadrillaForm" name="asignarCuadrillaForm">
                                 <input type="hidden" id="idObra" value="'.$rsObra[idObra].'">
 
