@@ -52,8 +52,8 @@ function eliminarPersonal($NombreCompleto)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $sql = mysqli_query($connect,"DELETE FROM Personal WHERE NombreCompleto='".$NombreCompleto."'")
-         or die ("Error al eliminar personal");
+        $sql = mysqli_query($connect,"DELETE FROM Personal WHERE NombreCompleto='".$NombreCompleto."'") or die ("Error al eliminar personal");
+        mysqli_query($connect,"DELETE FROM PersonalCuadrilla WHERE Nombre='".$NombreCompleto."'") or die ("Error al eliminar personal");
         mysqli_close($connect);
         return $sql;
     }

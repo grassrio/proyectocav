@@ -1,5 +1,4 @@
 <?php
-require 'Clases/Usuario.php';
 
     function insertarUsuario($NombreUsu,$pass,$cargo,$idEmpleado){
         require('config.php');
@@ -7,11 +6,18 @@ require 'Clases/Usuario.php';
         if ($connect)
         {
             mysqli_select_db($connect,$mysqldb);
-            $usuario = new Usuario();
             $passConMd5 = md5($pass);
-            $sql     = $usuario->insertarUsuario($connect,$NombreUsu,$passConMd5,$cargo,$idEmpleado);
+            $sql = mysqli_query($connect,"INSERT INTO Usuario (NombreUsuario,Password,TipoUsuario,idPersonal) VALUES ('".$NombreUsu."','".$passConMd5."','".$cargo."','".$idEmpleado."')") or die ("Error al insertar usuario");
+            mysqli_close($connect);
             return $sql;
         }
+        return $sql;
+    }
+
+    function existeUsuario($connect,$nombreUsuario,$pass)
+    {
+        $sql = mysqli_query($connect,"SELECT * FROM Usuario WHERE NombreUsuario='".$nombreUsuario."'AND Password='".$pass."'")
+           or die ("Error al consultar usuarios");
         return $sql;
     }
 
@@ -21,8 +27,8 @@ require 'Clases/Usuario.php';
         if ($connect)
         {
             mysqli_select_db($connect,$mysqldb);
-            $usuario = new Usuario();
-            $sql     = $usuario->DevolverUsuarios($connect);
+            $sql = mysqli_query($connect,"SELECT * FROM Usuario") or die ("Error al consultar usuarios");
+            mysqli_close($connect);
             return $sql;
         }
         return $sql;
@@ -41,15 +47,15 @@ require 'Clases/Usuario.php';
         return $sql;
     }
 
-    function modificarUsuario($id,$pass){
+    function modificarUsuario($idUsuario,$pass){
         require('config.php');
         $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
         if ($connect)
         {
             mysqli_select_db($connect,$mysqldb);
-            $usuario = new Usuario();
             $passConMd5 = md5($pass);
-            $sql     = $usuario->ModificarUsuario($connect,$id,$passConMd5);
+            $sql = mysqli_query($connect,"UPDATE Usuario SET Password='".$passConMd5."' WHERE Id='".$idUsuario."'") or die ("Error al modificar usuario");
+            mysqli_close($connect);
             return $sql;
         }
         return $sql;
@@ -60,8 +66,8 @@ require 'Clases/Usuario.php';
         if ($connect)
         {
             mysqli_select_db($connect,$mysqldb);
-            $usuario = new Usuario();
-            $sql     = $usuario->EliminarUsuario($connect,$nombre);
+            $sql = mysqli_query($connect,"DELETE FROM Usuario WHERE NombreUsuario='".$nombre."'") or die ("Error al eliminar el usuario");
+            mysqli_close($connect);
             return $sql;
         }
         return $sql;

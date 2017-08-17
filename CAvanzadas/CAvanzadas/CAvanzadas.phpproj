@@ -267,7 +267,6 @@
     <Compile Include="PantallaLicitacion.php" />
     <Compile Include="login.php" />
     <Compile Include="mysql.php" />
-    <Compile Include="Clases\Usuario.php" />
     <Compile Include="PantallaObra.php" />
     <Compile Include="PantallaPersonal.php" />
     <Compile Include="PantallaRubro.php" />
@@ -340,7 +339,6 @@
     <Folder Include="img\" />
     <Folder Include="js\" />
     <Folder Include="includes\" />
-    <Folder Include="Clases\" />
     <Folder Include="informes\" />
     <Folder Include="Properties\" />
     <Folder Include="Properties\PublishProfiles\" />
