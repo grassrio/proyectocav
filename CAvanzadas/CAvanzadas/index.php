@@ -104,7 +104,20 @@ if (isset($_SESSION['usuario'])) {
                     }
                     else {
                         e.preventDefault()
-                        ProductividadEmpleado();
+                        if ($('#fechaFin').val() >= $('#fechaInicio').val())
+                        {
+                            ProductividadEmpleado();
+                        }
+                        else
+                        {
+                            swal({
+                                title: "Advertencia!",
+                                text: "La fecha desde tiene que ser menor o igual a la fecha hasta!",
+                                type: "warning",
+                                confirmButtonText: "OK"
+                            });
+                        }
+
                     }
                 })
                 $('#ventanaSeleccionaFecha').on('hidden.bs.modal', function (e) {
@@ -119,7 +132,7 @@ if (isset($_SESSION['usuario'])) {
             $('#btnConsulta').prop('disabled', true);
             var fechaInicio = $('#fechaInicio').val();
             var fechaFin = $('#fechaFin').val();
-            $.post("ajaxPersonal.php", //Required URL of the page on server
+             $.post("ajaxPersonal.php", //Required URL of the page on server
                   { // Data Sending With Request To Server
                       action: "ProductividadEmpleado",
                       FechaInicio: fechaInicio,
