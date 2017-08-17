@@ -84,6 +84,20 @@ function obtenerObreros($idCuadrilla)
     return $sql;
 }
 
+function obtenerCuadrillaCompuestas($nombrePersonal)
+{
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $sql = mysqli_query($connect,"SELECT * FROM PersonalCuadrilla WHERE Nombre='".$nombrePersonal."'") or die ("Error al obtener cuadrillas de personal");
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
 function nuevoObreroCuadrilla($idCuadrilla,$Porcentaje,$Nombre)
 {
     require('config.php');

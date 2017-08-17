@@ -10,31 +10,27 @@ if (isset($_SESSION['usuario'])) {
 <html lang="en">
 
 <head>
-    
-        <meta charset="utf-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>CAvanzadas</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet" />
-        <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
-        <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
-        <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CAvanzadas</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
 
 
-        <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/sweetalert.min.js"></script>
-        <script src="js/validator.min.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/sweetalert.min.js"></script>
+    <script src="js/validator.min.js"></script>
 
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/editable/bootstrap-table-editable.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/export/bootstrap-table-export.js"></script>
-        <script src="http://rawgit.com/hhurz/tableExport.jquery.plugin/master/tableExport.js"></script>
-        <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/extensions/filter-control/bootstrap-table-filter-control.js"></script>
-
-
-        <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css" />
-        <link rel="stylesheet" type="text/css" href="http://rawgit.com/vitalets/x-editable/master/dist/bootstrap3-editable/css/bootstrap-editable.css" />
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-table-export.min.js"></script>
+    <script src="js/tableExport.min.js"></script>
+    <script src="js/bootstrap-table-filter-control.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-table.min.css" />
 
     <style>
         body {
@@ -282,7 +278,185 @@ if (isset($_SESSION['usuario'])) {
 
 </body>
 </html>
-<?php 
-    }
-    } ?>
+<?php
+}else{
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CAvanzadas</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico" />
+    <link href="css/todc-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css" />
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            background-image: url(img/imgPrincipal.jpg);
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            -moz-background-size: cover;
+            -webkit-background-size: cover;
+            -o-background-size: cover;
+        }
+    </style>
+
+</head>
+<body>
+    <script>
+        $(document).ready(function () {
+            $("#ventanaMetrajesEstimados").on("show.bs.modal", function (e) {
+                idObraActiva = $(e.relatedTarget).data('target-idobra');
+                cargaMetrajesEstimados(idObraActiva);
+            });
+        });
+
+        function cargaMetrajesEstimados($idObra) {
+            $("#ventanaMetrajesEstimadosBodyTabla").html("");
+            var idObra = $idObra
+            $.post("ajaxLicitacion.php", //Required URL of the page on server
+                  { // Data Sending With Request To Server
+                      action: "metrajesEstimadosFuncionario",
+                      idObra: idObra
+                  },
+            function (response, status) { // Required Callback Function
+                $("#ventanaMetrajesEstimadosBodyTabla").html(response);
+            });
+        }
+    </script>
+    <!--VENTANA METRAJES ESTIMADOS-->
+    <div class="modal fade" tabindex="1" role="dialog" id="ventanaMetrajesEstimados">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="ventanaMetrajesEstimadosTitle">Metrajes estimados</h4>
+                </div>
+                <div class="modal-body" id="ventanaMetrajesEstimadosBody">
+                    <div class="panel">
+                        <div id="ventanaMetrajesEstimadosBodyTabla"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Construcciones Avanzadas SRL  -  Pavimentación y veredas</h3>
+        </div>
+    </div>
+    <nav class="navbar navbar-toolbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <ul class="nav nav-pills">
+                    <li>
+                        <a href="includes/logout.php">
+                            <i class="glyphicon glyphicon-object-align-horizontal"></i>Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div>
+    </nav>
+        <div class="panel panel-default">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Obras asignadas</h3>
+            </div>
+        </div>
+
+        <table class="table">
+            <tr>
+                <th>Nº Obra</th>
+                <th>Zona</th>
+                <th>Dirección</th>
+                <th>Esquina</th>
+                <th>Esquina</th>
+            </tr>
+            <?php
+                require 'includes/ConsultasUsuarios.php';
+                require 'includes/ConsultasPersonal.php';
+                require 'includes/ConsultasCuadrilla.php';
+                require 'includes/ConsultasObra.php';
+                require 'includes/ConsultaZonas.php';
+                $nombreUsuario = $_SESSION['usuario'];
+                //Obtengo usuario basandome en el nombre de usuario logeado
+                $sqlUsuario = devolverUsuario($nombreUsuario);
+                $rowcount = mysqli_num_rows($sqlUsuario);
+                $cuadrillasFormaParteArray = array();
+                if ($rowcount>0) {
+                    $rsUsuario=mysqli_fetch_array($sqlUsuario);
+                    $idObrero = $rsUsuario[idPersonal];
+                    //Obtengo obrero por su idPersonal
+                    $sqlObrero = obtenerObreroPorId($idObrero);
+                    $rowcountObrero = mysqli_num_rows($sqlObrero);
+                    if ($rowcountObrero>0) {
+                        $rsObrero=mysqli_fetch_array($sqlObrero);
+                        $NombreCompleto = $rsObrero[NombreCompleto];
+                        //Obtengo todas las cuadrillas de las cuales forma parte
+                        $sqlCuadrillasFormaParte = obtenerCuadrillaCompuestas($NombreCompleto);
+                        $rowcountCuadrillas = mysqli_num_rows($sqlCuadrillasFormaParte);
+                        //Si compone alguna cuadrilla
+                        if ($rowcountCuadrillas>0) {
+                            while($rsCuadrillasFormaParte=mysqli_fetch_array($sqlCuadrillasFormaParte)){
+                                //Agrego al array las cuadrillas de las que forma parte para recorrer una sola vez
+                                array_push($cuadrillasFormaParteArray,$rsCuadrillasFormaParte[idCuadrilla]);
+                            }
+                            $sqlObrasAsignadas = obtenerObrasAsignadas();
+                            $rowcountObrasAsignadas = mysqli_num_rows($sqlObrasAsignadas);
+                            //Si hay alguna obra en estado asignado
+                            if ($rowcountObrasAsignadas>0) {
+                                while($rsObrasAsignadas=mysqli_fetch_array($sqlObrasAsignadas)){
+                                    //Verifico si la obra tiene asignada la cuadrilla a la que pertenece el obrero
+                                    foreach($cuadrillasFormaParteArray as $idCuadrilla){
+                                        if ($rsObrasAsignadas[idCuadrilla]==$idCuadrilla){
+                                            //La obra tiene asignada la cuadrillaa la que pertenece
+                                            //Mostramos la obra
+                                            $idZona = $rsObrasAsignadas[idZona];
+                                            $zona = devolverZona($idZona);
+                                            $rsZona=mysqli_fetch_array($zona);
+                                            echo "<tr>"
+                                            .'<td><button type="button" data-target-idobra="'.$rsObrasAsignadas[idObra].'" class="btn btn-success btn-xs" data-target="#ventanaMetrajesEstimados" data-toggle="modal">'.$rsObrasAsignadas[Nombre].'</button></td>'  
+                                            ."<td>".$rsZona[Nombre]."</td>"
+                                            ."<td>".$rsObrasAsignadas[Direccion]."</td>"
+                                            ."<td>".$rsObrasAsignadas[Esquina1]."</td>"
+                                            ."<td>".$rsObrasAsignadas[Esquina2]."</td>"
+                                            ."</tr>";
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+
+                    }
+                }
+            ?>
+        </table>
+    </div>
+
+</body>
+</html>
+<?php
+}
+} ?>
 

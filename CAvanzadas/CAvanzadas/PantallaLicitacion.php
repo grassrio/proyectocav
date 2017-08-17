@@ -45,7 +45,7 @@ if (isset($_SESSION['usuario'])&&($_SESSION['tipoUsuario'] <> 2)) {?>
         });
 
         function resizeIframe(obj) {
-            obj.style.height = (obj.contentWindow.document.body.scrollHeight*1.3) + 'px';
+            obj.style.height = (obj.contentWindow.document.body.scrollHeight*1.5) + 'px';
         }
 
         function cargaIframe(idLicitacion) {

@@ -21,15 +21,16 @@ if(isset($_POST['submit'])){
             $tipoUsuarioSql = mysqli_fetch_array($sql);
             $_SESSION['usuario']=$username;
             $_SESSION['tipoUsuario']=$tipoUsuarioSql[TipoUsuario];
-            if($_SESSION['tipoUsuario']==2){
+            header("location:../index.php");
+            /*if($_SESSION['tipoUsuario']==2){
                 echo 'El usuario '.$username.'no tiene permisos para ingresar.';
                 session_abort();
-            }   
+            }
             else
             {
                 header("location:../index.php");
 
-            }
+            }*/
         }
     }
 }

@@ -5,7 +5,7 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
     $action = $_POST['action'];
     switch($action) {
         case 'nuevoPersonal' :
-            insertarPersonal($_POST['NombreCompleto'],$_POST['Direccion'],$_POST['Telefono'],$_POST['Cargo']);
+            $idPersonal = insertarPersonal($_POST['NombreCompleto'],$_POST['Direccion'],$_POST['Telefono'],$_POST['Cargo']);
             if ($_POST['Cargo'] =='Director' )
             {
                 $cargo = 1;
@@ -18,10 +18,8 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
             {
                 $cargo = 3;
             }
-            $sql = devolverPersonal($_POST['NombreCompleto']);
             $passConMd5 = md5($_POST['Pass']);
-            $rs=mysqli_fetch_array($sql);
-            insertarUsuario($_POST['NombreUsu'],$passConMd5,$cargo,$rs[0]);
+            insertarUsuario($_POST['NombreUsu'],$passConMd5,$cargo,$idPersonal);
             break;
         case 'eliminarPersonal' :
             eliminarPersonal($_POST['NombreCompleto']);

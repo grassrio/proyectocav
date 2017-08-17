@@ -239,6 +239,19 @@ function obtenerObra($idObra){
     return $sql;
 }
 
+function obtenerObrasAsignadas(){
+    require('config.php');
+    $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+    if ($connect)
+    {
+        mysqli_select_db($connect,$mysqldb);
+        $sql = mysqli_query($connect,"SELECT * FROM Obra WHERE Estado='Asignado'") or die ("Error al obtener obras");
+        mysqli_close($connect);
+        return $sql;
+    }
+    return $sql;
+}
+
 function agregarBaliza($idObra,$Proveedor,$Cantidad,$fechaInicio,$fechaFin){
     require('config.php');
     $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');

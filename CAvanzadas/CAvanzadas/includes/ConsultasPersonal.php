@@ -20,10 +20,11 @@ function insertarPersonal($nombreCompleto,$direccion,$telefono,$cargo)
     if ($connect)
     {
         mysqli_select_db($connect,$mysqldb);
-        $sql = mysqli_query($connect,"INSERT INTO Personal (NombreCompleto,Direccion,Telefono,Cargo) VALUES ('".$nombreCompleto."','".$direccion."','".$telefono."','".$cargo."')")
-            or die ("Error al insertar personal");
+        mysqli_query($connect,"INSERT INTO Personal (NombreCompleto,Direccion,Telefono,Cargo) VALUES ('".$nombreCompleto."','".$direccion."','".$telefono."','".$cargo."')")
+            or die ("Error, este empleado ya existe");
+        $idPersonal = $connect->insert_id;
         mysqli_close($connect);
-        return $sql;
+        return $idPersonal;
 
     }
     return $sql;
@@ -98,6 +99,7 @@ function obtenerObreroPorId($idObrero)
     }
     return $sql;
 }
+
 function ObrasFinalizadasEntreFecha($fechaInicio,$fechaFin)
 {
     require('config.php');

@@ -27,6 +27,20 @@ require 'Clases/Usuario.php';
         }
         return $sql;
     }
+
+    function devolverUsuario($nombreUsuario){
+        require('config.php');
+        $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');
+        if ($connect)
+        {
+            mysqli_select_db($connect,$mysqldb);
+            $sql = mysqli_query($connect,"SELECT * FROM Usuario WHERE NombreUsuario='".$nombreUsuario."'") or die ("Error al obtener usuario");
+            mysqli_close($connect);
+            return $sql;
+        }
+        return $sql;
+    }
+
     function modificarUsuario($id,$pass){
         require('config.php');
         $connect = mysqli_connect($mysqlserver,$mysqluser,$mysqlpass) or die('Error al conectarse a la base de datos');

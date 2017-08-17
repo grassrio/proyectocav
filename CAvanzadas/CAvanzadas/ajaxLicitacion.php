@@ -178,6 +178,37 @@ if(isset($_POST['action']) && !empty($_POST['action'])) {
                 echo "<br> Sin metrajes estimados";
             }
             break;
+        case 'metrajesEstimadosFuncionario' :
+            $idObra=$_POST['idObra'];
+            $metrajeObraSql = metrajesEstimados($idObra);
+            $rowcount = mysqli_num_rows($metrajeObraSql);
+            if ($rowcount>0){
+                echo '
+                <br>
+                <br>
+                <br>
+                <div class="panel panel-info" >
+                <!-- Tabla Metrajes Estimados -->
+                <table class="table">
+                <tr>
+                    <th>Rubro</th>
+                    <th>Cantidad</th>
+                </tr>
+                ';
+                while($rsMetrajeObra=mysqli_fetch_array($metrajeObraSql))
+                {
+                    echo "<tr>"
+                    ."<td>".$rsMetrajeObra[NombreRubro]."</td>"
+                    ."<td>".$rsMetrajeObra[MetrajeEstimado]." ".$rsMetrajeObra[Unidad]."</td>"
+                    ."</tr>";
+                }
+                echo '</table>
+                      </div>
+                ';
+            }else{
+                echo "<br> Sin metrajes estimados";
+            }
+            break;
         case 'metrajesRealizados' :
             $idObra=$_POST['idObra'];
             $metrajeObraSql = metrajesRealizados($idObra);
